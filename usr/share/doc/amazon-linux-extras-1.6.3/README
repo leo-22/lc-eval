@@ -1,0 +1,40 @@
+A tool for selective enabling of fresh not-as-stable software from specific,
+topical RPM repositories for Amazon Linux.
+
+This consists of a Catalog of topics, many Repositories, and this tool.
+
+The Catalog is a JSON description of the topics available that a user can
+subscribe to. For instance, "golang1.8" or "mysql3.45+php9.1" are topics, and
+those may involve unnamed libraries and adapters and bridges and configuration, 
+
+The Catalog has a version number "1", an optional message-of-the-day, a
+dict of topics, and whitelists of configurations that Amazon knows to be able
+to cohabitate on a computer.  topics is a list of dicts with "n" (topic name) and
+"inst" (packages to install automatically). whitelists are list of integers
+representing zero-based index into topics list to show topics we know can
+co-habitate.  A set of topics are allowed to be enabled if there exists a
+whitelist that is equal or is a superset of the proposed topics.
+
+The underlying packages that make up a topic may change over time, when new
+versions are released. A user could track changes and upgrade with DNF or YUM,
+but it is expected most EC2 users will launch new machines with new images and
+get newer packages newly installed, instead of upgrading existing packages.
+Amazon makes no warranty about upgrading package versions.
+
+The Code
+
+The code is a thin wrapper in bin/ over a python module in
+amazon_linux_extras/ . The wrapper overrides the default IO encoding
+to be UTF-8 (not ASCII), sets up gettext and logging, and then calls main()
+in the module.
+
+The module adds subcommands by the presence of functions starting with "cmd_".
+There are a few commands: list, enable, install, disable, help.
+
+Enable, install, and disable write YUM/DNF "ini" configuration to a new file in 
+/etc/yum.repo.d/ .
+
+The names of topics need to be tweaked to be acceptable YUM repo ini sections,
+so there are encode/decode functions for that. 
+
+The "install" subcommand also runs DNF or YUM after enabling the repos.

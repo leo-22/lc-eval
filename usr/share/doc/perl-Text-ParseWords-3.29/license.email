@@ -1,0 +1,57 @@
+Return-Path: rt-cpan-org-return@perl.org
+Received: from zmta04.collab.prod.int.phx2.redhat.com (LHLO
+ zmta04.collab.prod.int.phx2.redhat.com) (10.5.81.11) by
+ zmail14.collab.prod.int.phx2.redhat.com with LMTP; Mon, 18 Nov 2013
+ 11:06:10 -0500 (EST)
+Received: from zmta04.collab.prod.int.phx2.redhat.com (localhost [127.0.0.1])
+	by zmta04.collab.prod.int.phx2.redhat.com (Postfix) with ESMTP id 9A08BDA0C9
+	for <mmaslano@redhat.com>; Mon, 18 Nov 2013 11:06:10 -0500 (EST)
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+	by zmta04.collab.prod.int.phx2.redhat.com (Postfix) with ESMTP id 954E9D1F23
+	for <mmaslano@mail.corp.redhat.com>; Mon, 18 Nov 2013 11:06:10 -0500 (EST)
+Received: from mx1.redhat.com (ext-mx14.extmail.prod.ext.phx2.redhat.com [10.5.110.19])
+	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id rAIG6A3W024510
+	for <mmaslano@redhat.com>; Mon, 18 Nov 2013 11:06:10 -0500
+Received: from rtcpan.develooper.com (rtcpan.develooper.com [207.171.7.181])
+	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id rAIG69Uk032392
+	for <mmaslano@redhat.com>; Mon, 18 Nov 2013 11:06:09 -0500
+Received: by rtcpan.develooper.com (Postfix, from userid 536)
+	id D3030FA; Mon, 18 Nov 2013 08:06:08 -0800 (PST)
+Precedence: normal
+Subject: [rt.cpan.org #90483] missing license file
+From: "Alexandr Ciornii via RT" <bug-Text-ParseWords@rt.cpan.org>
+Reply-To: bug-Text-ParseWords@rt.cpan.org
+In-Reply-To: <rt-4.0.18-4704-1384789048-1647.90483-6-0@rt.cpan.org>
+References: <RT-Ticket-90483@rt.cpan.org>
+ <rt-4.0.18-4704-1384789048-1647.90483-6-0@rt.cpan.org>
+Message-ID: <rt-4.0.18-2172-1384790768-1347.90483-6-0@rt.cpan.org>
+X-RT-Loop-Prevention: rt.cpan.org
+RT-Ticket: rt.cpan.org #90483
+Managed-BY: RT 4.0.18 (http://www.bestpractical.com/rt/)
+RT-Originator: CHORNY@cpan.org
+To: mmaslano@redhat.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+X-RT-Original-Encoding: utf-8
+Date: Mon, 18 Nov 2013 11:06:08 -0500
+X-RedHat-Spam-Score: -1.9  (BAYES_00,SPF_PASS,URIBL_BLOCKED)
+X-Scanned-By: MIMEDefang 2.68 on 10.5.11.23
+X-Scanned-By: MIMEDefang 2.68 on 10.5.110.19
+
+<URL: https://rt.cpan.org/Ticket/Display.html?id=90483 >
+
+On Mon Nov 18 10:37:28 2013, mmaslano@redhat.com wrote:
+> It would be a big help if you have better defined license. License
+> text in .pm file would be enough.
+
+Will do in next version.
+
+> I found Perl license in Makefile.PL,
+> so we assumed it's Perl (GPL+ or Artistic). Is it correct?
+
+yes
+
+-- 
+Alexandr Ciornii, http://chorny.net
+

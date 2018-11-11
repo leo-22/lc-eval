@@ -1,0 +1,37 @@
+0.5.0 - 2013-03-XX
+  - add libxml2 headers and library to Makefile
+  - add libxml2-devel build req to rpm spec
+  - split out header, add memstream utils from Augeas
+  - integrate with Travis CI
+  - Takefile: add gem authors metadata
+  - Augeas::transform: add .lns suffix if a module name is passed
+    to match aug_transform behaviour
+  - add Augeas::clearm
+  - add Augeas::context and Augeas::context=
+  - add Augeas::label
+  - add Augeas::rename
+  - add Augeas::srun
+  - add Augeas::text_retrieve
+  - add Augeas::text_store
+
+0.4.1 - 2011-03-29
+  - remove object files from release tarball
+
+0.4.0 - 2011-03-25
+  - set can now set multiple elements at once
+  - expose aug_setm as Augeas#setm
+  - expose error functions through Augeas#error
+  - expose aug_span as Augeas#span
+
+0.3.0 - 2009-08-12
+  - Require augeas >= 0.5.1
+  - Bindings for aug_load, aug_defvar, and aug_defnode
+  - Map flags AUG_NO_STDINC, AUG_NO_LOAD, AUG_NO_MODL_AUTOLOAD
+  - Augeas::transform: convenience method for setting up transforms
+  - Augeas::set: allow passing in nil as the value
+  - Augeas::open: make args optional, accept block
+  - Exception raising versions of set, load, and save
+
+0.2.0 - 2008-08-26
+  Details for this and earlier releases need to be extracted from the
+  history of the git repo

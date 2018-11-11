@@ -1,0 +1,16 @@
+---
+:backends:
+    - yaml
+
+:merge_behavior: 'deeper'
+
+:hierarchy:
+    - "nodes/%{clientcert}"
+    - "profile/%{code_development}"
+    - "defaults"
+
+:yaml:
+    :datadir: 
+
+## Toggle vim-enhanced to set tabstop to 4. Set to "true" to turn on through .vimrc
+vim::use_spaces: false

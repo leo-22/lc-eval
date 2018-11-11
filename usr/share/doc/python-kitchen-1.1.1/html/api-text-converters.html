@@ -1,0 +1,1405 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Kitchen.text.converters &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen.text: unicode and utf8 and xml oh my!" href="api-text.html" />
+    <link rel="next" title="Format Text for Display" href="api-text-display.html" />
+    <link rel="prev" title="Kitchen.text: unicode and utf8 and xml oh my!" href="api-text.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-display.html" title="Format Text for Display"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-text.html" title="Kitchen.text: unicode and utf8 and xml oh my!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" accesskey="U">Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-kitchen.text.converters">
+<span id="kitchen-text-converters"></span><h1>Kitchen.text.converters<a class="headerlink" href="#module-kitchen.text.converters" title="Permalink to this headline">¶</a></h1>
+<p>Functions to handle conversion of byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version kitchen: </span>0.2a2 ; API kitchen.text 2.0.0
+Added <a class="reference internal" href="#kitchen.text.converters.getwriter" title="kitchen.text.converters.getwriter"><tt class="xref py py-func docutils literal"><span class="pre">getwriter()</span></tt></a></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version kitchen: </span>0.2.2  ; API kitchen.text 2.1.0
+Added <a class="reference internal" href="#kitchen.text.converters.exception_to_unicode" title="kitchen.text.converters.exception_to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_unicode()</span></tt></a>,
+<a class="reference internal" href="#kitchen.text.converters.exception_to_bytes" title="kitchen.text.converters.exception_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_bytes()</span></tt></a>,
+<a class="reference internal" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a>,
+and <a class="reference internal" href="#kitchen.text.converters.BYTE_EXCEPTION_CONVERTERS" title="kitchen.text.converters.BYTE_EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">BYTE_EXCEPTION_CONVERTERS</span></tt></a></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version kitchen: </span>1.0.1 ; API kitchen.text 2.1.1
+Deprecated <a class="reference internal" href="#kitchen.text.converters.BYTE_EXCEPTION_CONVERTERS" title="kitchen.text.converters.BYTE_EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">BYTE_EXCEPTION_CONVERTERS</span></tt></a> as
+we&#8217;ve simplified <a class="reference internal" href="#kitchen.text.converters.exception_to_unicode" title="kitchen.text.converters.exception_to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_unicode()</span></tt></a> and
+<a class="reference internal" href="#kitchen.text.converters.exception_to_bytes" title="kitchen.text.converters.exception_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_bytes()</span></tt></a> to make it unnecessary</p>
+<div class="section" id="byte-strings-and-unicode-in-python2">
+<h2>Byte Strings and Unicode in Python2<a class="headerlink" href="#byte-strings-and-unicode-in-python2" title="Permalink to this headline">¶</a></h2>
+<p>Python2 has two string types, <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> represents an abstract sequence of text characters.  It can
+hold any character that is present in the unicode standard.  <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> can
+hold any byte of data.  The operating system and python work together to
+display these bytes as characters in many cases but you should always keep in
+mind that the information is really a sequence of bytes, not a sequence of
+characters.  In python2 these types are interchangeable a large amount of the
+time.  They are one of the few pairs of types that automatically convert when
+used in equality:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># string is converted to unicode and then compared</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;I am a string&quot;</span> <span class="o">==</span> <span class="s">u&quot;I am a string&quot;</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Other types, like int, don&#39;t have this special treatment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="mi">5</span> <span class="o">==</span> <span class="s">&quot;5&quot;</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>However, this automatic conversion tends to lull people into a false sense of
+security.  As long as you&#8217;re dealing with <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters the
+automatic conversion will save you from seeing any differences.  Once you
+start using characters that are not in <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a>, you will start getting
+<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt> and <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeWarning</span></tt> as the automatic conversions
+between the types fail:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;I am an ñ&quot;</span> <span class="o">==</span> <span class="s">u&quot;I am an ñ&quot;</span>
+<span class="go">__main__:1: UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Why do these conversions fail?  The reason is that the python2
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> type represents an abstract sequence of unicode text known as
+<a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code points</em></a>.  <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, on the other hand, really represents
+a sequence of bytes.  Those bytes are converted by your operating system to
+appear as characters on your screen using a particular encoding (usually
+with a default defined by the operating system and customizable by the
+individual user.) Although <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters are fairly standard in
+what bytes represent each character, the bytes outside of the <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a>
+range are not.  In general, each encoding will map a different character to
+a particular byte.  Newer encodings map individual characters to multiple
+bytes (which the older encodings will instead treat as multiple characters).
+In the face of these differences, python refuses to guess at an encoding and
+instead issues a warning or exception and refuses to convert.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="unicode-frustrations.html#overcoming-frustration"><em>Overcoming frustration: Correctly using unicode in python2</em></a>
+    For a longer introduction on this subject.</p>
+</div>
+</div>
+<div class="section" id="strategy-for-explicit-conversion">
+<h2>Strategy for Explicit Conversion<a class="headerlink" href="#strategy-for-explicit-conversion" title="Permalink to this headline">¶</a></h2>
+<p>So what is the best method of dealing with this weltering babble of incoherent
+encodings?  The basic strategy is to explicitly turn everything into
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> when it first enters your program.  Then, when you send it to
+output, you can transform the unicode back into bytes.  Doing this allows you
+to control the encodings that are used and avoid getting tracebacks due to
+<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt>. Using the functions defined in this module, that looks
+something like this:</p>
+<div class="highlight-pycon"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">to_unicode</span><span class="p">,</span> <span class="n">to_bytes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">name</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Enter your name: &#39;</span><span class="p">)</span>
+<span class="go">Enter your name: Toshio くらとみ</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">name</span>
+<span class="go">&#39;Toshio \xe3\x81\x8f\xe3\x82\x89\xe3\x81\xa8\xe3\x81\xbf&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="go">&lt;type &#39;str&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unicode_name</span> <span class="o">=</span> <span class="n">to_unicode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">unicode_name</span><span class="p">)</span>
+<span class="go">&lt;type &#39;unicode&#39;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unicode_name</span>
+<span class="go">u&#39;Toshio \u304f\u3089\u3068\u307f&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Do a lot of other things before needing to save/output again:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;datafile&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">to_bytes</span><span class="p">(</span><span class="s">u&#39;Name: </span><span class="si">%s</span><span class="se">\\</span><span class="s">n&#39;</span> <span class="o">%</span> <span class="n">unicode_name</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+<p>A few notes:</p>
+<p>Looking at line 6, you&#8217;ll notice that the input we took from the user was
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  In general, anytime we&#8217;re getting a value from outside
+of python (The filesystem, reading data from the network, interacting with an
+external command, reading values from the environment) we are interacting with
+something that will want to give us a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Some <a class="reference external" href="http://docs.python.org/library">python standard library</a>
+modules and third party libraries will automatically attempt to convert a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings for you.  This is both a boon and
+a curse.  If the library can guess correctly about the encoding that the data
+is in, it will return <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> objects to you without you having to
+convert.  However, if it can&#8217;t guess correctly, you may end up with one of
+several problems:</p>
+<dl class="docutils">
+<dt><tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt></dt>
+<dd>The library attempted to decode a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> into
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>, string failed, and raises an exception.</dd>
+<dt>Garbled data</dt>
+<dd>If the library returns the data after decoding it with the wrong encoding,
+the characters you see in the <tt class="xref py py-exc docutils literal"><span class="pre">unicode</span></tt> string won&#8217;t be the ones that
+you expect.</dd>
+<dt>A byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> instead of <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string</dt>
+<dd>Some libraries will return a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string when they&#8217;re able to
+decode the data and a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>  when they can&#8217;t.  This is
+generally the hardest problem to debug when it occurs.  Avoid it in your
+own code and try to avoid or open bugs against upstreams that do this. See
+<a class="reference internal" href="designing-unicode-apis.html#designingunicodeawareapis"><em>Designing Unicode Aware APIs</em></a> for strategies to do this properly.</dd>
+</dl>
+<p>On line 8, we convert from a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.
+<a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> does this for us.  It has some
+error handling and sane defaults that make this a nicer function to use than
+calling <tt class="xref py py-meth docutils literal"><span class="pre">str.decode()</span></tt> directly:</p>
+<ul class="simple">
+<li>Instead of defaulting to the <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> encoding which fails with all
+but the simple American English characters, it defaults to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.</li>
+<li>Instead of raising an error if it cannot decode a value, it will replace
+the value with the unicode &#8220;Replacement character&#8221; symbol (<tt class="docutils literal"><span class="pre">�</span></tt>).</li>
+<li>If you happen to call this method with something that is not a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>, it will return an empty <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.</li>
+</ul>
+<p>All three of these can be overridden using different keyword arguments to the
+function.  See the <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> documentation for more information.</p>
+<p>On line 15 we push the data back out to a file.  Two things you should note here:</p>
+<ol class="arabic simple">
+<li>We deal with the strings as <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> until the last instant.  The
+string format that we&#8217;re using is <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and the variable also
+holds <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  People sometimes get into trouble when they mix
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> format with a variable that holds a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+string (or vice versa) at this stage.</li>
+<li><a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a>, does the reverse of
+<a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a>.  In this case, we&#8217;re using the default values which
+turn <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> using <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.  Any
+errors are replaced with a <tt class="docutils literal"><span class="pre">�</span></tt> and sending nonstring objects yield empty
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.  Just like <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a>, you can look at
+the documentation for <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> to find out how to override any of
+these defaults.</li>
+</ol>
+<div class="section" id="when-to-use-an-alternate-strategy">
+<h3>When to use an alternate strategy<a class="headerlink" href="#when-to-use-an-alternate-strategy" title="Permalink to this headline">¶</a></h3>
+<p>The default strategy of decoding to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings when you take
+data in and encoding to a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> when you send the data back out
+works great for most problems but there are a few times when you shouldn&#8217;t:</p>
+<ul class="simple">
+<li>The values aren&#8217;t meant to be read as text</li>
+<li>The values need to be byte-for-byte when you send them back out &#8211; for
+instance if they are database keys or filenames.</li>
+<li>You are transferring the data between several libraries that all expect
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.</li>
+</ul>
+<p>In each of these instances, there is a reason to keep around the byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> version of a value.  Here&#8217;s a few hints to keep your sanity in
+these situations:</p>
+<ol class="arabic">
+<li><p class="first">Keep your <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> values separate.  Just like the
+pain caused when you have to use someone else&#8217;s library that returns both
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> you can cause yourself pain if you have
+functions that can return both types or variables that could hold either
+type of value.</p>
+</li>
+<li><p class="first">Name your variables so that you can tell whether you&#8217;re storing byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  One of the first things you end
+up having to do when debugging is determine what type of string you have in
+a variable and what type of string you are expecting.  Naming your
+variables consistently so that you can tell which type they are supposed to
+hold will save you from at least one of those steps.</p>
+</li>
+<li><p class="first">When you get values initially, make sure that you&#8217;re dealing with the type
+of value that you expect as you save it.  You can use <tt class="xref py py-func docutils literal"><span class="pre">isinstance()</span></tt>
+or <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> since <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> doesn&#8217;t do any modifications of
+the string if it&#8217;s already a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  When using <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a>
+for this purpose you might want to use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="n">b_input</span> <span class="o">=</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">input_should_be_bytes_already</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s">&#39;strict&#39;</span><span class="p">,</span> <span class="n">nonstring</span><span class="o">=</span><span class="s">&#39;strict&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">handle_errors_somehow</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The reason is that the default of <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> will take characters
+that are illegal in the chosen encoding and transform them to replacement
+characters.  Since the point of keeping this data as a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is
+to keep the exact same bytes when you send it outside of your code,
+changing things to replacement characters should be rasing red flags that
+something is wrong.  Setting <tt class="xref py py-attr docutils literal"><span class="pre">errors</span></tt> to <tt class="docutils literal"><span class="pre">strict</span></tt> will raise an
+exception which gives you an opportunity to fail gracefully.</p>
+</li>
+<li><p class="first">Sometimes you will want to print out the values that you have in your byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  When you do this you will need to make sure that you
+transform <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> to <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> before combining them.  Also be
+sure that any other function calls (including <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>) are going to
+give you strings that are the same type.  For instance:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Username: </span><span class="si">%(user)s</span><span class="s">&#39;</span><span class="p">),</span> <span class="s">&#39;utf-8&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="n">b_username</span><span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="section" id="gotchas-and-how-to-avoid-them">
+<h2>Gotchas and how to avoid them<a class="headerlink" href="#gotchas-and-how-to-avoid-them" title="Permalink to this headline">¶</a></h2>
+<p>Even when you have a good conceptual understanding of how python2 treats
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> there are still some things that can
+surprise you.  In most cases this is because, as noted earlier, python or one
+of the python libraries you depend on is trying to convert a value
+automatically and failing.  Explicit conversion at the appropriate place
+usually solves that.</p>
+<div class="section" id="str-obj">
+<h3>str(obj)<a class="headerlink" href="#str-obj" title="Permalink to this headline">¶</a></h3>
+<p>One common idiom for getting a simple, string representation of an object is to use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Unfortunately, this is not safe.  Sometimes str(obj) will return
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  Sometimes it will return a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Sometimes,
+it will attempt to convert from a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string to a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, fail, and throw a <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt>.  To be safe from all of
+these, first decide whether you need <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to be
+returned.  Then use <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> or <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> to get the simple
+representation like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">u_representation</span> <span class="o">=</span> <span class="n">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">nonstring</span><span class="o">=</span><span class="s">&#39;simplerepr&#39;</span><span class="p">)</span>
+<span class="n">b_representation</span> <span class="o">=</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">nonstring</span><span class="o">=</span><span class="s">&#39;simplerepr&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="print">
+<h3>print<a class="headerlink" href="#print" title="Permalink to this headline">¶</a></h3>
+<p>python has a builtin <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> statement that outputs strings to the
+terminal.  This originated in a time when python only dealt with byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  When <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings came about, some enhancements
+were made to the <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> statement so that it could print those as well.
+The enhancements make <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> work most of the time.  However, the times
+when it doesn&#8217;t work tend to make for cryptic debugging.</p>
+<p>The basic issue is that <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> has to figure out what encoding to use
+when it prints a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string to the terminal.  When python is
+attached to your terminal (ie, you&#8217;re running the interpreter or running
+a script that prints to the screen) python is able to take the encoding value
+from your locale settings <span class="target" id="index-0"></span><tt class="xref std std-envvar docutils literal"><span class="pre">LC_ALL</span></tt> or <span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">LC_CTYPE</span></tt> and print the
+characters allowed by that encoding.  On most modern Unix systems, the
+encoding is <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> which means that you can print any <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+character without problem.</p>
+<p>There are two common cases of things going wrong:</p>
+<ol class="arabic">
+<li><p class="first">Someone has a locale set that does not accept all valid unicode characters.
+For instance:</p>
+<div class="highlight-python"><pre>$ LC_ALL=C python
+&gt;&gt;&gt; print u'\ufffd'
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+UnicodeEncodeError: 'ascii' codec can't encode character u'\ufffd' in position 0: ordinal not in range(128)</pre>
+</div>
+<p>This often happens when a script that you&#8217;ve written and debugged from the
+terminal is run from an automated environment like <strong class="program">cron</strong>.  It
+also occurs when you have written a script using a <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> aware
+locale and released it for consumption by people all over the internet.
+Inevitably, someone is running with a locale that can&#8217;t handle all unicode
+characters and you get a traceback reported.</p>
+</li>
+<li><p class="first">You redirect output to a file.  Python isn&#8217;t using the values in
+<span class="target" id="index-2"></span><tt class="xref std std-envvar docutils literal"><span class="pre">LC_ALL</span></tt> unconditionally to decide what encoding to use.  Instead
+it is using the encoding set for the terminal you are printing to which is
+set to accept different encodings by <span class="target" id="index-3"></span><tt class="xref std std-envvar docutils literal"><span class="pre">LC_ALL</span></tt>.  If you redirect
+to a file, you are no longer printing to the terminal so <span class="target" id="index-4"></span><tt class="xref std std-envvar docutils literal"><span class="pre">LC_ALL</span></tt>
+won&#8217;t have any effect.  At this point, python will decide it can&#8217;t find an
+encoding and fallback to <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> which will likely lead to
+<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt> being raised.  You can see this in a short script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/python -tt</span>
+<span class="k">print</span> <span class="s">u&#39;</span><span class="se">\ufffd</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+<p>And then look at the difference between running it normally and redirecting to a file:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> ./test.py
+<span class="go">�</span>
+<span class="gp">$</span> ./test.py &gt; t
+<span class="go">Traceback (most recent call last):</span>
+<span class="go">  File &quot;test.py&quot;, line 3, in &lt;module&gt;</span>
+<span class="go">      print u&#39;\ufffd&#39;</span>
+<span class="go">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\ufffd&#39; in position 0: ordinal not in range(128)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>The short answer to dealing with this is to always use bytes when writing
+output.  You can do this by explicitly converting to bytes like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">to_bytes</span>
+<span class="n">u_string</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="se">\ufffd</span><span class="s">&#39;</span>
+<span class="k">print</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">u_string</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or you can wrap stdout and stderr with a <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt>.
+A <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> is convenient in that you can assign it to
+encode for <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt> or <tt class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></tt> and then have output
+automatically converted but it has the drawback of still being able to throw
+<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt> if the writer can&#8217;t encode all possible unicode
+codepoints.  Kitchen provides an alternate version which can be retrieved with
+<a class="reference internal" href="#kitchen.text.converters.getwriter" title="kitchen.text.converters.getwriter"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.getwriter()</span></tt></a> which will not traceback in its
+standard configuration.</p>
+</div>
+<div class="section" id="unicode-str-and-dict-keys">
+<span id="unicode-and-dict-keys"></span><h3>Unicode, str, and dict keys<a class="headerlink" href="#unicode-str-and-dict-keys" title="Permalink to this headline">¶</a></h3>
+<p>The <tt class="xref py py-func docutils literal"><span class="pre">hash()</span></tt> of the <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters is the same for
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  When you use them in <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt>
+keys, they evaluate to the same dictionary slot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">u_string</span> <span class="o">=</span> <span class="s">u&#39;a&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_string</span> <span class="o">=</span> <span class="s">&#39;a&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hash</span><span class="p">(</span><span class="n">u_string</span><span class="p">),</span> <span class="nb">hash</span><span class="p">(</span><span class="n">b_string</span><span class="p">)</span>
+<span class="go">(12416037344, 12416037344)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">u_string</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;unicode&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">b_string</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;bytes&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">{u&#39;a&#39;: &#39;bytes&#39;}</span>
+</pre></div>
+</div>
+<p>When you deal with key values outside of <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a>, <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> evaluate unequally no matter what their character content or
+hash value:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">u_string</span> <span class="o">=</span> <span class="s">u&#39;ñ&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_string</span> <span class="o">=</span> <span class="n">u_string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">u_string</span>
+<span class="go">ñ</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">b_string</span>
+<span class="go">ñ</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">u_string</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;unicode&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">b_string</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;bytes&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">{u&#39;\\xf1&#39;: &#39;unicode&#39;, &#39;\\xc3\\xb1&#39;: &#39;bytes&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_string2</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">xf1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hash</span><span class="p">(</span><span class="n">u_string</span><span class="p">),</span> <span class="nb">hash</span><span class="p">(</span><span class="n">b_string2</span><span class="p">)</span>
+<span class="go">(30848092528, 30848092528)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">u_string</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;unicode&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">b_string2</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;bytes&#39;</span>
+<span class="go">{u&#39;\\xf1&#39;: &#39;unicode&#39;, &#39;\\xf1&#39;: &#39;bytes&#39;}</span>
+</pre></div>
+</div>
+<p>How do you work with this one?  Remember rule #1:  Keep your <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+and byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> values separate.  That goes for keys in a dictionary
+just like anything else.</p>
+<ul>
+<li><p class="first">For any given dictionary, make sure that all your keys are either
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  <strong>Do not mix the two.</strong>  If you&#8217;re being
+given both <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> but you don&#8217;t need to preserve
+separate keys for each, I recommend using <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> or
+<a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> to convert all keys to one type or the other like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">to_unicode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u_string</span> <span class="o">=</span> <span class="s">u&#39;one&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_string</span> <span class="o">=</span> <span class="s">&#39;two&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">to_unicode</span><span class="p">(</span><span class="n">u_string</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="n">to_unicode</span><span class="p">(</span><span class="n">b_string</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span>
+<span class="go">{u&#39;two&#39;: 2, u&#39;one&#39;: 1}</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">These issues also apply to using dicts with tuple keys that contain
+a mixture of <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Once again the best fix
+is to standardise on either <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.</p>
+</li>
+<li><p class="first">If you absolutely need to store values in a dictionary where the keys could
+be either <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> you can use
+<a class="reference internal" href="api-collections.html#kitchen.collections.strictdict.StrictDict" title="kitchen.collections.strictdict.StrictDict"><tt class="xref py py-class docutils literal"><span class="pre">StrictDict</span></tt></a> which has separate
+entries for all <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and deals correctly
+with any <tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> containing mixed <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="functions">
+<h1>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="unicode-and-byte-str-conversion">
+<h2>Unicode and byte str conversion<a class="headerlink" href="#unicode-and-byte-str-conversion" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="kitchen.text.converters.to_unicode">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">to_unicode</tt><big>(</big><em>obj</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em>, <em>nonstring=None</em>, <em>non_string=None</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.to_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an object into a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>obj</strong> &#8211; Object to convert to a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  This should
+normally be a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></li>
+<li><strong>encoding</strong> &#8211; What encoding to try converting the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> as.
+Defaults to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a></li>
+<li><strong>errors</strong> &#8211; If errors are found while decoding, perform this action.
+Defaults to <tt class="docutils literal"><span class="pre">replace</span></tt> which replaces the invalid bytes with
+a character that means the bytes were unable to be decoded.  Other
+values are the same as the error handling schemes in the <a class="reference external" href="http://docs.python.org/library/codecs.html#codec-base-classes">codec base
+classes</a>.
+For instance <tt class="docutils literal"><span class="pre">strict</span></tt> which raises an exception and <tt class="docutils literal"><span class="pre">ignore</span></tt> which
+simply omits the non-decodable characters.</li>
+<li><strong>nonstring</strong> &#8211; <p>How to treat nonstring values.  Possible values are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">simplerepr:</th><td class="field-body">Attempt to call the object&#8217;s &#8220;simple representation&#8221;
+method and return that value.  Python-2.3+ has two methods that
+try to return a simple representation: <tt class="xref py py-meth docutils literal"><span class="pre">object.__unicode__()</span></tt>
+and <tt class="xref py py-meth docutils literal"><span class="pre">object.__str__()</span></tt>.  We first try to get a usable value
+from <tt class="xref py py-meth docutils literal"><span class="pre">object.__unicode__()</span></tt>.  If that fails we try the same
+with <tt class="xref py py-meth docutils literal"><span class="pre">object.__str__()</span></tt>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">empty:</th><td class="field-body">Return an empty <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">strict:</th><td class="field-body">Raise a <tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">passthru:</th><td class="field-body">Return the object unchanged</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">repr:</th><td class="field-body">Attempt to return a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string of the repr of the
+object</td>
+</tr>
+</tbody>
+</table>
+<p>Default is <tt class="docutils literal"><span class="pre">simplerepr</span></tt></p>
+</li>
+<li><strong>non_string</strong> &#8211; <em>Deprecated</em> Use <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> instead</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> is <tt class="docutils literal"><span class="pre">strict</span></tt> and
+a non-<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt> object is passed in or if <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt>
+is set to an unknown value</li>
+<li><strong>UnicodeDecodeError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">errors</span></tt> is <tt class="docutils literal"><span class="pre">strict</span></tt> and
+<tt class="xref py py-attr docutils literal"><span class="pre">obj</span></tt> is not decodable using the given encoding</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or the original object depending on the
+value of <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Usually this should be used on a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> but it can take both
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings intelligently.  Nonstring
+objects are handled in different ways depending on the setting of the
+<tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> parameter.</p>
+<p>The default values of this function are set so as to always return
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string and never raise an error when converting from
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  However, when you do
+not pass validly encoded text (or a nonstring object), you may end up with
+output that you don&#8217;t expect.  Be sure you understand the requirements of
+your data, not just ignore errors by passing it through this function.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 0.2.1a2: </span>Deprecated <tt class="xref py py-attr docutils literal"><span class="pre">non_string</span></tt> in favor of <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> parameter and changed
+default value to <tt class="docutils literal"><span class="pre">simplerepr</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.to_bytes">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">to_bytes</tt><big>(</big><em>obj</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em>, <em>nonstring=None</em>, <em>non_string=None</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an object into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>obj</strong> &#8211; Object to convert to a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  This should normally
+be a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.</li>
+<li><strong>encoding</strong> &#8211; Encoding to use to convert the <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string
+into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Defaults to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a>.</li>
+<li><strong>errors</strong> &#8211; <p>If errors are found while encoding, perform this action.
+Defaults to <tt class="docutils literal"><span class="pre">replace</span></tt> which replaces the invalid bytes with
+a character that means the bytes were unable to be encoded.  Other
+values are the same as the error handling schemes in the <a class="reference external" href="http://docs.python.org/library/codecs.html#codec-base-classes">codec base
+classes</a>.
+For instance <tt class="docutils literal"><span class="pre">strict</span></tt> which raises an exception and <tt class="docutils literal"><span class="pre">ignore</span></tt> which
+simply omits the non-encodable characters.</p>
+</li>
+<li><strong>nonstring</strong> &#8211; <p>How to treat nonstring values.  Possible values are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">simplerepr:</th><td class="field-body">Attempt to call the object&#8217;s &#8220;simple representation&#8221;
+method and return that value.  Python-2.3+ has two methods that
+try to return a simple representation: <tt class="xref py py-meth docutils literal"><span class="pre">object.__unicode__()</span></tt>
+and <tt class="xref py py-meth docutils literal"><span class="pre">object.__str__()</span></tt>.  We first try to get a usable value
+from <tt class="xref py py-meth docutils literal"><span class="pre">object.__str__()</span></tt>.  If that fails we try the same
+with <tt class="xref py py-meth docutils literal"><span class="pre">object.__unicode__()</span></tt>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">empty:</th><td class="field-body">Return an empty byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">strict:</th><td class="field-body">Raise a <tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">passthru:</th><td class="field-body">Return the object unchanged</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">repr:</th><td class="field-body">Attempt to return a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> of the <tt class="xref py py-func docutils literal"><span class="pre">repr()</span></tt> of the
+object</td>
+</tr>
+</tbody>
+</table>
+<p>Default is <tt class="docutils literal"><span class="pre">simplerepr</span></tt>.</p>
+</li>
+<li><strong>non_string</strong> &#8211; <em>Deprecated</em> Use <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> instead.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> is <tt class="docutils literal"><span class="pre">strict</span></tt> and
+a non-<tt class="xref py py-class docutils literal"><span class="pre">basestring</span></tt> object is passed in or if <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt>
+is set to an unknown value.</li>
+<li><strong>UnicodeEncodeError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">errors</span></tt> is <tt class="docutils literal"><span class="pre">strict</span></tt> and all of the
+bytes of <tt class="xref py py-attr docutils literal"><span class="pre">obj</span></tt> are unable to be encoded using <tt class="xref py py-attr docutils literal"><span class="pre">encoding</span></tt>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or the original object depending on the value
+of <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>If you pass a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> into this function the byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is returned unmodified.  It is <strong>not</strong> re-encoded with
+the specified <tt class="xref py py-attr docutils literal"><span class="pre">encoding</span></tt>.  The easiest way to achieve that is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">to_bytes</span><span class="p">(</span><span class="n">to_unicode</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">The initial <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> call will ensure text is
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  Then, <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> will turn that into
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> with the specified encoding.</p>
+</div>
+<p>Usually, this should be used on a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string but it can take
+either a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string intelligently.
+Nonstring objects are handled in different ways depending on the setting
+of the <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> parameter.</p>
+<p>The default values of this function are set so as to always return a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and never raise an error when converting from unicode to
+bytes.  However, when you do not pass an encoding that can validly encode
+the object (or a non-string object), you may end up with output that you
+don&#8217;t expect.  Be sure you understand the requirements of your data, not
+just ignore errors by passing it through this function.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 0.2.1a2: </span>Deprecated <tt class="xref py py-attr docutils literal"><span class="pre">non_string</span></tt> in favor of <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> parameter
+and changed default value to <tt class="docutils literal"><span class="pre">simplerepr</span></tt></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.getwriter">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">getwriter</tt><big>(</big><em>encoding</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.getwriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <tt class="xref py py-class docutils literal"><span class="pre">codecs.StreamWriter</span></tt> that resists tracing back.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>encoding</strong> &#8211; Encoding to use for transforming <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings
+into byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">codecs.StreamWriter</span></tt></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> that you can instantiate to wrap output
+streams to automatically translate <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings into <tt class="xref py py-attr docutils literal"><span class="pre">encoding</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p>This is a reimplemetation of <tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt> that returns
+a <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> that resists issuing tracebacks.  The
+<tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> that is returned uses
+<a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_bytes()</span></tt></a> to convert <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings into byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  The departures from
+<tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt> are:</p>
+<ol class="arabic simple">
+<li>The <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> that is returned will take byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> as well as <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.  Any byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> will be passed through unmodified.</li>
+<li>The default error handler for unknown bytes is to <tt class="docutils literal"><span class="pre">replace</span></tt> the bytes
+with the unknown character (<tt class="docutils literal"><span class="pre">?</span></tt> in most ascii-based encodings, <tt class="docutils literal"><span class="pre">�</span></tt>
+in the utf encodings) whereas <tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt> defaults to
+<tt class="docutils literal"><span class="pre">strict</span></tt>.  Like <tt class="xref py py-class docutils literal"><span class="pre">codecs.StreamWriter</span></tt>, the returned
+<tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> can have its error handler changed in
+code by setting <tt class="docutils literal"><span class="pre">stream.errors</span> <span class="pre">=</span> <span class="pre">'new_handler_name'</span></tt></li>
+</ol>
+<p>Example usage:</p>
+<div class="highlight-python"><pre>$ LC_ALL=C python
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; from kitchen.text.converters import getwriter
+&gt;&gt;&gt; UTF8Writer = getwriter('utf-8')
+&gt;&gt;&gt; unwrapped_stdout = sys.stdout
+&gt;&gt;&gt; sys.stdout = UTF8Writer(unwrapped_stdout)
+&gt;&gt;&gt; print 'caf\xc3\xa9'
+café
+&gt;&gt;&gt; print u'caf\xe9'
+café
+&gt;&gt;&gt; ASCIIWriter = getwriter('ascii')
+&gt;&gt;&gt; sys.stdout = ASCIIWriter(unwrapped_stdout)
+&gt;&gt;&gt; print 'caf\xc3\xa9'
+café
+&gt;&gt;&gt; print u'caf\xe9'
+caf?</pre>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">API docs for <tt class="xref py py-class docutils literal"><span class="pre">codecs.StreamWriter</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt>
+and <a class="reference external" href="http://wiki.python.org/moin/PrintFails">Print Fails</a> on the
+python wiki.</p>
+</div>
+<p class="versionadded">
+<span class="versionmodified">New in version kitchen: </span>0.2a2, API: kitchen.text 1.1.0</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.to_str">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">to_str</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.to_str" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Deprecated</em></p>
+<p>This function converts something to a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> if it isn&#8217;t one.
+It&#8217;s used to call <tt class="xref py py-func docutils literal"><span class="pre">str()</span></tt> or <tt class="xref py py-func docutils literal"><span class="pre">unicode()</span></tt> on the object to get its
+simple representation without danger of getting a <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt>.
+You should be using <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> or <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> explicitly
+instead.</p>
+<p>If you need <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">to_unicode</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">nonstring</span><span class="o">=</span><span class="s">&#39;simplerepr&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you need byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">to_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">nonstring</span><span class="o">=</span><span class="s">&#39;simplerepr&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.to_utf8">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">to_utf8</tt><big>(</big><em>obj</em>, <em>errors='replace'</em>, <em>non_string='passthru'</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.to_utf8" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Deprecated</em></p>
+<p>Convert <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> to an encoded <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.
+You should be using <a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">to_bytes</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">non_string</span><span class="o">=</span><span class="s">&#39;passthru&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="transformation-to-xml">
+<h2>Transformation to XML<a class="headerlink" href="#transformation-to-xml" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="kitchen.text.converters.unicode_to_xml">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">unicode_to_xml</tt><big>(</big><em>string</em>, <em>encoding='utf-8'</em>, <em>attrib=False</em>, <em>control_chars='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.unicode_to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string and turn it into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+suitable for xml</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string to encode into an XML compatible byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></li>
+<li><strong>encoding</strong> &#8211; encoding to use for the returned byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.
+Default is to encode to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.  If some of the characters in
+<tt class="xref py py-attr docutils literal"><span class="pre">string</span></tt> are not encodable in this encoding, the unknown
+characters will be entered into the output string using xml character
+references.</li>
+<li><strong>attrib</strong> &#8211; If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>, quote the string for use in an xml
+attribute.  If <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt> (default), quote for use in an xml text
+field.</li>
+<li><strong>control_chars</strong> &#8211; <p><a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> are not allowed in XML
+documents.  When we encounter those we need to know what to do.  Valid
+options are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">replace:</th><td class="field-body">(default) Replace the control characters with <tt class="docutils literal"><span class="pre">?</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">ignore:</th><td class="field-body">Remove the characters altogether from the output</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">strict:</th><td class="field-body">Raise an <a class="reference internal" href="api-exceptions.html#kitchen.text.exceptions.XmlEncodeError" title="kitchen.text.exceptions.XmlEncodeError"><tt class="xref py py-exc docutils literal"><span class="pre">XmlEncodeError</span></tt></a>  when
+we encounter a <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><a class="reference internal" href="api-exceptions.html#kitchen.text.exceptions.XmlEncodeError" title="kitchen.text.exceptions.XmlEncodeError"><strong>kitchen.text.exceptions.XmlEncodeError</strong></a> &#8211; If <tt class="xref py py-attr docutils literal"><span class="pre">control_chars</span></tt>
+is set to <tt class="docutils literal"><span class="pre">strict</span></tt> and the string to be made suitable for output to
+xml contains <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> or if <tt class="xref py py-attr docutils literal"><span class="pre">string</span></tt> is not
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string then we raise this exception.</li>
+<li><strong>ValueError</strong> &#8211; If <tt class="xref py py-attr docutils literal"><span class="pre">control_chars</span></tt> is set to something other than
+<tt class="docutils literal"><span class="pre">replace</span></tt>, <tt class="docutils literal"><span class="pre">ignore</span></tt>, or <tt class="docutils literal"><span class="pre">strict</span></tt>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">representation of the <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string as a valid XML
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>XML files consist mainly of text encoded using a particular charset.  XML
+also denies the use of certain bytes in the encoded text (example: <tt class="docutils literal"><span class="pre">ASCII</span>
+<span class="pre">Null</span></tt>).  There are also special characters that must be escaped if they
+are present in the input (example: <tt class="docutils literal"><span class="pre">&lt;</span></tt>).  This function takes care of
+all of those issues for you.</p>
+<p>There are a few different ways to use this function depending on your
+needs.  The simplest invocation is like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">unicode_to_xml</span><span class="p">(</span><span class="s">u&#39;String with non-ASCII characters: &lt;&quot;á と&quot;&gt;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will return the following to you, encoded in <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&#39;String with non-ASCII characters: &amp;lt;&quot;á と&quot;&amp;gt;&#39;</span>
+</pre></div>
+</div>
+<p>Pretty straightforward.  Now, what if you need to encode your document in
+something other than <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a>?  For instance, <tt class="docutils literal"><span class="pre">latin-1</span></tt>?  Let&#8217;s
+see:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">unicode_to_xml</span><span class="p">(</span><span class="s">u&#39;String with non-ASCII characters: &lt;&quot;á と&quot;&gt;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;latin-1&#39;</span><span class="p">)</span>
+<span class="s">&#39;String with non-ASCII characters: &amp;lt;&quot;á &amp;#12392;&quot;&amp;gt;&#39;</span>
+</pre></div>
+</div>
+<p>Because the <tt class="docutils literal"><span class="pre">と</span></tt> character is not available in the <tt class="docutils literal"><span class="pre">latin-1</span></tt> charset,
+it is replaced with <tt class="docutils literal"><span class="pre">&amp;#12392;</span></tt> in our output.  This is an xml character
+reference which represents the character at unicode codepoint <tt class="docutils literal"><span class="pre">12392</span></tt>, the
+<tt class="docutils literal"><span class="pre">と</span></tt> character.</p>
+<p>When you want to reverse this, use <a class="reference internal" href="#kitchen.text.converters.xml_to_unicode" title="kitchen.text.converters.xml_to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">xml_to_unicode()</span></tt></a> which will turn
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> into a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string and replace the xml
+character references with the unicode characters.</p>
+<p>XML also has the quirk of not allowing <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> in its
+output.  The <tt class="xref py py-attr docutils literal"><span class="pre">control_chars</span></tt> parameter allows us to specify what to
+do with those.  For use cases that don&#8217;t need absolute character by
+character fidelity (example: holding strings that will just be used for
+display in a GUI app later), the default value of <tt class="docutils literal"><span class="pre">replace</span></tt> works well:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">unicode_to_xml</span><span class="p">(</span><span class="s">u&#39;String with disallowed control chars: </span><span class="se">\u0000\u0007</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="s">&#39;String with disallowed control chars: ??&#39;</span>
+</pre></div>
+</div>
+<p>If you do need to be able to reproduce all of the characters at a later
+date (examples: if the string is a key value in a database or a path on a
+filesystem) you have many choices.  Here are a few that rely on <tt class="docutils literal"><span class="pre">utf-7</span></tt>,
+a verbose encoding that encodes <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> (as well as
+non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> unicode values) to characters from within the
+<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> printable characters.  The good thing about doing this is
+that the code is pretty simple.  You just need to use <tt class="docutils literal"><span class="pre">utf-7</span></tt> both when
+encoding the field for xml and when decoding it for use in your python
+program:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">unicode_to_xml</span><span class="p">(</span><span class="s">u&#39;String with unicode: と and control char: </span><span class="se">\u0007</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf7&#39;</span><span class="p">)</span>
+<span class="s">&#39;String with unicode: +MGg and control char: +AAc-&#39;</span>
+<span class="c"># [...]</span>
+<span class="n">xml_to_unicode</span><span class="p">(</span><span class="s">&#39;String with unicode: +MGg and control char: +AAc-&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf7&#39;</span><span class="p">)</span>
+<span class="s">u&#39;String with unicode: と and control char: </span><span class="se">\u0007</span><span class="s">&#39;</span>
+</pre></div>
+</div>
+<p>As you can see, the <tt class="docutils literal"><span class="pre">utf-7</span></tt> encoding will transform even characters that
+would be representable in <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a>.  This can be a drawback if you
+want unicode characters in the file to be readable without being decoded
+first.  You can work around this with increased complexity in your
+application code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">encoding</span> <span class="o">=</span> <span class="s">&#39;utf-8&#39;</span>
+<span class="n">u_string</span> <span class="o">=</span> <span class="s">u&#39;String with unicode: と and control char: </span><span class="se">\u0007</span><span class="s">&#39;</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c"># First attempt to encode to utf8</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">unicode_to_xml</span><span class="p">(</span><span class="n">u_string</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s">&#39;strict&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">XmlEncodeError</span><span class="p">:</span>
+    <span class="c"># Fallback to utf-7</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="s">&#39;utf-7&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">unicode_to_xml</span><span class="p">(</span><span class="n">u_string</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s">&#39;strict&#39;</span><span class="p">)</span>
+<span class="n">write_tag</span><span class="p">(</span><span class="s">&#39;&lt;mytag encoding=</span><span class="si">%s</span><span class="s">&gt;</span><span class="si">%s</span><span class="s">&lt;/mytag&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">encoding</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+<span class="c"># [...]</span>
+<span class="n">encoding</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">attributes</span><span class="o">.</span><span class="n">encoding</span>
+<span class="n">u_string</span> <span class="o">=</span> <span class="n">xml_to_unicode</span><span class="p">(</span><span class="n">u_string</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Using code similar to that, you can have some fields encoded using your
+default encoding and fallback to <tt class="docutils literal"><span class="pre">utf-7</span></tt> if there are <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control
+characters</em></a> present.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If your goal is to preserve the <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> you cannot
+save the entire file as <tt class="docutils literal"><span class="pre">utf-7</span></tt> and set the xml encoding parameter
+to <tt class="docutils literal"><span class="pre">utf-7</span></tt> if your goal is to preserve the <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control
+characters</em></a>.  Because XML doesn&#8217;t allow <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>,
+you have to encode those separate from any encoding work that the XML
+parser itself knows about.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#kitchen.text.converters.bytes_to_xml" title="kitchen.text.converters.bytes_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">bytes_to_xml()</span></tt></a></dt>
+<dd>if you&#8217;re dealing with bytes that are non-text or of an unknown
+encoding that you must preserve on a byte for byte level.</dd>
+<dt><a class="reference internal" href="#kitchen.text.converters.guess_encoding_to_xml" title="kitchen.text.converters.guess_encoding_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">guess_encoding_to_xml()</span></tt></a></dt>
+<dd>if you&#8217;re dealing with strings in unknown encodings that you don&#8217;t
+need to save with char-for-char fidelity.</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.xml_to_unicode">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">xml_to_unicode</tt><big>(</big><em>byte_string</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.xml_to_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> from an xml file into a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to decode</li>
+<li><strong>encoding</strong> &#8211; encoding that the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is in</li>
+<li><strong>errors</strong> &#8211; What to do if not every character is  valid in
+<tt class="xref py py-attr docutils literal"><span class="pre">encoding</span></tt>.  See the <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> documentation for legal
+values.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string decoded from <tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function attempts to reverse what <a class="reference internal" href="#kitchen.text.converters.unicode_to_xml" title="kitchen.text.converters.unicode_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">unicode_to_xml()</span></tt></a> does.  It
+takes a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> (presumably read in from an xml file) and
+expands all the html entities into unicode characters and decodes the byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> into a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  One thing it cannot do is
+restore any <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> that were removed prior to
+inserting into the file.  If you need to keep such characters you need to
+use <a class="reference internal" href="#kitchen.text.converters.xml_to_bytes" title="kitchen.text.converters.xml_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">xml_to_bytes()</span></tt></a> and <a class="reference internal" href="#kitchen.text.converters.bytes_to_xml" title="kitchen.text.converters.bytes_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">bytes_to_xml()</span></tt></a> or use on of the
+strategies documented in <a class="reference internal" href="#kitchen.text.converters.unicode_to_xml" title="kitchen.text.converters.unicode_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">unicode_to_xml()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.byte_string_to_xml">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">byte_string_to_xml</tt><big>(</big><em>byte_string</em>, <em>input_encoding='utf-8'</em>, <em>errors='replace'</em>, <em>output_encoding='utf-8'</em>, <em>attrib=False</em>, <em>control_chars='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.byte_string_to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make sure a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is validly encoded for xml output</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; Byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to turn into valid xml output</li>
+<li><strong>input_encoding</strong> &#8211; Encoding of <tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt>.  Default <tt class="docutils literal"><span class="pre">utf-8</span></tt></li>
+<li><strong>errors</strong> &#8211; <p>How to handle errors encountered while decoding the
+<tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt> into <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> at the beginning of the
+process.  Values are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">replace:</th><td class="field-body">(default) Replace the invalid bytes with a <tt class="docutils literal"><span class="pre">?</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">ignore:</th><td class="field-body">Remove the characters altogether from the output</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">strict:</th><td class="field-body">Raise an <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeDecodeError</span></tt> when we encounter
+a non-decodable character</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>output_encoding</strong> &#8211; Encoding for the xml file that this string will go
+into.  Default is <tt class="docutils literal"><span class="pre">utf-8</span></tt>.  If all the characters in
+<tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt> are not encodable in this encoding, the unknown
+characters will be entered into the output string using xml character
+references.</li>
+<li><strong>attrib</strong> &#8211; If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>, quote the string for use in an xml
+attribute.  If <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt> (default), quote for use in an xml text
+field.</li>
+<li><strong>control_chars</strong> &#8211; <p>XML does not allow <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>.  When
+we encounter those we need to know what to do.  Valid options are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">replace:</th><td class="field-body">(default) Replace the <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> with <tt class="docutils literal"><span class="pre">?</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">ignore:</th><td class="field-body">Remove the characters altogether from the output</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">strict:</th><td class="field-body">Raise an error when we encounter a <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>XmlEncodeError</strong> &#8211; If <tt class="xref py py-attr docutils literal"><span class="pre">control_chars</span></tt> is set to <tt class="docutils literal"><span class="pre">strict</span></tt> and
+the string to be made suitable for output to xml contains
+<a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> then we raise this exception.</li>
+<li><strong>UnicodeDecodeError</strong> &#8211; If errors is set to <tt class="docutils literal"><span class="pre">strict</span></tt> and the
+<tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt> contains bytes that are not decodable using
+<tt class="xref py py-attr docutils literal"><span class="pre">input_encoding</span></tt>, this error is raised</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">representation of the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> in the output encoding with
+any bytes that aren&#8217;t available in xml taken care of.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Use this when you have a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> representing text that you need
+to make suitable for output to xml.  There are several cases where this
+is the case.  For instance, if you need to transform some strings encoded
+in <tt class="docutils literal"><span class="pre">latin-1</span></tt> to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> for output:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">utf8_string</span> <span class="o">=</span> <span class="n">byte_string_to_xml</span><span class="p">(</span><span class="n">latin1_string</span><span class="p">,</span> <span class="n">input_encoding</span><span class="o">=</span><span class="s">&#39;latin-1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you already have strings in the proper encoding you may still want to
+use this function to remove <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cleaned_string</span> <span class="o">=</span> <span class="n">byte_string_to_xml</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">input_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">output_encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#kitchen.text.converters.unicode_to_xml" title="kitchen.text.converters.unicode_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">unicode_to_xml()</span></tt></a></dt>
+<dd>for other ideas on using this function</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.xml_to_byte_string">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">xml_to_byte_string</tt><big>(</big><em>byte_string</em>, <em>input_encoding='utf-8'</em>, <em>errors='replace'</em>, <em>output_encoding='utf-8'</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.xml_to_byte_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> from an xml file into <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to decode</li>
+<li><strong>input_encoding</strong> &#8211; encoding that the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is in</li>
+<li><strong>errors</strong> &#8211; What to do if not every character is valid in
+<tt class="xref py py-attr docutils literal"><span class="pre">encoding</span></tt>.  See the <a class="reference internal" href="#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> docstring for legal
+values.</li>
+<li><strong>output_encoding</strong> &#8211; Encoding for the output byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string decoded from <tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function attempts to reverse what <a class="reference internal" href="#kitchen.text.converters.unicode_to_xml" title="kitchen.text.converters.unicode_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">unicode_to_xml()</span></tt></a> does.  It
+takes a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> (presumably read in from an xml file) and
+expands all the html entities into unicode characters and decodes the
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> into a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  One thing it cannot do
+is restore any <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> that were removed prior to
+inserting into the file.  If you need to keep such characters you need to
+use <a class="reference internal" href="#kitchen.text.converters.xml_to_bytes" title="kitchen.text.converters.xml_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">xml_to_bytes()</span></tt></a> and <a class="reference internal" href="#kitchen.text.converters.bytes_to_xml" title="kitchen.text.converters.bytes_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">bytes_to_xml()</span></tt></a> or use one of the
+strategies documented in <a class="reference internal" href="#kitchen.text.converters.unicode_to_xml" title="kitchen.text.converters.unicode_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">unicode_to_xml()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.bytes_to_xml">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">bytes_to_xml</tt><big>(</big><em>byte_string</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.bytes_to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> encoded so it is valid inside of any xml
+file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to transform</li>
+<li><strong>**kwargs</strong> (<em>*args,</em>) &#8211; extra arguments to this function are passed on to
+the function actually implementing the encoding.  You can use this to
+tweak the output in some cases but, as a general rule, you shouldn&#8217;t
+because the underlying encoding function is not guaranteed to remain
+the same.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> consisting of all <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> representation of the input.  This will be encoded
+using base64.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function is made especially to put binary information into xml
+documents.</p>
+<p>This function is intended for encoding things that must be preserved
+byte-for-byte.  If you want to encode a byte string that&#8217;s text and don&#8217;t
+mind losing the actual bytes you probably want to try <a class="reference internal" href="#kitchen.text.converters.byte_string_to_xml" title="kitchen.text.converters.byte_string_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">byte_string_to_xml()</span></tt></a>
+or <a class="reference internal" href="#kitchen.text.converters.guess_encoding_to_xml" title="kitchen.text.converters.guess_encoding_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">guess_encoding_to_xml()</span></tt></a> instead.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the current implementation uses <tt class="xref py py-func docutils literal"><span class="pre">base64.b64encode()</span></tt> and
+there&#8217;s no plans to change it, that isn&#8217;t guaranteed.  If you want to
+make sure that you can encode and decode these messages it&#8217;s best to
+use <a class="reference internal" href="#kitchen.text.converters.xml_to_bytes" title="kitchen.text.converters.xml_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">xml_to_bytes()</span></tt></a> if you use this function to encode.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.xml_to_bytes">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">xml_to_bytes</tt><big>(</big><em>byte_string</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.xml_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a string encoded using <a class="reference internal" href="#kitchen.text.converters.bytes_to_xml" title="kitchen.text.converters.bytes_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">bytes_to_xml()</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to transform.  This should be a base64
+encoded sequence of bytes originally generated by <a class="reference internal" href="#kitchen.text.converters.bytes_to_xml" title="kitchen.text.converters.bytes_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">bytes_to_xml()</span></tt></a>.</li>
+<li><strong>**kwargs</strong> (<em>*args,</em>) &#8211; extra arguments to this function are passed on to
+the function actually implementing the encoding.  You can use this to
+tweak the output in some cases but, as a general rule, you shouldn&#8217;t
+because the underlying encoding function is not guaranteed to remain
+the same.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> that&#8217;s the decoded input</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If you&#8217;ve got fields in an xml document that were encoded with
+<a class="reference internal" href="#kitchen.text.converters.bytes_to_xml" title="kitchen.text.converters.bytes_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">bytes_to_xml()</span></tt></a> then you want to use this function to undecode them.
+It converts a base64 encoded string into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although the current implementation uses <tt class="xref py py-func docutils literal"><span class="pre">base64.b64decode()</span></tt> and
+there&#8217;s no plans to change it, that isn&#8217;t guaranteed.  If you want to
+make sure that you can encode and decode these messages it&#8217;s best to
+use <a class="reference internal" href="#kitchen.text.converters.bytes_to_xml" title="kitchen.text.converters.bytes_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">bytes_to_xml()</span></tt></a> if you use this function to decode.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.guess_encoding_to_xml">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">guess_encoding_to_xml</tt><big>(</big><em>string</em>, <em>output_encoding='utf-8'</em>, <em>attrib=False</em>, <em>control_chars='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.guess_encoding_to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> suitable for inclusion in xml</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to be transformed into
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> suitable for inclusion in xml.  If string is
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> we attempt to guess the encoding.  If we cannot guess,
+we fallback to <tt class="docutils literal"><span class="pre">latin-1</span></tt>.</li>
+<li><strong>output_encoding</strong> &#8211; Output encoding for the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  This
+should match the encoding of your xml file.</li>
+<li><strong>attrib</strong> &#8211; If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>, escape the item for use in an xml
+attribute.  If <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt> (default) escape the item for use in
+a text node.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> encoded byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.to_xml">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">to_xml</tt><big>(</big><em>string</em>, <em>encoding='utf-8'</em>, <em>attrib=False</em>, <em>control_chars='ignore'</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.to_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Deprecated</em>: Use <a class="reference internal" href="#kitchen.text.converters.guess_encoding_to_xml" title="kitchen.text.converters.guess_encoding_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">guess_encoding_to_xml()</span></tt></a> instead</p>
+</dd></dl>
+
+</div>
+<div class="section" id="working-with-exception-messages">
+<h2>Working with exception messages<a class="headerlink" href="#working-with-exception-messages" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="kitchen.text.converters.EXCEPTION_CONVERTERS">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">EXCEPTION_CONVERTERS</tt><em class="property"> = (&lt;function &lt;lambda&gt; at 0x7f5254d10398&gt;, &lt;function &lt;lambda&gt; at 0x7f5254d10410&gt;)</em><a class="headerlink" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Tuple of functions to try to use to convert an exception into a string</dt>
+<dd><p class="first">representation.  Its main use is to extract a string (<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) from an exception object in <a class="reference internal" href="#kitchen.text.converters.exception_to_unicode" title="kitchen.text.converters.exception_to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_unicode()</span></tt></a> and
+<a class="reference internal" href="#kitchen.text.converters.exception_to_bytes" title="kitchen.text.converters.exception_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_bytes()</span></tt></a>.  The functions here will try the exception&#8217;s
+<tt class="docutils literal"><span class="pre">args[0]</span></tt> and the exception itself (roughly equivalent to
+<cite>str(exception)</cite>) to extract the message. This is only a default and can
+be easily overridden when calling those functions.  There are several
+reasons you might wish to do that.  If you have exceptions where the best
+string representing the exception is not returned by the default
+functions, you can add another function to extract from a different
+field:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="p">(</span><span class="n">EXCEPTION_CONVERTERS</span><span class="p">,</span>
+        <span class="n">exception_to_unicode</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">message</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+<span class="n">c</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">EXCEPTION_CONVERTERS</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">MyError</span><span class="p">(</span><span class="s">&#39;An Exception message&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">MyError</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">exception_to_unicode</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">converters</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another reason would be if you&#8217;re converting to a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and
+you know the <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> needs to be a non-<a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> encoding.
+<a class="reference internal" href="#kitchen.text.converters.exception_to_bytes" title="kitchen.text.converters.exception_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_bytes()</span></tt></a> defaults to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> but if you convert
+into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> explicitly using a converter then you can choose
+a different encoding:</p>
+<div class="last highlight-python"><pre>from kitchen.text.converters import (EXCEPTION_CONVERTERS,
+        exception_to_bytes, to_bytes)
+c = [lambda e: to_bytes(e.args[0], encoding='euc_jp'),
+        lambda e: to_bytes(e, encoding='euc_jp')]
+c.extend(EXCEPTION_CONVERTERS)
+try:
+    do_something()
+except Exception, e:
+    log = open('logfile.euc_jp', 'a')
+    log.write('%s</pre>
+</div>
+</dd>
+<dt>&#8216; % exception_to_bytes(e, converters=c)</dt>
+<dd><blockquote class="first">
+<div>log.close()</div></blockquote>
+<p>Each function in this list should take the exception as its sole argument
+and return a string containing the message representing the exception.
+The functions may return the message as a :byte class:<cite>str</cite>,
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string, or even an object if you trust the object to
+return a decent string representation.  The <a class="reference internal" href="#kitchen.text.converters.exception_to_unicode" title="kitchen.text.converters.exception_to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_unicode()</span></tt></a>
+and <a class="reference internal" href="#kitchen.text.converters.exception_to_bytes" title="kitchen.text.converters.exception_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_bytes()</span></tt></a> functions will make sure to convert the
+string to the proper type before returning.</p>
+<p class="last versionadded">
+<span class="versionmodified">New in version 0.2.2.</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="data">
+<dt id="kitchen.text.converters.BYTE_EXCEPTION_CONVERTERS">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">BYTE_EXCEPTION_CONVERTERS</tt><em class="property"> = (&lt;function &lt;lambda&gt; at 0x7f5254d10488&gt;, &lt;function to_bytes at 0x7f5254d101b8&gt;)</em><a class="headerlink" href="#kitchen.text.converters.BYTE_EXCEPTION_CONVERTERS" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Deprecated</em>: Use <a class="reference internal" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a> instead.</p>
+<p>Tuple of functions to try to use to convert an exception into a string
+representation.  This tuple is similar to the one in
+<a class="reference internal" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a> but it&#8217;s used with <a class="reference internal" href="#kitchen.text.converters.exception_to_bytes" title="kitchen.text.converters.exception_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">exception_to_bytes()</span></tt></a>
+instead.  Ideally, these functions should do their best to return the data
+as a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> but the results will be run through
+<a class="reference internal" href="#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> before being returned.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.2.2.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 1.0.1: </span>Deprecated as simplifications allow <a class="reference internal" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a> to
+perform the same function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.exception_to_unicode">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">exception_to_unicode</tt><big>(</big><em>exc</em>, <em>converters=(&lt;function &lt;lambda&gt; at 0x7f5254d10398&gt;</em>, <em>&lt;function &lt;lambda&gt; at 0x7f5254d10410&gt;)</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.exception_to_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an exception object into a unicode representation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>exc</strong> &#8211; Exception object to convert</li>
+<li><strong>converters</strong> &#8211; List of functions to use to convert the exception into
+a string.  See <a class="reference internal" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a> for the default value and
+an example of adding other converters to the defaults.  The functions
+in the list are tried one at a time to see if they can extract
+a string from the exception.  The first one to do so without raising
+an exception is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string representation of the exception.  The
+value extracted by the <tt class="xref py py-attr docutils literal"><span class="pre">converters</span></tt> will be converted into
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> before being returned using the <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a>
+encoding.  If you know you need to use an alternate encoding add
+a function that does that to the list of functions in
+<tt class="xref py py-attr docutils literal"><span class="pre">converters</span></tt>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.2.2.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.converters.exception_to_bytes">
+<tt class="descclassname">kitchen.text.converters.</tt><tt class="descname">exception_to_bytes</tt><big>(</big><em>exc</em>, <em>converters=(&lt;function &lt;lambda&gt; at 0x7f5254d10398&gt;</em>, <em>&lt;function &lt;lambda&gt; at 0x7f5254d10410&gt;)</em><big>)</big><a class="headerlink" href="#kitchen.text.converters.exception_to_bytes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an exception object into a str representation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>exc</strong> &#8211; Exception object to convert</li>
+<li><strong>converters</strong> &#8211; List of functions to use to convert the exception into
+a string.  See <a class="reference internal" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a> for the default value and
+an example of adding other converters to the defaults.  The functions
+in the list are tried one at a time to see if they can extract
+a string from the exception.  The first one to do so without raising
+an exception is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> representation of the exception.  The value
+extracted by the <tt class="xref py py-attr docutils literal"><span class="pre">converters</span></tt> will be converted into
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> before being returned using the <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> encoding.
+If you know you need to use an alternate encoding add a function that
+does that to the list of functions in <tt class="xref py py-attr docutils literal"><span class="pre">converters</span></tt>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.2.2.</span></p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 1.0.1: </span>Code simplification allowed us to switch to using
+<a class="reference internal" href="#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a> as the default value of
+<tt class="xref py py-attr docutils literal"><span class="pre">converters</span></tt>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Kitchen.text.converters</a><ul>
+<li><a class="reference internal" href="#byte-strings-and-unicode-in-python2">Byte Strings and Unicode in Python2</a></li>
+<li><a class="reference internal" href="#strategy-for-explicit-conversion">Strategy for Explicit Conversion</a><ul>
+<li><a class="reference internal" href="#when-to-use-an-alternate-strategy">When to use an alternate strategy</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#gotchas-and-how-to-avoid-them">Gotchas and how to avoid them</a><ul>
+<li><a class="reference internal" href="#str-obj">str(obj)</a></li>
+<li><a class="reference internal" href="#print">print</a></li>
+<li><a class="reference internal" href="#unicode-str-and-dict-keys">Unicode, str, and dict keys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#unicode-and-byte-str-conversion">Unicode and byte str conversion</a></li>
+<li><a class="reference internal" href="#transformation-to-xml">Transformation to XML</a></li>
+<li><a class="reference internal" href="#working-with-exception-messages">Working with exception messages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-text.html"
+                        title="previous chapter">Kitchen.text: unicode and utf8 and xml oh my!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-text-display.html"
+                        title="next chapter">Format Text for Display</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-text-converters.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-display.html" title="Format Text for Display"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-text.html" title="Kitchen.text: unicode and utf8 and xml oh my!"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" >Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

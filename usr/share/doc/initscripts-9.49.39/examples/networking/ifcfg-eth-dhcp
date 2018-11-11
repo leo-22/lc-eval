@@ -1,0 +1,14 @@
+# ifcfg sample for common ethernet interfaces using DHCP
+#
+# Please read /usr/share/doc/initscripts-*/sysconfig.txt
+# for the documentation of these parameters.
+
+DEVICE=eth0
+BOOTPROTO=dhcp
+HWADDR=00:11:22:33:44:55
+ONBOOT=yes
+
+# WARNING: When both DHCP_HOSTNAME and DHCP_FQDN are specified,
+#          only DHCP_FQDN will be used.
+DHCP_HOSTNAME=host1
+DHCP_FQDN=host1.foo.bar.com

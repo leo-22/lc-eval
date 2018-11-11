@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Kitchen, everything but the sink &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="#" />
+    <link rel="next" title="Using kitchen to write good code" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Using kitchen to write good code"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="kitchen-everything-but-the-sink">
+<h1>Kitchen, everything but the sink<a class="headerlink" href="#kitchen-everything-but-the-sink" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Toshio Kuratomi</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">19 March 2011</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Version:</th><td class="field-body">1.0.x</td>
+</tr>
+</tbody>
+</table>
+<p>We&#8217;ve all done it.  In the process of writing a brand new application we&#8217;ve
+discovered that we need a little bit of code that we&#8217;ve invented before.
+Perhaps it&#8217;s something to handle unicode text.  Perhaps it&#8217;s something to make
+a bit of python-2.5 code run on python-2.3.  Whatever it is, it ends up being
+a tiny bit of code that seems too small to worry about pushing into its own
+module so it sits there, a part of your current project, waiting to be cut and
+pasted into your next project.  And the next.  And the next.  And since that
+little bittybit of code proved so useful to you, it&#8217;s highly likely that it
+proved useful to someone else as well.  Useful enough that they&#8217;ve written it
+and copy and pasted it over and over into each of their new projects.</p>
+<p>Well, no longer!  Kitchen aims to pull these small snippets of code into a few
+python modules which you can import and use within your project.  No more copy
+and paste!  Now you can let someone else maintain and release these small
+snippets so that you can get on with your life.</p>
+<p>This package forms the core of Kitchen.  It contains some useful modules for
+using newer <a class="reference external" href="http://docs.python.org/library">python standard library</a> modules on older python versions, text manipulation,
+<span class="target" id="index-0"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0386"><strong>PEP 386</strong></a> versioning, and initializing <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>.  With this package we&#8217;re
+trying to provide a few useful features that don&#8217;t have too many dependencies
+outside of the <a class="reference external" href="http://docs.python.org/library">python standard library</a>.  We&#8217;ll be releasing other modules that drop into the
+kitchen namespace to add other features (possibly with larger deps) as time
+goes on.</p>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ve tried to keep the core kitchen module&#8217;s requirements lightweight.  At the
+moment kitchen only requires</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">python:</th><td class="field-body">2.3.1 or later</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Kitchen-1.1.0 is likely to be the last release that supports
+python-2.3.x.  Future releases will target python-2.4 as the minimum
+required version.</p>
+</div>
+<div class="section" id="soft-requirements">
+<h3>Soft Requirements<a class="headerlink" href="#soft-requirements" title="Permalink to this headline">¶</a></h3>
+<p>If found, these libraries will be used to make the implementation of some part
+of kitchen better in some way.  If they are not present, the API that they
+enable will still exist but may function in a different manner.</p>
+<dl class="docutils">
+<dt><a class="reference external" href="http://pypi.python.org/pypi/chardet">chardet</a></dt>
+<dd>Used in <a class="reference internal" href="api-text-misc.html#kitchen.text.misc.guess_encoding" title="kitchen.text.misc.guess_encoding"><tt class="xref py py-func docutils literal"><span class="pre">guess_encoding()</span></tt></a> and
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.guess_encoding_to_xml" title="kitchen.text.converters.guess_encoding_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">guess_encoding_to_xml()</span></tt></a> to help guess
+encoding of byte strings being converted.  If not present, unknown
+encodings will be converted as if they were <tt class="docutils literal"><span class="pre">latin1</span></tt></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="other-recommended-libraries">
+<h2>Other Recommended Libraries<a class="headerlink" href="#other-recommended-libraries" title="Permalink to this headline">¶</a></h2>
+<p>These libraries implement commonly used functionality that everyone seems to
+invent.  Rather than reinvent their wheel, I simply list the things that they
+do well for now.  Perhaps if people can&#8217;t find them normally, I&#8217;ll add them as
+requirements in <tt class="file docutils literal"><span class="pre">setup.py</span></tt> or link them into kitchen&#8217;s namespace.  For
+now, I just mention them here:</p>
+<dl class="docutils">
+<dt><a class="reference external" href="http://pypi.python.org/pypi/bunch/">bunch</a></dt>
+<dd>Bunch is a dictionary that you can use attribute lookup as well as bracket
+notation to access.  Setting it apart from most homebrewed implementations
+is the <tt class="xref py py-func docutils literal"><span class="pre">bunchify()</span></tt> function which will descend nested structures of
+lists and dicts, transforming the dicts to Bunch&#8217;s.</dd>
+<dt><a class="reference external" href="http://code.krypto.org/python/hashlib/">hashlib</a></dt>
+<dd>Python 2.5 and forward have a <tt class="xref py py-mod docutils literal"><span class="pre">hashlib</span></tt> library that provides secure
+hash functions to python.  If you&#8217;re developing for python2.3 or
+python2.4, though, you can install the standalone hashlib library and have
+access to the same functions.</dd>
+<dt><a class="reference external" href="http://pypi.python.org/pypi/iterutils/">iterutils</a></dt>
+<dd>The python documentation for <tt class="xref py py-mod docutils literal"><span class="pre">itertools</span></tt> has some examples
+of other nice iterable functions that can be built from the
+<tt class="xref py py-mod docutils literal"><span class="pre">itertools</span></tt> functions.  This third-party module creates those recipes
+as a module.</dd>
+<dt><a class="reference external" href="http://pypi.python.org/pypi/ordereddict/">ordereddict</a></dt>
+<dd>Python 2.7 and forward have a <tt class="xref py py-mod docutils literal"><span class="pre">OrderedDict</span></tt> that
+provides a <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt> whose items are ordered (and indexable) as well
+as named.</dd>
+<dt><a class="reference external" href="http://pypi.python.org/pypi/unittest2">unittest2</a></dt>
+<dd>Python 2.7 has an updated <tt class="xref py py-mod docutils literal"><span class="pre">unittest</span></tt> library with new functions not
+present in the <a class="reference external" href="http://docs.python.org/library">python standard library</a> for Python 2.6 or less.  If you want to use those
+new functions but need your testing framework to be compatible with older
+Python the unittest2 library provides the update as an external module.</dd>
+<dt><a class="reference external" href="http://somethingaboutorange.com/mrl/projects/nose/">nose</a></dt>
+<dd>If you want to use a test discovery tool instead of the unittest
+framework, nosetests provides a simple to use way to do that.</dd>
+</dl>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>This python module is distributed under the terms of the
+<a class="reference external" href="http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">GNU Lesser General Public License Version 2 or later</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Some parts of this module are licensed under terms less restrictive
+than the LGPLv2+.  If you separate these files from the work as a whole
+you are allowed to use them under the less restrictive licenses.  The
+following is a list of the files that are known:</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://www.python.org/download/releases/2.4/license/">Python 2 license</a></dt>
+<dd><tt class="file docutils literal"><span class="pre">_subprocess.py</span></tt>, <tt class="file docutils literal"><span class="pre">test_subprocess.py</span></tt>,
+<tt class="file docutils literal"><span class="pre">defaultdict.py</span></tt>, <tt class="file docutils literal"><span class="pre">test_defaultdict.py</span></tt>,
+<tt class="file docutils literal"><span class="pre">_base64.py</span></tt>, and <tt class="file docutils literal"><span class="pre">test_base64.py</span></tt></dd>
+</dl>
+</div>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Using kitchen to write good code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unicode-frustrations.html">Overcoming frustration: Correctly using unicode in python2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designing-unicode-apis.html">Designing Unicode Aware APIs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-overview.html">Kitchen API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api-i18n.html">Kitchen.i18n Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-text.html">Kitchen.text: unicode and utf8 and xml oh my!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-collections.html">Kitchen.collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-iterutils.html">Kitchen.iterutils Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-versioning.html">Helpers for versioning software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-pycompat24.html">Python 2.4 Compatibiity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-pycompat25.html">Python 2.5 Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-pycompat27.html">Python 2.7 Compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-exceptions.html">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="porting-guide-0.3.html">1.0.0 Porting Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="porting-guide-0.3.html#python-fedora">python-fedora</a></li>
+<li class="toctree-l2"><a class="reference internal" href="porting-guide-0.3.html#yum">yum</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hacking.html">Conventions for contributing to kitchen</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#style">Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#python-2-3-compatibility">Python 2.3 compatibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#unittests">Unittests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#docstrings-and-documentation">Docstrings and documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#kitchen-versioning">Kitchen versioning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#i18n">I18N</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#api-updates">API updates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#news-file">NEWS file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#kitchen-subpackages">Kitchen subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hacking.html#kitchen-addon-packages">Kitchen addon packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+<div class="section" id="project-pages">
+<h2>Project Pages<a class="headerlink" href="#project-pages" title="Permalink to this headline">¶</a></h2>
+<p>More information about the project can be found on the <a class="reference external" href="https://fedorahosted.org/kitchen">project webpage</a></p>
+<p>The latest published version of this documentation can be found on the <a class="reference external" href="https://fedorahosted.org/releases/k/i/kitchen/docs">documentation page</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Kitchen, everything but the sink</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a><ul>
+<li><a class="reference internal" href="#soft-requirements">Soft Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-recommended-libraries">Other Recommended Libraries</a></li>
+<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#contents">Contents</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#project-pages">Project Pages</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="next chapter">Using kitchen to write good code</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Using kitchen to write good code"
+             >next</a> |</li>
+        <li><a href="#">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

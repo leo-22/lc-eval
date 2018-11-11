@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overcoming frustration: Correctly using unicode in python2 &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Using kitchen to write good code" href="tutorial.html" />
+    <link rel="next" title="Designing Unicode Aware APIs" href="designing-unicode-apis.html" />
+    <link rel="prev" title="Using kitchen to write good code" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="designing-unicode-apis.html" title="Designing Unicode Aware APIs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Using kitchen to write good code"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" accesskey="U">Using kitchen to write good code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="overcoming-frustration-correctly-using-unicode-in-python2">
+<span id="overcoming-frustration"></span><h1>Overcoming frustration: Correctly using unicode in python2<a class="headerlink" href="#overcoming-frustration-correctly-using-unicode-in-python2" title="Permalink to this headline">¶</a></h1>
+<p>In python-2.x, there&#8217;s two types that deal with text.</p>
+<ol class="arabic simple">
+<li><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is for strings of bytes.  These are very similar in nature to
+how strings are handled in C.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> is for strings of unicode <a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code points</em></a>.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p><strong>Just what the dickens is &#8220;Unicode&#8221;?</strong></p>
+<p>One mistake that people encountering this issue for the first time make is
+confusing the <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> type and the encodings of unicode stored in
+the <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> type.  In python, the <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> type stores an
+abstract sequence of <a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code points</em></a>.  Each <a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a>
+represents a <a class="reference internal" href="glossary.html#term-grapheme"><em class="xref std std-term">grapheme</em></a>.  By contrast, byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> stores
+a sequence of bytes which can then be mapped to a sequence of <a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code
+points</em></a>.  Each unicode encoding (<a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>, UTF-7, UTF-16, UTF-32,
+etc) maps different sequences of bytes to the unicode <a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code points</em></a>.</p>
+<p class="last">What does that mean to you as a programmer?  When you&#8217;re dealing with text
+manipulations (finding the number of characters in a string or cutting
+a string on word boundaries) you should be dealing with <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings as they abstract characters in a manner that&#8217;s appropriate for
+thinking of them as a sequence of letters that you will see on a page.
+When dealing with I/O, reading to and from the disk, printing to
+a terminal, sending something over a network link, etc, you should be dealing
+with byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> as those devices are going to need to deal with
+concrete implementations of what bytes represent your abstract characters.</p>
+</div>
+<p>In the python2 world many APIs use these two classes interchangably but there
+are several important APIs where only one or the other will do the right
+thing.  When you give the wrong type of string to an API that wants the other
+type, you may end up with an exception being raised (<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeDecodeError</span></tt>
+or <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeEncodeError</span></tt>).  However, these exceptions aren&#8217;t always raised
+because python implicitly converts between types... <em>sometimes</em>.</p>
+<div class="section" id="frustration-1-inconsistent-errors">
+<h2>Frustration #1: Inconsistent Errors<a class="headerlink" href="#frustration-1-inconsistent-errors" title="Permalink to this headline">¶</a></h2>
+<p>Although converting when possible seems like the right thing to do, it&#8217;s
+actually the first source of frustration.  A programmer can test out their
+program with a string like: <tt class="docutils literal"><span class="pre">The</span> <span class="pre">quick</span> <span class="pre">brown</span> <span class="pre">fox</span> <span class="pre">jumped</span> <span class="pre">over</span> <span class="pre">the</span> <span class="pre">lazy</span> <span class="pre">dog</span></tt>
+and not encounter any issues.  But when they release their software into the
+wild, someone enters the string: <tt class="docutils literal"><span class="pre">I</span> <span class="pre">sat</span> <span class="pre">down</span> <span class="pre">for</span> <span class="pre">coffee</span> <span class="pre">at</span> <span class="pre">the</span> <span class="pre">café</span></tt> and
+suddenly an exception is thrown.  The reason?  The mechanism that converts
+between the two types is only able to deal with <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters.
+Once you throw non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters into your strings, you have to
+start dealing with the conversion manually.</p>
+<p>So, if I manually convert everything to either byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings, will I be okay?  The answer is.... <em>sometimes</em>.</p>
+</div>
+<div class="section" id="frustration-2-inconsistent-apis">
+<h2>Frustration #2: Inconsistent APIs<a class="headerlink" href="#frustration-2-inconsistent-apis" title="Permalink to this headline">¶</a></h2>
+<p>The problem you run into when converting everything to byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings is that you&#8217;ll be using someone else&#8217;s API quite
+often (this includes the APIs in the <a class="reference external" href="http://docs.python.org/library">python standard library</a>) and find that the API will only
+accept byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or only accept <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.  Or worse,
+that the code will accept either when you&#8217;re dealing with strings that consist
+solely of <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> but throw an error when you give it a string that&#8217;s
+got non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters.  When you encounter these APIs you first
+need to identify which type will work better and then you have to convert your
+values to the correct type for that code.  Thus the programmer that wants to
+proactively fix all unicode errors in their code needs to do two things:</p>
+<ol class="arabic simple">
+<li>You must keep track of what type your sequences of text are.  Does
+<tt class="docutils literal"><span class="pre">my_sentence</span></tt> contain <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>?  If you don&#8217;t
+know that then you&#8217;re going to be in for a world of hurt.</li>
+<li>Anytime you call a function you need to evaluate whether that function will
+do the right thing with <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> values.  Sending
+the wrong value here will lead to a <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt> being thrown when
+the string contains non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is one mitigating factor here.  The python community has been
+standardizing on using <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> in all its APIs.  Although there
+are some APIs that you need to send byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to in order to be
+safe, (including things as ubiquitous as <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> as we&#8217;ll see in the
+next section), it&#8217;s getting easier and easier to use <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings with most APIs.</p>
+</div>
+</div>
+<div class="section" id="frustration-3-inconsistent-treatment-of-output">
+<h2>Frustration #3: Inconsistent treatment of output<a class="headerlink" href="#frustration-3-inconsistent-treatment-of-output" title="Permalink to this headline">¶</a></h2>
+<p>Alright, since the python community is moving to using <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings everywhere, we might as well convert everything to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings and use that by default, right?  Sounds good most of the time but
+there&#8217;s at least one huge caveat to be aware of.  Anytime you output text to
+the terminal or to a file, the text has to be converted into a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Python will try to implicitly convert from <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> to
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>... but it will throw an exception if the bytes are
+non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(),</span> <span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+<span class="go">café</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/var/tmp/debug.log&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\xe9&#39; in position 3</span>: <span class="n">ordinal not in range(128)</span>
+</pre></div>
+</div>
+<p>Okay, this is simple enough to solve:  Just convert to a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and
+we&#8217;re all set:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">string</span> <span class="o">=</span> <span class="nb">unicode</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(),</span> <span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+<span class="go">café</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">string_for_output</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">,</span> <span class="s">&#39;replace&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;/var/tmp/debug.log&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">log</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">string_for_output</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p>So that was simple, right?  Well... there&#8217;s one gotcha that makes things a bit
+harder to debug sometimes.  When you attempt to write non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a>
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings to a file-like object you get a traceback everytime.
+But what happens when you use <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt>?  The terminal is a file-like object
+so it should raise an exception right?  The answer to that is....
+<em>sometimes</em>:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="go">$ python</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">u&#39;café&#39;</span>
+<span class="go">café</span>
+</pre></div>
+</div>
+<p>No exception.  Okay, we&#8217;re fine then?</p>
+<p>We are until someone does one of the following:</p>
+<ul>
+<li><p class="first">Runs the script in a different locale:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="go">$ LC_ALL=C python</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Note: if you&#39;re using a good terminal program when running in the C locale</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># The terminal program will prevent you from entering non-ASCII characters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># python will still recognize them if you use the codepoint instead:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">u&#39;caf</span><span class="se">\xe9</span><span class="s">&#39;</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\xe9&#39; in position 3</span>: <span class="n">ordinal not in range(128)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Redirects output to a file:</p>
+<div class="highlight-pycon"><div class="highlight"><pre><span class="go">$ cat test.py</span>
+<span class="go">#!/usr/bin/python -tt</span>
+<span class="go"># -*- coding: utf-8 -*-</span>
+<span class="go">print u&#39;café&#39;</span>
+<span class="go">$ ./test.py  &gt;t</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;./test.py&quot;</span>, line <span class="m">4</span>, in <span class="n">&lt;module&gt;</span>
+    <span class="k">print</span> <span class="s">u&#39;café&#39;</span>
+<span class="gr">UnicodeEncodeError: &#39;ascii&#39; codec can&#39;t encode character u&#39;\xe9&#39; in position 3</span>: <span class="n">ordinal not in range(128)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Okay, the locale thing is a pain but understandable: the C locale doesn&#8217;t
+understand any characters outside of <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> so naturally attempting to
+display those won&#8217;t work.  Now why does redirecting to a file cause problems?
+It&#8217;s because <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> in python2 is treated specially.  Whereas the other
+file-like objects in python always convert to <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> unless you set
+them up differently, using <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> to output to the terminal will use
+the user&#8217;s locale to convert before sending the output to the terminal.  When
+<tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> is not outputting to the terminal (being redirected to a file,
+for instance), <tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> decides that it doesn&#8217;t know what locale to use
+for that file and so it tries to convert to <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> instead.</p>
+<p>So what does this mean for you, as a programmer?  Unless you have the luxury
+of controlling how your users use your code, you should always, always, always
+convert to a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> before outputting strings to the terminal or to
+a file.  Python even provides you with a facility to do just this.  If you
+know that every <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string you send to a particular file-like
+object (for instance, <tt class="xref py py-data docutils literal"><span class="pre">stdout</span></tt>) should be converted to a particular
+encoding you can use a <tt class="xref py py-class docutils literal"><span class="pre">codecs.StreamWriter</span></tt> object to convert from
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  In particular,
+<tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt> will return a <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> class
+that will help you to wrap a file-like object for output.  Using our
+<tt class="xref py py-func docutils literal"><span class="pre">print()</span></tt> example:</p>
+<div class="highlight-python"><pre>$ cat test.py
+#!/usr/bin/python -tt
+# -*- coding: utf-8 -*-
+import codecs
+import sys
+
+UTF8Writer = codecs.getwriter('utf8')
+sys.stdout = UTF8Writer(sys.stdout)
+print u'café'
+$ ./test.py  &gt;t
+$ cat t
+café</pre>
+</div>
+</div>
+<div class="section" id="frustrations-4-and-5-the-other-shoes">
+<h2>Frustrations #4 and #5 &#8211; The other shoes<a class="headerlink" href="#frustrations-4-and-5-the-other-shoes" title="Permalink to this headline">¶</a></h2>
+<p>In English, there&#8217;s a saying &#8220;waiting for the other shoe to drop&#8221;.  It means
+that when one event (usually bad) happens, you come to expect another event
+(usually worse) to come after.  In this case we have two other shoes.</p>
+<div class="section" id="frustration-4-now-it-doesn-t-take-byte-strings">
+<h3>Frustration #4: Now it doesn&#8217;t take byte strings?!<a class="headerlink" href="#frustration-4-now-it-doesn-t-take-byte-strings" title="Permalink to this headline">¶</a></h3>
+<p>If you wrap <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt> using <tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt> and think you
+are now safe to print any variable without checking its type I am afraid
+I must inform you that you&#8217;re not paying enough attention to <a class="reference internal" href="glossary.html#term-murphy-s-law"><em class="xref std std-term">Murphy&#8217;s
+Law</em></a>.  The <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> that <tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt>
+provides will take <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings and transform them into byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> before they get to <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>.  The problem is if you
+give it something that&#8217;s already a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> it tries to transform
+that as well.  To do that it tries to turn the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> you give it
+into <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and then transform that back into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>...
+and since it uses the <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> codec to perform those conversions,
+chances are that it&#8217;ll blow up when making them:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">codecs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">UTF8Writer</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">getwriter</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">UTF8Writer</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;café&#39;</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;/usr/lib64/python2.6/codecs.py&quot;</span>, line <span class="m">351</span>, in <span class="n">write</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">consumed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">)</span>
+<span class="gr">UnicodeDecodeError: &#39;ascii&#39; codec can&#39;t decode byte 0xc3 in position 3</span>: <span class="n">ordinal not in range(128)</span>
+</pre></div>
+</div>
+<p>To work around this, kitchen provides an alternate version of
+<tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt> that can deal with both byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.  Use <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.getwriter" title="kitchen.text.converters.getwriter"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.getwriter()</span></tt></a> in
+place of the <tt class="xref py py-mod docutils literal"><span class="pre">codecs</span></tt> version like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">getwriter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">UTF8Writer</span> <span class="o">=</span> <span class="n">getwriter</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">UTF8Writer</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">u&#39;café&#39;</span>
+<span class="go">café</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;café&#39;</span>
+<span class="go">café</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="frustration-5-exceptions">
+<h3>Frustration #5: Exceptions<a class="headerlink" href="#frustration-5-exceptions" title="Permalink to this headline">¶</a></h3>
+<p>Okay, so we&#8217;ve gotten ourselves this far.  We convert everything to
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.  We&#8217;re aware that we need to convert back into byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> before we write to the terminal.  We&#8217;ve worked around the
+inability of the standard <tt class="xref py py-func docutils literal"><span class="pre">getwriter()</span></tt> to deal with both byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.  Are we all set?  Well, there&#8217;s at
+least one more gotcha:  raising exceptions with a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> message.
+Take a look:</p>
+<div class="highlight-pycon"><pre>&gt;&gt;&gt; class MyException(Exception):
+&gt;&gt;&gt;     pass
+&gt;&gt;&gt;
+&gt;&gt;&gt; raise MyException(u'Cannot do this')
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+__main__.MyException: Cannot do this
+&gt;&gt;&gt; raise MyException(u'Cannot do this while at a café')
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+__main__.MyException:
+&gt;&gt;&gt;</pre>
+</div>
+<p>No, I didn&#8217;t truncate that last line; raising exceptions really cannot handle
+non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters in a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string and will output an
+exception without the message if the message contains them.  What happens if
+we try to use the handy dandy <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.getwriter" title="kitchen.text.converters.getwriter"><tt class="xref py py-func docutils literal"><span class="pre">getwriter()</span></tt></a> trick
+to work around this?</p>
+<div class="highlight-pycon"><pre>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; from kitchen.text.converters import getwriter
+&gt;&gt;&gt; sys.stderr = getwriter('utf8')(sys.stderr)
+&gt;&gt;&gt; raise MyException(u'Cannot do this')
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+__main__.MyException: Cannot do this
+&gt;&gt;&gt; raise MyException(u'Cannot do this while at a café')
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+__main__.MyException&gt;&gt;&gt;</pre>
+</div>
+<p>Not only did this also fail, it even swallowed the trailing newline that&#8217;s
+normally there.... So how to make this work?  Transform from <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings to byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> manually before outputting:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">to_bytes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">raise</span> <span class="n">MyException</span><span class="p">(</span><span class="n">to_bytes</span><span class="p">(</span><span class="s">u&#39;Cannot do this while at a café&#39;</span><span class="p">))</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">__main__.MyException</span>: <span class="n">Cannot do this while at a café</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">If you use <tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt> on <tt class="xref py py-data docutils literal"><span class="pre">sys.stderr</span></tt>, you&#8217;ll find
+that raising an exception with a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is broken by the
+default <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> as well.  Don&#8217;t do that or you&#8217;ll
+have no way to output non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters.  If you want to use
+a <tt class="xref py py-class docutils literal"><span class="pre">StreamWriter</span></tt> to encode other things on stderr while
+still having working exceptions, use
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.getwriter" title="kitchen.text.converters.getwriter"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.getwriter()</span></tt></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="frustration-6-inconsistent-apis-part-deux">
+<h2>Frustration #6: Inconsistent APIs Part deux<a class="headerlink" href="#frustration-6-inconsistent-apis-part-deux" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you do everything right in your code but other people&#8217;s code fails
+you.  With unicode issues this happens more often than we want.  A glaring
+example of this is when you get values back from a function that aren&#8217;t
+consistently <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.</p>
+<p>An example from the <a class="reference external" href="http://docs.python.org/library">python standard library</a> is <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>.  The <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> functions
+are used to help translate messages that you display to users in the users&#8217;
+native languages.  Since most languages contain letters outside of the
+<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> range, the values that are returned contain unicode characters.
+<tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> provides you with <tt class="xref py py-meth docutils literal"><span class="pre">ugettext()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">ungettext()</span></tt> to return these translations as
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings and <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></tt>, and
+<tt class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></tt> to return them as encoded byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Unfortunately, even though they&#8217;re documented to return only
+one type of string or the other, the implementation has corner cases where the
+wrong type can be returned.</p>
+<p>This means that even if you separate your <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string and byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> correctly before you pass your strings to a <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>
+function, afterwards, you might have to check that you have the right sort of
+string type again.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference internal" href="api-i18n.html#module-kitchen.i18n" title="kitchen.i18n"><tt class="xref py py-mod docutils literal"><span class="pre">kitchen.i18n</span></tt></a> provides alternate gettext translation objects that
+return only byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or only <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.</p>
+</div>
+</div>
+<div class="section" id="a-few-solutions">
+<h2>A few solutions<a class="headerlink" href="#a-few-solutions" title="Permalink to this headline">¶</a></h2>
+<p>Now that we&#8217;ve identified the issues, can we define a comprehensive strategy
+for dealing with them?</p>
+<div class="section" id="convert-text-at-the-border">
+<h3>Convert text at the border<a class="headerlink" href="#convert-text-at-the-border" title="Permalink to this headline">¶</a></h3>
+<p>If you get some piece of text from a library, read from a file, etc, turn it
+into a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string immediately.  Since python is moving in the
+direction of <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings everywhere it&#8217;s going to be easier to
+work with <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings within your code.</p>
+<p>If your code is heavily involved with using things that are bytes, you can do
+the opposite and convert all text into byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> at the border and
+only convert to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> when you need it for passing to another
+library or performing string operations on it.</p>
+<p>In either case, the important thing is to pick a default type for strings and
+stick with it throughout your code.  When you mix the types it becomes much
+easier to operate on a string with a function that can only use the other type
+by mistake.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In python3, the abstract unicode type becomes much more prominent.
+The type named <tt class="docutils literal"><span class="pre">str</span></tt> is the equivalent of python2&#8217;s <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and
+python3&#8217;s <tt class="docutils literal"><span class="pre">bytes</span></tt> type replaces python2&#8217;s <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Most APIs deal
+in the unicode type of string with just some pieces that are low level
+dealing with bytes.  The implicit conversions between bytes and unicode
+is removed and whenever you want to make the conversion you need to do so
+explicitly.</p>
+</div>
+</div>
+<div class="section" id="when-the-data-needs-to-be-treated-as-bytes-or-unicode-use-a-naming-convention">
+<h3>When the data needs to be treated as bytes (or unicode) use a naming convention<a class="headerlink" href="#when-the-data-needs-to-be-treated-as-bytes-or-unicode-use-a-naming-convention" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes you&#8217;re converting nearly all of your data to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings but you have one or two values where you have to keep byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> around.  This is often the case when you need to use the value
+verbatim with some external resource.  For instance, filenames or key values
+in a database.  When you do this, use a naming convention for the data you&#8217;re
+working with so you (and others reading your code later) don&#8217;t get confused
+about what&#8217;s being stored in the value.</p>
+<p>If you need both a textual string to present to the user and a byte value for
+an exact match, consider keeping both versions around.  You can either use two
+variables for this or a <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt> whose key is the byte value.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You can use the naming convention used in kitchen as a guide for
+implementing your own naming convention.  It prefixes byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+variables of unknown encoding with <tt class="docutils literal"><span class="pre">b_</span></tt> and byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> of known
+encoding with the encoding name like: <tt class="docutils literal"><span class="pre">utf8_</span></tt>.  If the default was to
+handle <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and only keep a few <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> values, those
+variables would be prefixed with <tt class="docutils literal"><span class="pre">u_</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="when-outputting-data-convert-back-into-bytes">
+<h3>When outputting data, convert back into bytes<a class="headerlink" href="#when-outputting-data-convert-back-into-bytes" title="Permalink to this headline">¶</a></h3>
+<p>When you go to send your data back outside of your program (to the filesystem,
+over the network, displaying to the user, etc) turn the data back into a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  How you do this will depend on the expected output format of
+the data.  For displaying to the user, you can use the user&#8217;s default encoding
+using <tt class="xref py py-func docutils literal"><span class="pre">locale.getpreferredencoding()</span></tt>.  For entering into a file, you&#8217;re best
+bet is to pick a single encoding and stick with it.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When using the encoding that the user has set (for instance, using
+<tt class="xref py py-func docutils literal"><span class="pre">locale.getpreferredencoding()</span></tt>, remember that they may have their
+encoding set to something that can&#8217;t display every single unicode
+character.  That means when you convert from <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> to a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> you need to decide what should happen if the byte value is
+not valid in the user&#8217;s encoding.  For purposes of displaying messages to
+the user, it&#8217;s usually okay to use the <tt class="docutils literal"><span class="pre">replace</span></tt> encoding error handler
+to replace the invalid characters with a question mark or other symbol
+meaning the character couldn&#8217;t be displayed.</p>
+</div>
+<p>You can use <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.getwriter" title="kitchen.text.converters.getwriter"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.getwriter()</span></tt></a> to do this automatically
+for <tt class="xref py py-data docutils literal"><span class="pre">sys.stdout</span></tt>.  When creating exception messages be sure to convert
+to bytes manually.</p>
+</div>
+<div class="section" id="when-writing-unittests-include-non-ascii-values-and-both-unicode-and-str-type">
+<h3>When writing unittests, include non-ASCII values and both unicode and str type<a class="headerlink" href="#when-writing-unittests-include-non-ascii-values-and-both-unicode-and-str-type" title="Permalink to this headline">¶</a></h3>
+<p>Unless you know that a specific portion of your code will only deal with
+<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a>, be sure to include non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> values in your unittests.
+Including a few characters from several different scripts is highly advised as
+well because some code may have special cased accented roman characters but
+not know how to handle characters used in Asian alphabets.</p>
+<p>Similarly, unless you know that that portion of your code will only be given
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings or only byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> be sure to try variables
+of both types in your unittests.  When doing this, make sure that the
+variables are also non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> as python&#8217;s implicit conversion will mask
+problems with pure <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> data.  In many cases, it makes sense to check
+what happens if byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings that won&#8217;t
+decode in the present locale are given.</p>
+</div>
+<div class="section" id="be-vigilant-about-spotting-poor-apis">
+<h3>Be vigilant about spotting poor APIs<a class="headerlink" href="#be-vigilant-about-spotting-poor-apis" title="Permalink to this headline">¶</a></h3>
+<p>Make sure that the libraries you use return only <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings or
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  Unittests can help you spot issues here by running many
+variations of data through your functions and checking that you&#8217;re still
+getting the types of string that you expect.</p>
+</div>
+<div class="section" id="example-putting-this-all-together-with-kitchen">
+<h3>Example: Putting this all together with kitchen<a class="headerlink" href="#example-putting-this-all-together-with-kitchen" title="Permalink to this headline">¶</a></h3>
+<p>The kitchen library provides a wide array of functions to help you deal with
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings in your program.  Here&#8217;s
+a short example that uses many kitchen functions to do its work:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/python -tt</span>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">locale</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">unicodedata</span>
+
+<span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">getwriter</span><span class="p">,</span> <span class="n">to_bytes</span><span class="p">,</span> <span class="n">to_unicode</span>
+<span class="kn">from</span> <span class="nn">kitchen.i18n</span> <span class="kn">import</span> <span class="n">get_translation_object</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c"># Setup gettext driven translations but use the kitchen functions so</span>
+    <span class="c"># we don&#39;t have the mismatched bytes-unicode issues.</span>
+    <span class="n">translations</span> <span class="o">=</span> <span class="n">get_translation_object</span><span class="p">(</span><span class="s">&#39;example&#39;</span><span class="p">)</span>
+    <span class="c"># We use _() for marking strings that we operate on as unicode</span>
+    <span class="c"># This is pretty much everything</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">translations</span><span class="o">.</span><span class="n">ugettext</span>
+    <span class="c"># And b_() for marking strings that we operate on as bytes.</span>
+    <span class="c"># This is limited to exceptions</span>
+    <span class="n">b_</span> <span class="o">=</span> <span class="n">translations</span><span class="o">.</span><span class="n">lgettext</span>
+
+    <span class="c"># Setup stdout</span>
+    <span class="n">encoding</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getpreferredencoding</span><span class="p">()</span>
+    <span class="n">Writer</span> <span class="o">=</span> <span class="n">getwriter</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">Writer</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+
+    <span class="c"># Load data.  Format is filename\0description</span>
+    <span class="c"># description should be utf-8 but filename can be any legal filename</span>
+    <span class="c"># on the filesystem</span>
+    <span class="c"># Sample datafile.txt:</span>
+    <span class="c">#   /etc/shells\x00Shells available on caf\xc3\xa9.lan</span>
+    <span class="c">#   /var/tmp/file\xff\x00File with non-utf8 data in the filename</span>
+    <span class="c">#</span>
+    <span class="c"># And to create /var/tmp/file\xff (under bash or zsh) do:</span>
+    <span class="c">#   echo &#39;Some data&#39; &gt; /var/tmp/file$&#39;\377&#39;</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;datafile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">datafile</span><span class="p">:</span>
+        <span class="c"># We&#39;re going to keep filename as bytes because we will need the</span>
+        <span class="c"># exact bytes to access files on a POSIX operating system.</span>
+        <span class="c"># description, we&#39;ll immediately transform into unicode type.</span>
+        <span class="n">b_filename</span><span class="p">,</span> <span class="n">description</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\0</span><span class="s">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c"># to_unicode defaults to decoding output from utf-8 and replacing</span>
+        <span class="c"># any problematic bytes with the unicode replacement character</span>
+        <span class="c"># We accept mangling of the description here knowing that our file</span>
+        <span class="c"># format is supposed to use utf-8 in that field and that the</span>
+        <span class="c"># description will only be displayed to the user, not used as</span>
+        <span class="c"># a key value.</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">to_unicode</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">b_filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+    <span class="n">datafile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c"># We&#39;re going to add a pair of extra fields onto our data to show the</span>
+    <span class="c"># length of the description and the filesize.  We put those between</span>
+    <span class="c"># the filename and description because we haven&#39;t checked that the</span>
+    <span class="c"># description is free of NULLs.</span>
+    <span class="n">datafile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;newdatafile.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+
+    <span class="c"># Name filename with a b_ prefix to denote byte string of unknown encoding</span>
+    <span class="k">for</span> <span class="n">b_filename</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="c"># Since we have the byte representation of filename, we can read any</span>
+        <span class="c"># filename</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">b_filename</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">F_OK</span><span class="p">):</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">b_filename</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c"># Because the description is unicode type,  we know the number of</span>
+        <span class="c"># characters corresponds to the length of the normalized unicode</span>
+        <span class="c"># string.</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s">&#39;NFC&#39;</span><span class="p">,</span> <span class="n">description</span><span class="p">))</span>
+
+        <span class="c"># Print a summary to the screen</span>
+        <span class="c"># Note that we do not let implici type conversion from str to</span>
+        <span class="c"># unicode transform b_filename into a unicode string.  That might</span>
+        <span class="c"># fail as python would use the ASCII filename.  Instead we use</span>
+        <span class="c"># to_unicode() to explictly transform in a way that we know will</span>
+        <span class="c"># not traceback.</span>
+        <span class="k">print</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;filename: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">to_unicode</span><span class="p">(</span><span class="n">b_filename</span><span class="p">)</span>
+        <span class="k">print</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;file size: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">size</span>
+        <span class="k">print</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;desc length: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">length</span>
+        <span class="k">print</span> <span class="n">_</span><span class="p">(</span><span class="s">u&#39;description: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">data</span><span class="p">[</span><span class="n">b_filename</span><span class="p">]</span>
+
+        <span class="c"># First combine the unicode portion</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="si">%s</span><span class="se">\0</span><span class="si">%s</span><span class="se">\0</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">b_filename</span><span class="p">])</span>
+        <span class="c"># Since the filenames are bytes, turn everything else to bytes before combining</span>
+        <span class="c"># Turning into unicode first would be wrong as the bytes in b_filename</span>
+        <span class="c"># might not convert</span>
+        <span class="n">b_line</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\0</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b_filename</span><span class="p">,</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+
+        <span class="c"># Just to demonstrate that getwriter will pass bytes through fine</span>
+        <span class="k">print</span> <span class="n">b_</span><span class="p">(</span><span class="s">&#39;Wrote: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="n">b_line</span>
+        <span class="n">datafile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">b_line</span><span class="p">)</span>
+    <span class="n">datafile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c"># And just to show how to properly deal with an exception.</span>
+    <span class="c"># Note two things about this:</span>
+    <span class="c"># 1) We use the b_() function to translate the string.  This returns a</span>
+    <span class="c">#    byte string instead of a unicode string</span>
+    <span class="c"># 2) We&#39;re using the b_() function returned by kitchen.  If we had</span>
+    <span class="c">#    used the one from gettext we would need to convert the message to</span>
+    <span class="c">#    a byte str first</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">u&#39;Demonstrate the proper way to raise exceptions.  Sincerely,  </span><span class="se">\u3068\u3057\u304a</span><span class="s">&#39;</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">b_</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="api-text-converters.html#module-kitchen.text.converters" title="kitchen.text.converters"><tt class="xref py py-mod docutils literal"><span class="pre">kitchen.text.converters</span></tt></a></p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Overcoming frustration: Correctly using unicode in python2</a><ul>
+<li><a class="reference internal" href="#frustration-1-inconsistent-errors">Frustration #1: Inconsistent Errors</a></li>
+<li><a class="reference internal" href="#frustration-2-inconsistent-apis">Frustration #2: Inconsistent APIs</a></li>
+<li><a class="reference internal" href="#frustration-3-inconsistent-treatment-of-output">Frustration #3: Inconsistent treatment of output</a></li>
+<li><a class="reference internal" href="#frustrations-4-and-5-the-other-shoes">Frustrations #4 and #5 &#8211; The other shoes</a><ul>
+<li><a class="reference internal" href="#frustration-4-now-it-doesn-t-take-byte-strings">Frustration #4: Now it doesn&#8217;t take byte strings?!</a></li>
+<li><a class="reference internal" href="#frustration-5-exceptions">Frustration #5: Exceptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#frustration-6-inconsistent-apis-part-deux">Frustration #6: Inconsistent APIs Part deux</a></li>
+<li><a class="reference internal" href="#a-few-solutions">A few solutions</a><ul>
+<li><a class="reference internal" href="#convert-text-at-the-border">Convert text at the border</a></li>
+<li><a class="reference internal" href="#when-the-data-needs-to-be-treated-as-bytes-or-unicode-use-a-naming-convention">When the data needs to be treated as bytes (or unicode) use a naming convention</a></li>
+<li><a class="reference internal" href="#when-outputting-data-convert-back-into-bytes">When outputting data, convert back into bytes</a></li>
+<li><a class="reference internal" href="#when-writing-unittests-include-non-ascii-values-and-both-unicode-and-str-type">When writing unittests, include non-ASCII values and both unicode and str type</a></li>
+<li><a class="reference internal" href="#be-vigilant-about-spotting-poor-apis">Be vigilant about spotting poor APIs</a></li>
+<li><a class="reference internal" href="#example-putting-this-all-together-with-kitchen">Example: Putting this all together with kitchen</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">Using kitchen to write good code</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="designing-unicode-apis.html"
+                        title="next chapter">Designing Unicode Aware APIs</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/unicode-frustrations.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="designing-unicode-apis.html" title="Designing Unicode Aware APIs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Using kitchen to write good code"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="tutorial.html" >Using kitchen to write good code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+455:8ce954d6e3358daa476e4ee040c8caaf3c24e353
+0
+5
+amzn2-core:15213:1540504372
+amzn2extra-docker:7:1539815247
+yum.knack.works_epel_7_x86_64:14069:1541044886
+yum.knack.works_puppet_7:225:1541044888
+installed:456:40bab673f2810843e63deb0a45b34a25dc67ed07
+1
+mbr: tree,x86_64,0,1.6.0,10.amzn2.0.1 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: False
+  reason: user
+  reinstall: False

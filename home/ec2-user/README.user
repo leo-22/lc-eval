@@ -1,0 +1,71 @@
+### Assumptions
+-  a hierarchy for Hiera exists with the following levels:
+    - nodes
+    - defaults
+
+- Puppet 3.8 is already installed and has the future parser enabled
+
+- the 'stdlib' Puppet module is installed and available for use
+
+- all required RPMs are available in pre-configured YUM repos
+
+
+### Tasks
+# RPM Puppet Module (required)
+- (required) create a puppet module named 'rpm' that does the following:
+- (required) installs an RPM development toolchain
+- (optional) creates a macro for system-wide use named 'microarch' that has a value
+  equal to the model of the first CPU on the system
+
+# VIM Puppet Module (required)
+- (required) create a puppet module named 'vim' that does the following:
+- (required) installs vim-enhanced
+- (required) the module should use a Hiera variable named 'vim::use_spaces' to control
+  the following behavior via a boolean:
+    - use a tabstop of 4 with spaces instead of tab characters
+    - when 'vim::use_spaces' is toggled, the behavior of vim should follow suit.
+    - the default behavior when the value is 'false' should be to use tabs
+
+# Profile (required)
+- (required) create a puppet profile class named 'profiles::code_development' that leverages
+  the modules created above
+
+# Module Application (required)
+- (required) apply the 'code_development' profile to this node via a Hiera configuration
+  (e.g., not statically defined in site.pp).  other nodes should not receive
+  this profile if they were to use the same hieradata.  the Hiera variable used
+  to control which profiles are applied should be named 'profiles'.
+- (required) this node should enable the use of spaces in 'vim', as configured via Puppet.
+
+# Create an RPM (optional)
+- (required) Create an RPM that installs a simple application into /usr/bin.
+
+# Host a YUM repo (optional)
+- (required) Host a YUM repo, accessible via HTTP, for your newly built RPM
+- (required) Configure the system to use your hosted YUM repo.  It should be accessible
+  after a reboot and accessed via HTTP.
+
+# Host a Secure YUM Repo (optional)
+- (required) Make your HTTP-accessible YUM repo accessible via HTTPS as well.
+- (required) SSL verification must not be disabled.  The system should trust your certificate. 
+
+# Solution Repo(s) (required)
+- (required) store all relevant files in Git repo(s) under /root/.  A README on how you expect
+  your solution to be installed and run would be useful.  We should not have to guess as to
+  how to install and test your solution.
+
+
+### Evaluation
+- the Puppet run should not produce any warnings or errors
+
+- your system should be able to run vim and not produce spaces when writing
+  code and 'tab' is pressed.
+
+- building an RPM from a spec file that use the 'microarch' macro should result
+  in the macro being expanded to the correct value.  doing the same on another
+  system with a different CPU model should leverage the correct value for that
+  system as well.
+
+- /etc/puppet and /var/lib/hiera will be copied to another system.  the new
+  system should not be configured to use spaces after puppet is run using
+  the modules and hieradata you just created.

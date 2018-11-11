@@ -1,0 +1,152 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using kitchen to write good code &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="next" title="Overcoming frustration: Correctly using unicode in python2" href="unicode-frustrations.html" />
+    <link rel="prev" title="Kitchen, everything but the sink" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unicode-frustrations.html" title="Overcoming frustration: Correctly using unicode in python2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Kitchen, everything but the sink"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="using-kitchen-to-write-good-code">
+<h1>Using kitchen to write good code<a class="headerlink" href="#using-kitchen-to-write-good-code" title="Permalink to this headline">¶</a></h1>
+<p>Kitchen&#8217;s functions won&#8217;t automatically make you a better programmer.  You
+have to learn when and how to use them as well.  This section of the
+documentation is intended to show you some of the ways that you can apply
+kitchen&#8217;s functions to problems that may have arisen in your life.  The goal
+of this section is to give you enough information to understand what the
+kitchen API can do for you and where in the <a class="reference internal" href="api-overview.html#kitchenapi"><em>Kitchen API</em></a> docs to look
+for something that can help you with your next issue.  Along the way,
+you might pick up the knack for identifying issues with your code before you
+publish it.  And that <em>will</em> make you a better coder.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unicode-frustrations.html">Overcoming frustration: Correctly using unicode in python2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unicode-frustrations.html#frustration-1-inconsistent-errors">Frustration #1: Inconsistent Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicode-frustrations.html#frustration-2-inconsistent-apis">Frustration #2: Inconsistent APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicode-frustrations.html#frustration-3-inconsistent-treatment-of-output">Frustration #3: Inconsistent treatment of output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicode-frustrations.html#frustrations-4-and-5-the-other-shoes">Frustrations #4 and #5 &#8211; The other shoes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicode-frustrations.html#frustration-6-inconsistent-apis-part-deux">Frustration #6: Inconsistent APIs Part deux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicode-frustrations.html#a-few-solutions">A few solutions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="designing-unicode-apis.html">Designing Unicode Aware APIs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="designing-unicode-apis.html#take-either-bytes-or-unicode-output-only-unicode">Take either bytes or unicode, output only unicode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designing-unicode-apis.html#take-either-bytes-or-unicode-output-the-same-type">Take either bytes or unicode, output the same type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designing-unicode-apis.html#separate-functions">Separate functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designing-unicode-apis.html#deciding-whether-to-take-str-or-unicode-when-no-value-is-returned">Deciding whether to take str or unicode when no value is returned</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designing-unicode-apis.html#apis-to-avoid">APIs to Avoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="designing-unicode-apis.html#knowing-your-data">Knowing your data</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Kitchen, everything but the sink</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="unicode-frustrations.html"
+                        title="next chapter">Overcoming frustration: Correctly using unicode in python2</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unicode-frustrations.html" title="Overcoming frustration: Correctly using unicode in python2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Kitchen, everything but the sink"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

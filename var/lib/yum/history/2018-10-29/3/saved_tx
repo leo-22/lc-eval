@@ -1,0 +1,151 @@
+430:b9389c137e8cd9875012582bd21eaebe7696914b
+0
+5
+amzn2-core:15213:1540504372
+amzn2extra-docker:7:1539815247
+yum.knack.works_epel_7_x86_64:14069:1540785674
+yum.knack.works_puppet_7:225:1540785676
+installed:446:bde84814799894ac3812e42b25a34cb2940ae73b
+16
+mbr: ruby-augeas,x86_64,0,0.5.0,1.el7 70
+  repo: yum.knack.works_epel_7_x86_64
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: puppet,noarch,0,3.8.7,1.el7@a:dependson
+  depends_on: puppet,noarch,0,3.8.7,1.el7@a
+mbr: libselinux-ruby,x86_64,0,2.5,12.amzn2.0.2 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: puppet,noarch,0,3.8.7,1.el7@a:dependson
+  depends_on: puppet,noarch,0,3.8.7,1.el7@a
+mbr: facter,x86_64,1,2.4.6,1.el7 70
+  repo: yum.knack.works_puppet_7
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: puppet,noarch,0,3.8.7,1.el7@a:dependson
+  depends_on: puppet,noarch,0,3.8.7,1.el7@a
+mbr: rubygems,noarch,0,2.0.14.1,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a:dependson rubygem-json,x86_64,0,1.7.7,33.amzn2.0.3@a:dependson rubygem-bigdecimal,x86_64,0,1.2.0,33.amzn2.0.3@a:dependson rubygem-io-console,x86_64,0,0.4.2,33.amzn2.0.3@a:dependson rubygem-psych,x86_64,0,2.0.0,33.amzn2.0.3@a:dependson rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a:dependson
+  depends_on: ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a rubygem-json,x86_64,0,1.7.7,33.amzn2.0.3@a rubygem-bigdecimal,x86_64,0,1.2.0,33.amzn2.0.3@a rubygem-io-console,x86_64,0,0.4.2,33.amzn2.0.3@a rubygem-psych,x86_64,0,2.0.0,33.amzn2.0.3@a rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a
+mbr: rubygem-io-console,x86_64,0,0.4.2,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a:dependson
+  depends_on: rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a
+mbr: rubygem-bigdecimal,x86_64,0,1.2.0,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a:dependson
+  depends_on: ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a
+mbr: ruby-irb,noarch,0,2.0.0.648,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a:dependson
+  depends_on: rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a
+mbr: augeas-libs,x86_64,0,1.4.0,5.amzn2.1.1 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: ruby-augeas,x86_64,0,0.5.0,1.el7@a:dependson
+  depends_on: ruby-augeas,x86_64,0,0.5.0,1.el7@a
+mbr: ruby-libs,x86_64,0,2.0.0.648,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: hiera,noarch,1,1.3.4,5.el7@a:dependson ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a:dependson ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a:dependson ruby-augeas,x86_64,0,0.5.0,1.el7@a:dependson ruby-augeas,x86_64,0,0.5.0,1.el7@a:dependson ruby-shadow,x86_64,0,1.4.1,23.el7@a:dependson ruby-shadow,x86_64,0,1.4.1,23.el7@a:dependson rubygem-json,x86_64,0,1.7.7,33.amzn2.0.3@a:dependson rubygem-json,x86_64,0,1.7.7,33.amzn2.0.3@a:dependson rubygem-bigdecimal,x86_64,0,1.2.0,33.amzn2.0.3@a:dependson rubygem-bigdecimal,x86_64,0,1.2.0,33.amzn2.0.3@a:dependson rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a:dependson rubygem-io-console,x86_64,0,0.4.2,33.amzn2.0.3@a:dependson rubygem-io-console,x86_64,0,0.4.2,33.amzn2.0.3@a:dependson rubygem-psych,x86_64,0,2.0.0,33.amzn2.0.3@a:dependson rubygem-psych,x86_64,0,2.0.0,33.amzn2.0.3@a:dependson rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a:dependson ruby-irb,noarch,0,2.0.0.648,33.amzn2.0.3@a:dependson
+  depends_on: hiera,noarch,1,1.3.4,5.el7@a ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a ruby,x86_64,0,2.0.0.648,33.amzn2.0.3@a ruby-augeas,x86_64,0,0.5.0,1.el7@a ruby-augeas,x86_64,0,0.5.0,1.el7@a ruby-shadow,x86_64,0,1.4.1,23.el7@a ruby-shadow,x86_64,0,1.4.1,23.el7@a rubygem-json,x86_64,0,1.7.7,33.amzn2.0.3@a rubygem-json,x86_64,0,1.7.7,33.amzn2.0.3@a rubygem-bigdecimal,x86_64,0,1.2.0,33.amzn2.0.3@a rubygem-bigdecimal,x86_64,0,1.2.0,33.amzn2.0.3@a rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a rubygem-io-console,x86_64,0,0.4.2,33.amzn2.0.3@a rubygem-io-console,x86_64,0,0.4.2,33.amzn2.0.3@a rubygem-psych,x86_64,0,2.0.0,33.amzn2.0.3@a rubygem-psych,x86_64,0,2.0.0,33.amzn2.0.3@a rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a ruby-irb,noarch,0,2.0.0.648,33.amzn2.0.3@a
+mbr: rubygem-json,x86_64,0,1.7.7,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: puppet,noarch,0,3.8.7,1.el7@a:dependson rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a:dependson
+  depends_on: puppet,noarch,0,3.8.7,1.el7@a rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a
+mbr: rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a:dependson
+  depends_on: rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a
+mbr: hiera,noarch,1,1.3.4,5.el7 70
+  repo: yum.knack.works_epel_7_x86_64
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: puppet,noarch,0,3.8.7,1.el7@a:dependson
+  depends_on: puppet,noarch,0,3.8.7,1.el7@a
+mbr: rubygem-psych,x86_64,0,2.0.0,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a:dependson
+  depends_on: rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a
+mbr: puppet,noarch,0,3.8.7,1.el7 70
+  repo: yum.knack.works_puppet_7
+  ts_state: u
+  output_state: 20
+  isDep: False
+  reason: user
+  reinstall: False
+mbr: ruby,x86_64,0,2.0.0.648,33.amzn2.0.3 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: puppet,noarch,0,3.8.7,1.el7@a:dependson facter,x86_64,1,2.4.6,1.el7@a:dependson facter,x86_64,1,2.4.6,1.el7@a:dependson rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a:dependson rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a:dependson ruby-irb,noarch,0,2.0.0.648,33.amzn2.0.3@a:dependson
+  depends_on: puppet,noarch,0,3.8.7,1.el7@a facter,x86_64,1,2.4.6,1.el7@a facter,x86_64,1,2.4.6,1.el7@a rubygems,noarch,0,2.0.14.1,33.amzn2.0.3@a rubygem-rdoc,noarch,0,4.0.0,33.amzn2.0.3@a ruby-irb,noarch,0,2.0.0.648,33.amzn2.0.3@a
+mbr: ruby-shadow,x86_64,0,1.4.1,23.el7 70
+  repo: yum.knack.works_epel_7_x86_64
+  ts_state: u
+  output_state: 20
+  isDep: True
+  reason: dep
+  reinstall: False
+  relatedto: puppet,noarch,0,3.8.7,1.el7@a:dependson
+  depends_on: puppet,noarch,0,3.8.7,1.el7@a

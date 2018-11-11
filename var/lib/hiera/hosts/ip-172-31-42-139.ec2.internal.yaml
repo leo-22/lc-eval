@@ -1,0 +1,11 @@
+---
+
+#classes:
+
+#profiles: ['code_development']
+profiles::code_development
+:hierarchy:
+ - "profile/%{code_development}"
+
+## Set below to true to enable and set tabstop to 4 through Boolean:
+vim::use_spaces: false

@@ -1,0 +1,18 @@
+# This is private data. Do not parse.
+UID=1000
+USER=ec2-user
+ACTIVE=1
+STATE=active
+REMOTE=1
+STOPPING=0
+TYPE=tty
+CLASS=user
+SCOPE=session-2276.scope
+FIFO=/run/systemd/sessions/2276.ref
+REMOTE_HOST=pool-108-28-39-216.washdc.fios.verizon.net
+SERVICE=sshd
+POS=0
+LEADER=12799
+AUDIT=2276
+REALTIME=1541976645840463
+MONOTONIC=1141185360526

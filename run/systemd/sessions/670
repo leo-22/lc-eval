@@ -1,0 +1,17 @@
+# This is private data. Do not parse.
+UID=1000
+USER=ec2-user
+ACTIVE=1
+STATE=closing
+REMOTE=1
+STOPPING=1
+TYPE=tty
+CLASS=user
+SCOPE=session-670.scope
+REMOTE_HOST=wsip-98-175-234-50.dc.dc.cox.net
+SERVICE=sshd
+POS=0
+LEADER=26735
+AUDIT=670
+REALTIME=1541170080861705
+MONOTONIC=334620381768

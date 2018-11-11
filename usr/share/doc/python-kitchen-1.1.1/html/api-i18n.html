@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Kitchen.i18n Module &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen API" href="api-overview.html" />
+    <link rel="next" title="Kitchen.text: unicode and utf8 and xml oh my!" href="api-text.html" />
+    <link rel="prev" title="Kitchen API" href="api-overview.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text.html" title="Kitchen.text: unicode and utf8 and xml oh my!"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-overview.html" title="Kitchen API"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" accesskey="U">Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-kitchen.i18n">
+<span id="kitchen-i18n-module"></span><h1>Kitchen.i18n Module<a class="headerlink" href="#module-kitchen.i18n" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="glossary.html#term-i18n"><em class="xref std std-term">I18N</em></a> is an important piece of any modern program.  Unfortunately,
+setting up <a class="reference internal" href="glossary.html#term-i18n"><em class="xref std std-term">i18n</em></a> in your program is often a confusing process.  The
+functions provided here aim to make the programming side of that a little
+easier.</p>
+<p>Most projects will be able to do something like this when they startup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># myprogram/__init__.py:</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">kitchen.i18n</span> <span class="kn">import</span> <span class="n">easy_gettext_setup</span>
+
+<span class="n">_</span><span class="p">,</span> <span class="n">N_</span>  <span class="o">=</span> <span class="n">easy_gettext_setup</span><span class="p">(</span><span class="s">&#39;myprogram&#39;</span><span class="p">,</span> <span class="n">localedirs</span><span class="o">=</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)),</span> <span class="s">&#39;locale&#39;</span><span class="p">),</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&#39;lib&#39;</span><span class="p">,</span> <span class="s">&#39;locale&#39;</span><span class="p">)</span>
+        <span class="p">))</span>
+</pre></div>
+</div>
+<p>Then, in other files that have strings that need translating:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># myprogram/commands.py:</span>
+
+<span class="kn">from</span> <span class="nn">myprogram</span> <span class="kn">import</span> <span class="n">_</span><span class="p">,</span> <span class="n">N_</span>
+
+<span class="k">def</span> <span class="nf">print_usage</span><span class="p">():</span>
+    <span class="k">print</span> <span class="n">_</span><span class="p">(</span><span class="s">u&quot;&quot;&quot;available commands are:</span>
+<span class="s">    --help              Display help</span>
+<span class="s">    --version           Display version of this program</span>
+<span class="s">    --bake-me-a-cake    as fast as you can</span>
+<span class="s">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">print_invitations</span><span class="p">(</span><span class="n">age</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Please come to my party.&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">N_</span><span class="p">(</span><span class="s">&#39;I will be turning </span><span class="si">%(age)s</span><span class="s"> year old&#39;</span><span class="p">,</span>
+        <span class="s">&#39;I will be turning </span><span class="si">%(age)s</span><span class="s"> years old&#39;</span><span class="p">,</span> <span class="n">age</span><span class="p">)</span> <span class="o">%</span> <span class="p">{</span><span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="n">age</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>See the documentation of <a class="reference internal" href="#kitchen.i18n.easy_gettext_setup" title="kitchen.i18n.easy_gettext_setup"><tt class="xref py py-func docutils literal"><span class="pre">easy_gettext_setup()</span></tt></a> and
+<a class="reference internal" href="#kitchen.i18n.get_translation_object" title="kitchen.i18n.get_translation_object"><tt class="xref py py-func docutils literal"><span class="pre">get_translation_object()</span></tt></a> for more details.</p>
+<blockquote>
+<div><div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt></dt>
+<dd>for details of how the python gettext facilities work</dd>
+<dt><a class="reference external" href="http://babel.edgewall.org">babel</a></dt>
+<dd>The babel module for in depth information on gettext, <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message
+catalogs</em></a>, and translating your app.  babel provides some nice
+features for <a class="reference internal" href="glossary.html#term-i18n"><em class="xref std std-term">i18n</em></a> on top of <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt></dd>
+</dl>
+</div>
+</div></blockquote>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="#kitchen.i18n.easy_gettext_setup" title="kitchen.i18n.easy_gettext_setup"><tt class="xref py py-func docutils literal"><span class="pre">easy_gettext_setup()</span></tt></a> should satisfy the needs of most users.
+<a class="reference internal" href="#kitchen.i18n.get_translation_object" title="kitchen.i18n.get_translation_object"><tt class="xref py py-func docutils literal"><span class="pre">get_translation_object()</span></tt></a> is designed to ease the way for anyone that
+needs more control.</p>
+<dl class="function">
+<dt id="kitchen.i18n.easy_gettext_setup">
+<tt class="descclassname">kitchen.i18n.</tt><tt class="descname">easy_gettext_setup</tt><big>(</big><em>domain</em>, <em>localedirs=()</em>, <em>use_unicode=True</em><big>)</big><a class="headerlink" href="#kitchen.i18n.easy_gettext_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup translation functions for an application</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>domain</strong> &#8211; Name of the message domain.  This should be a unique name
+that can be used to lookup the <a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a> for this app.</li>
+<li><strong>localedirs</strong> &#8211; Iterator of directories to look for <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message
+catalogs</em></a> under.  The first directory to exist is used regardless of
+whether messages for this domain are present.  If none of the
+directories exist, fallback on <tt class="docutils literal"><span class="pre">sys.prefix</span></tt> + <tt class="file docutils literal"><span class="pre">/share/locale</span></tt>
+Default: No directories to search so we just use the fallback.</li>
+<li><strong>use_unicode</strong> &#8211; If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> return the <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> functions
+for <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings else return the functions for byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> for the translations.  Default is <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">tuple of the <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> function and <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> function
+for plurals</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Setting up <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> can be a little tricky because of lack of
+documentation.  This function will setup <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>  using the 
+<a class="reference external" href="http://docs.python.org/library/gettext.html#class-based-api">Class-based API</a> for you.
+For the simple case, you can use the default arguments and call it like
+this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">_</span><span class="p">,</span> <span class="n">N_</span> <span class="o">=</span> <span class="n">easy_gettext_setup</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will get you two functions, <tt class="xref py py-func docutils literal"><span class="pre">_()</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">N_()</span></tt> that you can use
+to mark strings in your code for translation.  <tt class="xref py py-func docutils literal"><span class="pre">_()</span></tt> is used to mark
+strings that don&#8217;t need to worry about plural forms no matter what the
+value of the variable is.  <tt class="xref py py-func docutils literal"><span class="pre">N_()</span></tt> is used to mark strings that do need
+to have a different form if a variable in the string is plural.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href=""><em>Kitchen.i18n Module</em></a></dt>
+<dd>This module&#8217;s documentation has examples of using <tt class="xref py py-func docutils literal"><span class="pre">_()</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">N_()</span></tt></dd>
+<dt><a class="reference internal" href="#kitchen.i18n.get_translation_object" title="kitchen.i18n.get_translation_object"><tt class="xref py py-func docutils literal"><span class="pre">get_translation_object()</span></tt></a></dt>
+<dd>for information on how to use <tt class="xref py py-attr docutils literal"><span class="pre">localedirs</span></tt> to get the
+proper <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> both when in development and when
+installed to FHS compliant directories on Linux.</dd>
+</dl>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The gettext functions returned from this function should be superior
+to the ones returned from <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>.  The traits that make them
+better are described in the <a class="reference internal" href="#kitchen.i18n.DummyTranslations" title="kitchen.i18n.DummyTranslations"><tt class="xref py py-class docutils literal"><span class="pre">DummyTranslations</span></tt></a> and
+<a class="reference internal" href="#kitchen.i18n.NewGNUTranslations" title="kitchen.i18n.NewGNUTranslations"><tt class="xref py py-class docutils literal"><span class="pre">NewGNUTranslations</span></tt></a> documentation.</p>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version kitchen-0.2.4: </span>; API kitchen.i18n 2.0.0
+Changed <a class="reference internal" href="#kitchen.i18n.easy_gettext_setup" title="kitchen.i18n.easy_gettext_setup"><tt class="xref py py-func docutils literal"><span class="pre">easy_gettext_setup()</span></tt></a> to return the lgettext
+functions instead of gettext functions when use_unicode=False.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.i18n.get_translation_object">
+<tt class="descclassname">kitchen.i18n.</tt><tt class="descname">get_translation_object</tt><big>(</big><em>domain</em>, <em>localedirs=()</em>, <em>languages=None</em>, <em>class_=None</em>, <em>fallback=True</em>, <em>codeset=None</em><big>)</big><a class="headerlink" href="#kitchen.i18n.get_translation_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a translation object bound to the <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>domain</strong> &#8211; Name of the message domain.  This should be a unique name
+that can be used to lookup the <a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a> for this app or
+library.</li>
+<li><strong>localedirs</strong> &#8211; Iterator of directories to look for
+<a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> under.  The directories are searched in order
+for <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a>.  For each of the directories searched,
+we check for message catalogs in any language specified
+in:attr:<cite>languages</cite>.  The <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> are used to create
+the Translation object that we return.  The Translation object will
+attempt to lookup the msgid in the first catalog that we found.  If
+it&#8217;s not in there, it will go through each subsequent catalog looking
+for a match.  For this reason, the order in which you specify the
+<tt class="xref py py-attr docutils literal"><span class="pre">localedirs</span></tt> may be important.  If no <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a>
+are found, either return a <a class="reference internal" href="#kitchen.i18n.DummyTranslations" title="kitchen.i18n.DummyTranslations"><tt class="xref py py-class docutils literal"><span class="pre">DummyTranslations</span></tt></a> object or raise
+an <tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt> depending on the value of <tt class="xref py py-attr docutils literal"><span class="pre">fallback</span></tt>.
+Rhe default localedir from  <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> which is
+<tt class="file docutils literal"><span class="pre">os.path.join(sys.prefix,</span> <span class="pre">'share',</span> <span class="pre">'locale')</span></tt> on Unix is
+implicitly appended to the <tt class="xref py py-attr docutils literal"><span class="pre">localedirs</span></tt>, making it the last
+directory searched.</li>
+<li><strong>languages</strong> &#8211; <p>Iterator of language codes to check for
+<a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a>.  If unspecified, the user&#8217;s locale settings
+will be used.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-func docutils literal"><span class="pre">gettext.find()</span></tt> for information on what environment
+variables are used.</p>
+</div>
+</li>
+<li><strong>class</strong> &#8211; The class to use to extract translations from the
+<a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a>.  Defaults to <a class="reference internal" href="#kitchen.i18n.NewGNUTranslations" title="kitchen.i18n.NewGNUTranslations"><tt class="xref py py-class docutils literal"><span class="pre">NewGNUTranslations</span></tt></a>.</li>
+<li><strong>fallback</strong> &#8211; If set to data:<cite>False</cite>, raise an <tt class="xref py py-exc docutils literal"><span class="pre">IOError</span></tt> if no
+<a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> are found.  If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>, the default,
+return a <a class="reference internal" href="#kitchen.i18n.DummyTranslations" title="kitchen.i18n.DummyTranslations"><tt class="xref py py-class docutils literal"><span class="pre">DummyTranslations</span></tt></a> object.</li>
+<li><strong>codeset</strong> &#8211; Set the character encoding to use when returning byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> objects.  This is equivalent to calling
+<tt class="xref py py-meth docutils literal"><span class="pre">output_charset()</span></tt> on the Translations
+object that is returned from this function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Translation object to get <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> methods from</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If you need more flexibility than <a class="reference internal" href="#kitchen.i18n.easy_gettext_setup" title="kitchen.i18n.easy_gettext_setup"><tt class="xref py py-func docutils literal"><span class="pre">easy_gettext_setup()</span></tt></a>, use this
+function.  It sets up a <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> Translation object and returns it
+to you.  Then you can access any of the methods of the object that you
+need directly.  For instance, if you specifically need to access
+<tt class="xref py py-func docutils literal"><span class="pre">lgettext()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">translations</span> <span class="o">=</span> <span class="n">get_translation_object</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">)</span>
+<span class="n">translations</span><span class="o">.</span><span class="n">lgettext</span><span class="p">(</span><span class="s">&#39;My Message&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This function is similar to the <a class="reference external" href="http://docs.python.org/library">python standard library</a> <tt class="xref py py-func docutils literal"><span class="pre">gettext.translation()</span></tt> but
+makes it better in two ways</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>It returns <a class="reference internal" href="#kitchen.i18n.NewGNUTranslations" title="kitchen.i18n.NewGNUTranslations"><tt class="xref py py-class docutils literal"><span class="pre">NewGNUTranslations</span></tt></a> or <a class="reference internal" href="#kitchen.i18n.DummyTranslations" title="kitchen.i18n.DummyTranslations"><tt class="xref py py-class docutils literal"><span class="pre">DummyTranslations</span></tt></a></dt>
+<dd><p class="first last">objects by default.  These are superior to the
+<tt class="xref py py-class docutils literal"><span class="pre">gettext.GNUTranslations</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">gettext.NullTranslations</span></tt>
+objects because they are consistent in the string type they return and
+they fix several issues that can causethe <a class="reference external" href="http://docs.python.org/library">python standard library</a> objects to throw
+<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>This function takes multiple directories to search for</dt>
+<dd><p class="first last"><a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a>.</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>The latter is important when setting up <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> in a portable
+manner.  There is not a common directory for translations across operating
+systems so one needs to look in multiple directories for the translations.
+<a class="reference internal" href="#kitchen.i18n.get_translation_object" title="kitchen.i18n.get_translation_object"><tt class="xref py py-func docutils literal"><span class="pre">get_translation_object()</span></tt></a> is able to handle that if you give it
+a list of directories to search for catalogs:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">translations</span> <span class="o">=</span> <span class="n">get_translation_object</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="n">localedirs</span><span class="o">=</span><span class="p">(</span>
+     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)),</span> <span class="s">&#39;locale&#39;</span><span class="p">),</span>
+     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="s">&#39;lib&#39;</span><span class="p">,</span> <span class="s">&#39;locale&#39;</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>This will search for several different directories:</p>
+<ol class="arabic simple">
+<li>A directory named <tt class="file docutils literal"><span class="pre">locale</span></tt> in the same directory as the module
+that called <a class="reference internal" href="#kitchen.i18n.get_translation_object" title="kitchen.i18n.get_translation_object"><tt class="xref py py-func docutils literal"><span class="pre">get_translation_object()</span></tt></a>,</li>
+<li>In <tt class="file docutils literal"><span class="pre">/usr/lib/locale</span></tt></li>
+<li>In <tt class="file docutils literal"><span class="pre">/usr/share/locale</span></tt> (the fallback directory)</li>
+</ol>
+<p>This allows <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> to work on Windows and in development (where the
+<a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> are typically in the toplevel module directory)
+and also when installed under Linux (where the <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a>
+are installed in <tt class="file docutils literal"><span class="pre">/usr/share/locale</span></tt>).  You (or the system packager)
+just need to install the <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> in
+<tt class="file docutils literal"><span class="pre">/usr/share/locale</span></tt> and remove the <tt class="file docutils literal"><span class="pre">locale</span></tt> directory from the
+module to make this work.  ie:</p>
+<div class="highlight-python"><pre>In development:
+    ~/foo   # Toplevel module directory
+    ~/foo/__init__.py
+    ~/foo/locale    # With message catalogs below here:
+    ~/foo/locale/es/LC_MESSAGES/foo.mo
+
+Installed on Linux:
+    /usr/lib/python2.7/site-packages/foo
+    /usr/lib/python2.7/site-packages/foo/__init__.py
+    /usr/share/locale/  # With message catalogs below here:
+    /usr/share/locale/es/LC_MESSAGES/foo.mo</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function will setup Translation objects that attempt to lookup
+msgids in all of the found <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a>.  This means if
+you have several versions of the <a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> installed
+in different directories that the function searches, you need to make
+sure that <tt class="xref py py-attr docutils literal"><span class="pre">localedirs</span></tt> specifies the directories so that newer
+<a class="reference internal" href="glossary.html#term-message-catalogs"><em class="xref std std-term">message catalogs</em></a> are searched first.  It also means that if
+a newer catalog does not contain a translation for a msgid but an
+older one that&#8217;s in <tt class="xref py py-attr docutils literal"><span class="pre">localedirs</span></tt> does, the translation from that
+older catalog will be returned.</p>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version kitchen-1.1.0: </span>; API kitchen.i18n 2.1.0
+Add more parameters to <a class="reference internal" href="#kitchen.i18n.get_translation_object" title="kitchen.i18n.get_translation_object"><tt class="xref py py-func docutils literal"><span class="pre">get_translation_object()</span></tt></a> so
+it can more easily be used as a replacement for
+<tt class="xref py py-func docutils literal"><span class="pre">gettext.translation()</span></tt>.  Also change the way we use localedirs.
+We cycle through them until we find a suitable locale file rather
+than simply cycling through until we find a directory that exists.
+The new code is based heavily on the <a class="reference external" href="http://docs.python.org/library">python standard library</a>
+<tt class="xref py py-func docutils literal"><span class="pre">gettext.translation()</span></tt> function.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="translation-objects">
+<h2>Translation Objects<a class="headerlink" href="#translation-objects" title="Permalink to this headline">¶</a></h2>
+<p>The standard translation objects from the <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> module suffer from
+several problems:</p>
+<ul class="simple">
+<li>They can throw <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt></li>
+<li>They can&#8217;t find translations for non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+messages</li>
+<li>They may return either <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> from the
+same function even though the functions say they will only return
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or only return byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.</li>
+</ul>
+<p><a class="reference internal" href="#kitchen.i18n.DummyTranslations" title="kitchen.i18n.DummyTranslations"><tt class="xref py py-class docutils literal"><span class="pre">DummyTranslations</span></tt></a> and <a class="reference internal" href="#kitchen.i18n.NewGNUTranslations" title="kitchen.i18n.NewGNUTranslations"><tt class="xref py py-class docutils literal"><span class="pre">NewGNUTranslations</span></tt></a> were written to fix
+these issues.</p>
+<dl class="class">
+<dt id="kitchen.i18n.DummyTranslations">
+<em class="property">class </em><tt class="descclassname">kitchen.i18n.</tt><tt class="descname">DummyTranslations</tt><big>(</big><em>fp=None</em><big>)</big><a class="headerlink" href="#kitchen.i18n.DummyTranslations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Safer version of <tt class="xref py py-class docutils literal"><span class="pre">gettext.NullTranslations</span></tt></p>
+<p>This Translations class doesn&#8217;t translate the strings and is intended to
+be used as a fallback when there were errors setting up a real
+Translations object.  It&#8217;s safer than <tt class="xref py py-class docutils literal"><span class="pre">gettext.NullTranslations</span></tt> in
+its handling of byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> vs <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.</p>
+<p>Unlike <tt class="xref py py-class docutils literal"><span class="pre">NullTranslations</span></tt>, this Translation class will
+never throw a <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt>.  The code that you have
+around a call to <a class="reference internal" href="#kitchen.i18n.DummyTranslations" title="kitchen.i18n.DummyTranslations"><tt class="xref py py-class docutils literal"><span class="pre">DummyTranslations</span></tt></a> might throw
+a <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt> but at least that will be in code you
+control and can fix.  Also, unlike <tt class="xref py py-class docutils literal"><span class="pre">NullTranslations</span></tt> all
+of this Translation object&#8217;s methods guarantee to return byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+except for <tt class="xref py py-meth docutils literal"><span class="pre">ugettext()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">ungettext()</span></tt> which guarantee to
+return <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.</p>
+<p>When byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> are returned, the strings will be encoded according
+to this algorithm:</p>
+<ol class="arabic simple">
+<li>If a fallback has been added, the fallback will be called first.
+You&#8217;ll need to consult the fallback to see whether it performs any
+encoding changes.</li>
+<li>If a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> was given, the same byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> will
+be returned.</li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and <a class="reference internal" href="#kitchen.i18n.DummyTranslations.set_output_charset" title="kitchen.i18n.DummyTranslations.set_output_charset"><tt class="xref py py-meth docutils literal"><span class="pre">set_output_charset()</span></tt></a>
+has been called then we encode the string using the
+<tt class="xref py py-attr docutils literal"><span class="pre">output_charset</span></tt></li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and this is <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt> or
+<tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">_charset</span></tt> was set output in that charset.</li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and this is <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt>
+or <tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt> we encode it using &#8216;utf-8&#8217;.</li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and this is <tt class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></tt>
+or <tt class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></tt> we encode using the value of
+<tt class="xref py py-func docutils literal"><span class="pre">locale.getpreferredencoding()</span></tt></li>
+</ol>
+<p>For <tt class="xref py py-meth docutils literal"><span class="pre">ugettext()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">ungettext()</span></tt>, we go through the same set of
+steps with the following differences:</p>
+<ul class="simple">
+<li>We transform byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> into <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings for
+these methods.</li>
+<li>The encoding used to decode the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is taken from
+<a class="reference internal" href="#kitchen.i18n.DummyTranslations.input_charset" title="kitchen.i18n.DummyTranslations.input_charset"><tt class="xref py py-attr docutils literal"><span class="pre">input_charset</span></tt></a> if it&#8217;s set, otherwise we decode using
+<a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.</li>
+</ul>
+<dl class="attribute">
+<dt id="kitchen.i18n.DummyTranslations.input_charset">
+<tt class="descname">input_charset</tt><a class="headerlink" href="#kitchen.i18n.DummyTranslations.input_charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>is an extension to the <a class="reference external" href="http://docs.python.org/library">python standard library</a> <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> that specifies what
+charset a message is encoded in when decoding a message to
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  This is used for two purposes:</p>
+</dd></dl>
+
+<ol class="arabic simple">
+<li>If the message string is a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, this is used to decode
+the string to a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string before looking it up in the
+<a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a>.</li>
+<li>In <tt class="xref py py-meth docutils literal"><span class="pre">ugettext()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">ungettext()</span></tt> methods, if a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is given as the message and is untranslated this is used
+as the encoding when decoding to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  This is different
+from <tt class="xref py py-attr docutils literal"><span class="pre">_charset</span></tt> which may be set when a <a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a>
+is loaded because <a class="reference internal" href="#kitchen.i18n.DummyTranslations.input_charset" title="kitchen.i18n.DummyTranslations.input_charset"><tt class="xref py py-attr docutils literal"><span class="pre">input_charset</span></tt></a> is used to describe an encoding
+used in a python source file while <tt class="xref py py-attr docutils literal"><span class="pre">_charset</span></tt> describes the
+encoding used in the <a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a> file.</li>
+</ol>
+<p>Any characters that aren&#8217;t able to be transformed from a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or vice versa will be replaced with
+a replacement character (ie: <tt class="docutils literal"><span class="pre">u'�'</span></tt> in unicode based encodings, <tt class="docutils literal"><span class="pre">'?'</span></tt> in other
+<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> compatible encodings).</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref py py-class docutils literal"><span class="pre">gettext.NullTranslations</span></tt></dt>
+<dd>For information about what methods are available and what they do.</dd>
+</dl>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version kitchen-1.1.0: </span>; API kitchen.i18n 2.1.0
+* Although we had adapted <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt>,
+  <tt class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></tt>, and <tt class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></tt> to always return byte
+  <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, we hadn&#8217;t forced those byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to always be
+  in a specified charset.  We now make sure that <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt> and
+  <tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt> return byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> encoded using
+  <tt class="xref py py-attr docutils literal"><span class="pre">output_charset</span></tt> if set, otherwise <tt class="xref py py-attr docutils literal"><span class="pre">charset</span></tt> and if
+  neither of those, <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.  With <tt class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></tt> and
+  <tt class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></tt> <tt class="xref py py-attr docutils literal"><span class="pre">output_charset</span></tt> if set, otherwise
+  <tt class="xref py py-func docutils literal"><span class="pre">locale.getpreferredencoding()</span></tt>.
+* Make setting <a class="reference internal" href="#kitchen.i18n.DummyTranslations.input_charset" title="kitchen.i18n.DummyTranslations.input_charset"><tt class="xref py py-attr docutils literal"><span class="pre">input_charset</span></tt></a> and <tt class="xref py py-attr docutils literal"><span class="pre">output_charset</span></tt> also
+  set those attributes on any fallback translation objects.</p>
+<dl class="method">
+<dt id="kitchen.i18n.DummyTranslations.set_output_charset">
+<tt class="descname">set_output_charset</tt><big>(</big><em>charset</em><big>)</big><a class="headerlink" href="#kitchen.i18n.DummyTranslations.set_output_charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the output charset</p>
+<p>This serves two purposes.  The normal
+<tt class="xref py py-meth docutils literal"><span class="pre">gettext.NullTranslations.set_output_charset()</span></tt> does not set the
+output on fallback objects.  On python-2.3,
+<tt class="xref py py-class docutils literal"><span class="pre">gettext.NullTranslations</span></tt> objects don&#8217;t contain this method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="kitchen.i18n.NewGNUTranslations">
+<em class="property">class </em><tt class="descclassname">kitchen.i18n.</tt><tt class="descname">NewGNUTranslations</tt><big>(</big><em>fp=None</em><big>)</big><a class="headerlink" href="#kitchen.i18n.NewGNUTranslations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Safer version of <tt class="xref py py-class docutils literal"><span class="pre">gettext.GNUTranslations</span></tt></p>
+<p><tt class="xref py py-class docutils literal"><span class="pre">gettext.GNUTranslations</span></tt> suffers from two problems that this
+class fixes.</p>
+<ol class="arabic simple">
+<li><tt class="xref py py-class docutils literal"><span class="pre">gettext.GNUTranslations</span></tt> can throw a
+<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt> in
+<tt class="xref py py-meth docutils literal"><span class="pre">gettext.GNUTranslations.ugettext()</span></tt> if the message being
+translated has non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> characters and there is no translation
+for it.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">gettext.GNUTranslations</span></tt> can return byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> from
+<tt class="xref py py-meth docutils literal"><span class="pre">gettext.GNUTranslations.ugettext()</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+strings from the other <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt>
+methods if the message being translated is the wrong type</li>
+</ol>
+<p>When byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> are returned, the strings will be encoded
+according to this algorithm:</p>
+<ol class="arabic simple">
+<li>If a fallback has been added, the fallback will be called first.
+You&#8217;ll need to consult the fallback to see whether it performs any
+encoding changes.</li>
+<li>If a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> was given, the same byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> will
+be returned.</li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and
+<tt class="xref py py-meth docutils literal"><span class="pre">set_output_charset()</span></tt> has been called then we encode the
+string using the <tt class="xref py py-attr docutils literal"><span class="pre">output_charset</span></tt></li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and this is <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt>
+or <tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt> and a charset was detected when parsing the
+<a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a>, output in that charset.</li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and this is <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt>
+or <tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt> we encode it using <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.</li>
+<li>If a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string was given and this is <tt class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></tt>
+or <tt class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></tt> we encode using the value of
+<tt class="xref py py-func docutils literal"><span class="pre">locale.getpreferredencoding()</span></tt></li>
+</ol>
+<p>For <tt class="xref py py-meth docutils literal"><span class="pre">ugettext()</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">ungettext()</span></tt>, we go through the same set of
+steps with the following differences:</p>
+<ul class="simple">
+<li>We transform byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> into <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings for these
+methods.</li>
+<li>The encoding used to decode the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is taken from
+<a class="reference internal" href="#kitchen.i18n.NewGNUTranslations.input_charset" title="kitchen.i18n.NewGNUTranslations.input_charset"><tt class="xref py py-attr docutils literal"><span class="pre">input_charset</span></tt></a> if it&#8217;s set, otherwise we decode using
+<a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a></li>
+</ul>
+<dl class="attribute">
+<dt id="kitchen.i18n.NewGNUTranslations.input_charset">
+<tt class="descname">input_charset</tt><a class="headerlink" href="#kitchen.i18n.NewGNUTranslations.input_charset" title="Permalink to this definition">¶</a></dt>
+<dd><p>an extension to the <a class="reference external" href="http://docs.python.org/library">python standard library</a> <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> that specifies what
+charset a message is encoded in when decoding a message to
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  This is used for two purposes:</p>
+</dd></dl>
+
+<ol class="arabic simple">
+<li>If the message string is a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, this is used to decode
+the string to a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string before looking it up in the
+<a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a>.</li>
+<li>In <tt class="xref py py-meth docutils literal"><span class="pre">ugettext()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">ungettext()</span></tt> methods, if a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is given as the message and is untranslated his is used as
+the encoding when decoding to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  This is different from
+the <tt class="xref py py-attr docutils literal"><span class="pre">_charset</span></tt> parameter that may be set when a <a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message
+catalog</em></a> is loaded because <a class="reference internal" href="#kitchen.i18n.NewGNUTranslations.input_charset" title="kitchen.i18n.NewGNUTranslations.input_charset"><tt class="xref py py-attr docutils literal"><span class="pre">input_charset</span></tt></a> is used to describe an
+encoding used in a python source file while <tt class="xref py py-attr docutils literal"><span class="pre">_charset</span></tt> describes
+the encoding used in the <a class="reference internal" href="glossary.html#term-message-catalog"><em class="xref std std-term">message catalog</em></a> file.</li>
+</ol>
+<p>Any characters that aren&#8217;t able to be transformed from a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or vice versa will be replaced
+with a replacement character (ie: <tt class="docutils literal"><span class="pre">u'�'</span></tt> in unicode based encodings,
+<tt class="docutils literal"><span class="pre">'?'</span></tt> in other <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> compatible encodings).</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref py py-class docutils literal"><span class="pre">gettext.GNUTranslations.gettext</span></tt></dt>
+<dd>For information about what methods this class has and what they do</dd>
+</dl>
+</div>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version kitchen-1.1.0: </span>; API kitchen.i18n 2.1.0
+Although we had adapted <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt>,
+<tt class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></tt>, and <tt class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></tt> to always return
+byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, we hadn&#8217;t forced those byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to always
+be in a specified charset.  We now make sure that <tt class="xref py py-meth docutils literal"><span class="pre">gettext()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">ngettext()</span></tt> return byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> encoded using
+<tt class="xref py py-attr docutils literal"><span class="pre">output_charset</span></tt> if set, otherwise <tt class="xref py py-attr docutils literal"><span class="pre">charset</span></tt> and if
+neither of those, <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.  With <tt class="xref py py-meth docutils literal"><span class="pre">lgettext()</span></tt> and
+<tt class="xref py py-meth docutils literal"><span class="pre">lngettext()</span></tt> <tt class="xref py py-attr docutils literal"><span class="pre">output_charset</span></tt> if set, otherwise
+<tt class="xref py py-func docutils literal"><span class="pre">locale.getpreferredencoding()</span></tt>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Kitchen.i18n Module</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
+<li><a class="reference internal" href="#translation-objects">Translation Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-overview.html"
+                        title="previous chapter">Kitchen API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-text.html"
+                        title="next chapter">Kitchen.text: unicode and utf8 and xml oh my!</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-i18n.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text.html" title="Kitchen.text: unicode and utf8 and xml oh my!"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-overview.html" title="Kitchen API"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

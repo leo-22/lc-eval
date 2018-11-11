@@ -1,0 +1,6 @@
+
+[yum.knack.works_puppet_7]
+name=added from: http://yum.knack.works/puppet/7
+baseurl=http://yum.knack.works/puppet/7
+enabled=1
+

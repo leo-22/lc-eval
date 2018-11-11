@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>UTF-8 &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen.text: unicode and utf8 and xml oh my!" href="api-text.html" />
+    <link rel="next" title="Kitchen.collections" href="api-collections.html" />
+    <link rel="prev" title="Miscellaneous functions for manipulating text" href="api-text-misc.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-collections.html" title="Kitchen.collections"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-text-misc.html" title="Miscellaneous functions for manipulating text"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" accesskey="U">Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-kitchen.text.utf8"></span><div class="section" id="utf-8">
+<h1>UTF-8<a class="headerlink" href="#utf-8" title="Permalink to this headline">¶</a></h1>
+<p>Functions for operating on byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> encoded as <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In many cases, it is better to convert to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>, operate on the
+strings, then convert back to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.  <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> type can
+handle many of these functions itself.  For those that it doesn&#8217;t
+(removing control characters from length calculations, for instance) the
+code to do so with a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> type is often simpler.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">All of the functions in this module are deprecated.  Most of them have
+been replaced with functions that operate on unicode values in
+<a class="reference internal" href="api-text-display.html#module-kitchen.text.display" title="kitchen.text.display"><tt class="xref py py-mod docutils literal"><span class="pre">kitchen.text.display</span></tt></a>.  <a class="reference internal" href="#kitchen.text.utf8.utf8_valid" title="kitchen.text.utf8.utf8_valid"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.utf8.utf8_valid()</span></tt></a> has
+been replaced with a function in <a class="reference internal" href="api-text-misc.html#module-kitchen.text.misc" title="kitchen.text.misc"><tt class="xref py py-mod docutils literal"><span class="pre">kitchen.text.misc</span></tt></a>.</p>
+</div>
+<dl class="function">
+<dt id="kitchen.text.utf8.utf8_text_fill">
+<tt class="descclassname">kitchen.text.utf8.</tt><tt class="descname">utf8_text_fill</tt><big>(</big><em>text</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#kitchen.text.utf8.utf8_text_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated</strong> Similar to <tt class="xref py py-func docutils literal"><span class="pre">textwrap.fill()</span></tt> but understands
+<a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> strings and doesn&#8217;t screw up lists/blocks/etc.</p>
+<p>Use <a class="reference internal" href="api-text-display.html#kitchen.text.display.fill" title="kitchen.text.display.fill"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.fill()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.utf8.utf8_text_wrap">
+<tt class="descclassname">kitchen.text.utf8.</tt><tt class="descname">utf8_text_wrap</tt><big>(</big><em>text</em>, <em>width=70</em>, <em>initial_indent=''</em>, <em>subsequent_indent=''</em><big>)</big><a class="headerlink" href="#kitchen.text.utf8.utf8_text_wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated</strong> Similar to <tt class="xref py py-func docutils literal"><span class="pre">textwrap.wrap()</span></tt> but understands
+<a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> data and doesn&#8217;t screw up lists/blocks/etc</p>
+<p>Use <a class="reference internal" href="api-text-display.html#kitchen.text.display.wrap" title="kitchen.text.display.wrap"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.wrap()</span></tt></a> instead</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.utf8.utf8_valid">
+<tt class="descclassname">kitchen.text.utf8.</tt><tt class="descname">utf8_valid</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#kitchen.text.utf8.utf8_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated</strong> Detect if a string is valid <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a></p>
+<p>Use <a class="reference internal" href="api-text-misc.html#kitchen.text.misc.byte_string_valid_encoding" title="kitchen.text.misc.byte_string_valid_encoding"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.misc.byte_string_valid_encoding()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.utf8.utf8_width">
+<tt class="descclassname">kitchen.text.utf8.</tt><tt class="descname">utf8_width</tt><big>(</big><em>msg</em><big>)</big><a class="headerlink" href="#kitchen.text.utf8.utf8_width" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated</strong> Get the <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> of a <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> string</p>
+<p>Use <a class="reference internal" href="api-text-display.html#kitchen.text.display.textual_width" title="kitchen.text.display.textual_width"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.textual_width()</span></tt></a> instead.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.utf8.utf8_width_chop">
+<tt class="descclassname">kitchen.text.utf8.</tt><tt class="descname">utf8_width_chop</tt><big>(</big><em>msg</em>, <em>chop=None</em><big>)</big><a class="headerlink" href="#kitchen.text.utf8.utf8_width_chop" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated</strong> Return a string chopped to a given <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a></p>
+<p>Use <a class="reference internal" href="api-text-display.html#kitchen.text.display.textual_width_chop" title="kitchen.text.display.textual_width_chop"><tt class="xref py py-func docutils literal"><span class="pre">textual_width_chop()</span></tt></a> and
+<a class="reference internal" href="api-text-display.html#kitchen.text.display.textual_width" title="kitchen.text.display.textual_width"><tt class="xref py py-func docutils literal"><span class="pre">textual_width()</span></tt></a> instead:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="s">&#39;く ku ら ra と to み mi&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Old way:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utf8_width_chop</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">(5, &#39;く ku&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># New way</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">to_bytes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.display</span> <span class="kn">import</span> <span class="n">textual_width</span><span class="p">,</span> <span class="n">textual_width_chop</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">textual_width</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">textual_width_chop</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="mi">5</span><span class="p">)))</span>
+<span class="go">(5, &#39;く ku&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.utf8.utf8_width_fill">
+<tt class="descclassname">kitchen.text.utf8.</tt><tt class="descname">utf8_width_fill</tt><big>(</big><em>msg</em>, <em>fill</em>, <em>chop=None</em>, <em>left=True</em>, <em>prefix=''</em>, <em>suffix=''</em><big>)</big><a class="headerlink" href="#kitchen.text.utf8.utf8_width_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated</strong> Pad a <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> string to fill a specified width</p>
+<p>Use <a class="reference internal" href="api-text-display.html#kitchen.text.display.byte_string_textual_width_fill" title="kitchen.text.display.byte_string_textual_width_fill"><tt class="xref py py-func docutils literal"><span class="pre">byte_string_textual_width_fill()</span></tt></a> instead</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-text-misc.html"
+                        title="previous chapter">Miscellaneous functions for manipulating text</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-collections.html"
+                        title="next chapter">Kitchen.collections</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-text-utf8.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-collections.html" title="Kitchen.collections"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-text-misc.html" title="Miscellaneous functions for manipulating text"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" >Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

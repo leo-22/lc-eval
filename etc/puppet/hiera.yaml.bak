@@ -1,0 +1,13 @@
+---
+
+:backends:
+    - yaml
+
+:merge_behavior: 'deeper'
+
+:hierarchy:
+    - "nodes/%{clientcert}"
+    - "defaults"
+
+:yaml:
+    :datadir:

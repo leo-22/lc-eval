@@ -1,0 +1,25 @@
+429:67c18a5c69d45d11335b870b7fb6ee112354b685
+0
+3
+amzn2-core:15213:1540504372
+amzn2extra-docker:7:1539815247
+installed:429:bbb08a447be08fa2e110dee1741dae7101a66193
+2
+mbr: kernel-tools,x86_64,0,4.14.70,72.55.amzn2 20
+  repo: installed
+  ts_state: ud
+  output_state: 90
+  isDep: False
+  reason: user
+  reinstall: False
+  relatedto: kernel-tools,x86_64,0,4.14.72,73.55.amzn2@a:updatedby
+  updated_by: kernel-tools,x86_64,0,4.14.72,73.55.amzn2@a
+mbr: kernel-tools,x86_64,0,4.14.72,73.55.amzn2 70
+  repo: amzn2-core
+  ts_state: u
+  output_state: 10
+  isDep: False
+  reason: user
+  reinstall: False
+  relatedto: kernel-tools,x86_64,0,4.14.70,72.55.amzn2@i:updates
+  updates: kernel-tools,x86_64,0,4.14.70,72.55.amzn2@i

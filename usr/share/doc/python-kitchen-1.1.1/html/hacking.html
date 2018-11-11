@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Conventions for contributing to kitchen &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="1.0.0 Porting Guide" href="porting-guide-0.3.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glossary.html" title="Glossary"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="porting-guide-0.3.html" title="1.0.0 Porting Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="conventions-for-contributing-to-kitchen">
+<h1>Conventions for contributing to kitchen<a class="headerlink" href="#conventions-for-contributing-to-kitchen" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="style">
+<h2>Style<a class="headerlink" href="#style" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Strive to be <span class="target" id="index-0"></span><a class="pep reference external" href="http://www.python.org/dev/peps/pep-0008"><strong>PEP 8</strong></a> compliant</li>
+<li>Run <cite>:command:`pylint</cite> ` over the code and try to resolve most of its nitpicking</li>
+</ul>
+</div>
+<div class="section" id="python-2-3-compatibility">
+<h2>Python 2.3 compatibility<a class="headerlink" href="#python-2-3-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>At the moment, we&#8217;re supporting python-2.3 and above.  Understand that there&#8217;s
+a lot of python features that we cannot use because of this.</p>
+<p>Sometimes modules in the <a class="reference external" href="http://docs.python.org/library">python standard library</a> can be added to kitchen so that they&#8217;re
+available.  When we do that we need to be careful of several things:</p>
+<ol class="arabic simple">
+<li>Keep the module in sync with the version in the python-2.x trunk.  Use
+<tt class="file docutils literal"><span class="pre">maintainers/sync-copied-files.py</span></tt> for this.</li>
+<li>Sync the unittests as well as the module.</li>
+<li>Be aware that not all modules are written to remain compatible with
+Python-2.3 and might use python language features that were not present
+then (generator expressions, relative imports, decorators, with, try: with
+both except: and finally:, etc)  These are not good candidates for
+importing into kitchen as they require more work to keep synced.</li>
+</ol>
+</div>
+<div class="section" id="unittests">
+<h2>Unittests<a class="headerlink" href="#unittests" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">At least smoketest your code (make sure a function will return expected
+values for one set of inputs).</p>
+</li>
+<li><p class="first">Note that even 100% coverage is not a guarantee of working code!  Good tests
+will realize that you need to also give multiple inputs that test the code
+paths of called functions that are outside of your code.  Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">to_unicode</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf8&#39;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s">&#39;replace&#39;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="p">)</span>
+
+<span class="c"># Smoketest only.  This will give 100% coverage for your code (it</span>
+<span class="c"># tests all of the code inside of to_unicode) but it leaves a lot of</span>
+<span class="c"># room for errors as it doesn&#39;t test all combinations of arguments</span>
+<span class="c"># that are then passed to the unicode() function.</span>
+
+<span class="n">tools</span><span class="o">.</span><span class="n">ok_</span><span class="p">(</span><span class="n">to_unicode</span><span class="p">(</span><span class="s">&#39;abc&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">u&#39;abc&#39;</span><span class="p">)</span>
+
+<span class="c"># Better -- tests now cover non-ascii characters and that error conditions</span>
+<span class="c"># occur properly.  There&#39;s a lot of other permutations that can be</span>
+<span class="c"># added along these same lines.</span>
+<span class="n">tools</span><span class="o">.</span><span class="n">ok_</span><span class="p">(</span><span class="n">to_unicode</span><span class="p">(</span><span class="s">u&#39;café&#39;</span><span class="p">,</span> <span class="s">&#39;utf8&#39;</span><span class="p">,</span> <span class="s">&#39;replace&#39;</span><span class="p">))</span>
+<span class="n">tools</span><span class="o">.</span><span class="n">assert_raises</span><span class="p">(</span><span class="ne">UnicodeError</span><span class="p">,</span> <span class="n">to_unicode</span><span class="p">,</span> <span class="p">[</span><span class="s">u&#39;cafè ñunru&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;latin1&#39;</span><span class="p">)])</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">We&#8217;re using nose for unittesting.  Rather than depend on unittest2
+functionality, use the functions that nose provides.</p>
+</li>
+<li><p class="first">Remember to maintain python-2.3 compatibility even in unittests.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="docstrings-and-documentation">
+<h2>Docstrings and documentation<a class="headerlink" href="#docstrings-and-documentation" title="Permalink to this headline">¶</a></h2>
+<p>We use sphinx to build our documentation.  We use the sphinx autodoc extension
+to pull docstrings out of the modules for API documentation.  This means that
+docstrings for subpackages and modules should follow a certain pattern.  The
+general structure is:</p>
+<ul class="simple">
+<li>Introductory material about a module in the module&#8217;s top level docstring.<ul>
+<li>Introductory material should begin with a level two title: an overbar and
+underbar of &#8216;-&#8216;.</li>
+</ul>
+</li>
+<li>docstrings for every function.<ul>
+<li>The first line is a short summary of what the function does</li>
+<li>This is followed by a blank line</li>
+<li>The next lines are a <cite>field list
+&lt;http://sphinx.pocoo.org/markup/desc.html#info-field-lists&gt;_</cite> giving
+information about the function&#8217;s signature.  We use the keywords:
+<tt class="docutils literal"><span class="pre">arg</span></tt>, <tt class="docutils literal"><span class="pre">kwarg</span></tt>, <tt class="docutils literal"><span class="pre">raises</span></tt>, <tt class="docutils literal"><span class="pre">returns</span></tt>, and sometimes <tt class="docutils literal"><span class="pre">rtype</span></tt>.  Use
+these to describe all arguments, key word arguments, exceptions raised,
+and return values using these.<ul>
+<li>Parameters that are <tt class="docutils literal"><span class="pre">kwarg</span></tt> should specify what their default
+behaviour is.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="kitchen-versioning">
+<span id="id1"></span><h2>Kitchen versioning<a class="headerlink" href="#kitchen-versioning" title="Permalink to this headline">¶</a></h2>
+<p>Currently the kitchen library is in early stages of development.  While we&#8217;re
+in this state, the main kitchen library uses the following pattern for version
+information:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Versions look like this::</dt>
+<dd><p class="first last">__version_info__ = ((0, 1, 2),)
+__version__ = &#8216;0.1.2&#8217;</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">The Major version number remains at 0 until we decide to make the first 1.0
+release of kitchen.  At that point, we&#8217;re declaring that we have some
+confidence that we won&#8217;t need to break backwards compatibility for a while.</p>
+</li>
+<li><p class="first">The Minor version increments for any backwards incompatible API changes.
+When this is updated, we reset micro to zero.</p>
+</li>
+<li><p class="first">The Micro version increments for any other changes (backwards compatible API
+changes, pure bugfixes, etc).</p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Versioning is only updated for releases that generate sdists and new
+uploads to the download directory.  Usually we update the version
+information for the library just before release.  By contrast, we update
+kitchen <a class="reference internal" href="#subpackage-versioning"><em>Versioning</em></a> when an API change is made.  When in
+doubt, look at the version information in the last release.</p>
+</div>
+</div>
+<div class="section" id="i18n">
+<h2>I18N<a class="headerlink" href="#i18n" title="Permalink to this headline">¶</a></h2>
+<p>All strings that are used as feedback for users need to be translated.
+<tt class="xref py py-mod docutils literal"><span class="pre">kitchen</span></tt> sets up several functions for this.  <tt class="xref py py-func docutils literal"><span class="pre">_()</span></tt> is used for
+marking things that are shown to users via print, GUIs, or other &#8220;standard&#8221;
+methods.  Strings for exceptions are marked with <tt class="xref py py-func docutils literal"><span class="pre">b_()</span></tt>.  This function
+returns a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> which is needed for use with exceptions:</p>
+<div class="highlight-python"><pre>from kitchen import _, b_
+
+def print_message(msg, username):
+    print _('%(user)s, your message of the day is:  %(message)s') % {
+            'message': msg, 'user': username}
+
+    raise Exception b_('Test message')</pre>
+</div>
+<p>This serves several purposes:</p>
+<ul class="simple">
+<li>It marks the strings to be extracted by an xgettext-like program.</li>
+<li><tt class="xref py py-func docutils literal"><span class="pre">_()</span></tt> is a function that will substitute available translations at
+runtime.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By using the <tt class="docutils literal"><span class="pre">%()s</span> <span class="pre">with</span> <span class="pre">dict</span></tt> style of string formatting, we make this
+string friendly to translators that may need to reorder the variables when
+they&#8217;re translating the string.</p>
+</div>
+<p><cite>paver &lt;http://www.blueskyonmars.com/projects/paver/&gt;_</cite> and <cite>babel
+&lt;http://babel.edgewall.org/&gt;_</cite> are used to extract the strings.</p>
+</div>
+<div class="section" id="api-updates">
+<h2>API updates<a class="headerlink" href="#api-updates" title="Permalink to this headline">¶</a></h2>
+<p>Kitchen strives to have a long deprecation cycle so that people have time to
+switch away from any APIs that we decide to discard.  Discarded APIs should
+raise a <tt class="xref py py-exc docutils literal"><span class="pre">DeprecationWarning</span></tt> and clearly state in the warning message and
+the docstring how to convert old code to use the new interface.  An example of
+deprecating a function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">from</span> <span class="nn">kitchen</span> <span class="kn">import</span> <span class="n">_</span>
+<span class="kn">from</span>  <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">to_bytes</span><span class="p">,</span> <span class="n">to_unicode</span>
+<span class="kn">from</span> <span class="nn">kitchen.text.new_module</span> <span class="kn">import</span> <span class="n">new_function</span>
+
+<span class="k">def</span> <span class="nf">old_function</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;**Deprecated**</span>
+
+<span class="sd">    This function is deprecated.  Use</span>
+<span class="sd">    :func:`kitchen.text.new_module.new_function` instead. If you want</span>
+<span class="sd">    unicode strngs as output, switch to::</span>
+
+<span class="sd">        &gt;&gt;&gt; from kitchen.text.new_module import new_function</span>
+<span class="sd">        &gt;&gt;&gt; output = new_function(param)</span>
+
+<span class="sd">    If you want byte strings, use::</span>
+
+<span class="sd">        &gt;&gt;&gt; from kitchen.text.new_module import new_function</span>
+<span class="sd">        &gt;&gt;&gt; from kitchen.text.converters import to_bytes</span>
+<span class="sd">        &gt;&gt;&gt; output = to_bytes(new_function(param))</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;kitchen.text.old_function is deprecated.  Use&#39;</span>
+        <span class="s">&#39; kitchen.text.new_module.new_function instead&#39;</span><span class="p">),</span>
+        <span class="ne">DeprecationWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">as_unicode</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">new_function</span><span class="p">(</span><span class="n">to_unicode</span><span class="p">(</span><span class="n">param</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">as_unicode</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">to_bytes</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">message</span>
+</pre></div>
+</div>
+<p>If a particular API change is very intrusive, it may be better to create a new
+version of the subpackage and ship both the old version and the new version.</p>
+</div>
+<div class="section" id="news-file">
+<h2>NEWS file<a class="headerlink" href="#news-file" title="Permalink to this headline">¶</a></h2>
+<p>Update the <tt class="file docutils literal"><span class="pre">NEWS</span></tt> file when you make a change that will be visible to
+the users.  This is not a ChangeLog file so we don&#8217;t need to list absolutely
+everything but it should give the user an idea of how this version differs
+from prior versions.  API changes should be listed here explicitly.  bugfixes
+can be more general:</p>
+<div class="highlight-python"><pre>-----
+0.2.0
+-----
+* Relicense to LGPLv2+
+* Add kitchen.text.format module with the following functions:
+  textual_width, textual_width_chop.
+* Rename the kitchen.text.utils module to kitchen.text.misc.  use of the
+  old names is deprecated but still available.
+* bugfixes applied to kitchen.pycompat24.defaultdict that fixes some
+  tracebacks</pre>
+</div>
+</div>
+<div class="section" id="kitchen-subpackages">
+<h2>Kitchen subpackages<a class="headerlink" href="#kitchen-subpackages" title="Permalink to this headline">¶</a></h2>
+<p>Kitchen itself is a namespace.  The kitchen sdist (tarball) provides certain
+useful subpackages.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#kitchen-addon-packages">Kitchen addon packages</a></dt>
+<dd>For information about subpackages not distributed in the kitchen sdist
+that install into the kitchen namespace.</dd>
+</dl>
+</div>
+<div class="section" id="versioning">
+<span id="subpackage-versioning"></span><h3>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h3>
+<p>Each subpackage should have its own version information which is independent
+of the other kitchen subpackages and the main kitchen library version. This is
+used so that code that depends on kitchen APIs can check the version
+information.  The standard way to do this is to put something like this in the
+subpackage&#8217;s <tt class="file docutils literal"><span class="pre">__init__.py</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kitchen.versioning</span> <span class="kn">import</span> <span class="n">version_tuple_to_string</span>
+
+<span class="n">__version_info__</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),)</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">version_tuple_to_string</span><span class="p">(</span><span class="n">__version_info__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><tt class="xref py py-attr docutils literal"><span class="pre">__version_info__</span></tt> is documented in <a class="reference internal" href="api-versioning.html#module-kitchen.versioning" title="kitchen.versioning"><tt class="xref py py-mod docutils literal"><span class="pre">kitchen.versioning</span></tt></a>.  The
+values of the first tuple should describe API changes to the module.  There
+are at least three numbers present in the tuple: (Major, minor, micro).  The
+major version number is for backwards incompatible changes (For
+instance, removing a function, or adding a new mandatory argument to
+a function).  Whenever one of these occurs, you should increment the major
+number and reset minor and micro to zero.  The second number is the minor
+version.  Anytime new but backwards compatible changes are introduced this
+number should be incremented and the micro version number reset to zero.  The
+micro version should be incremented when a change is made that does not change
+the API at all.  This is a common case for bugfixes, for instance.</p>
+<p>Version information beyond the first three parts of the first tuple may be
+useful for versioning but semantically have similar meaning to the micro
+version.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We update the <tt class="xref py py-attr docutils literal"><span class="pre">__version_info__</span></tt> tuple when the API is updated.
+This way there&#8217;s less chance of forgetting to update the API version when
+a new release is made.  However, we try to only increment the version
+numbers a single step for any release.  So if kitchen-0.1.0 has
+kitchen.text.__version__ == &#8216;1.0.1&#8217;, kitchen-0.1.1 should have
+kitchen.text.__version__ == &#8216;1.0.2&#8217; or &#8216;1.1.0&#8217; or &#8216;2.0.0&#8217;.</p>
+</div>
+</div>
+<div class="section" id="criteria-for-subpackages-in-kitchen">
+<h3>Criteria for subpackages in kitchen<a class="headerlink" href="#criteria-for-subpackages-in-kitchen" title="Permalink to this headline">¶</a></h3>
+<p>Supackages within kitchen should meet these criteria:</p>
+<ul>
+<li><p class="first">Generally useful or needed for other pieces of kitchen.</p>
+</li>
+<li><p class="first">No mandatory requirements outside of the <a class="reference external" href="http://docs.python.org/library">python standard library</a>.</p>
+<ul class="simple">
+<li>Optional requirements from outside the <a class="reference external" href="http://docs.python.org/library">python standard library</a> are allowed.  Things with
+mandatory requirements are better placed in <a class="reference internal" href="#kitchen-addon-packages">kitchen addon packages</a></li>
+</ul>
+</li>
+<li><p class="first">Somewhat API stable &#8211; this is not a hard requirement.  We can change the
+kitchen api.  However, it is better not to as people may come to depend on
+it.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#api-updates">API Updates</a></p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="kitchen-addon-packages">
+<h2>Kitchen addon packages<a class="headerlink" href="#kitchen-addon-packages" title="Permalink to this headline">¶</a></h2>
+<p>Addon packages are very similar to subpackages integrated into the kitchen
+sdist.  This section just lists some of the differences to watch out for.</p>
+<div class="section" id="setup-py">
+<h3>setup.py<a class="headerlink" href="#setup-py" title="Permalink to this headline">¶</a></h3>
+<p>Your <tt class="file docutils literal"><span class="pre">setup.py</span></tt> should contain entries like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># It&#39;s suggested to use a dotted name like this so the package is easily</span>
+<span class="c"># findable on pypi:</span>
+<span class="n">setup</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;kitchen.config&#39;</span><span class="p">,</span>
+    <span class="c"># Include kitchen in the keywords, again, for searching on pypi</span>
+    <span class="n">keywords</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;kitchen&#39;</span><span class="p">,</span> <span class="s">&#39;configuration&#39;</span><span class="p">],</span>
+    <span class="c"># This package lives in the directory kitchen/config</span>
+    <span class="n">packages</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;kitchen.config&#39;</span><span class="p">],</span>
+    <span class="c"># [...]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="package-directory-layout">
+<h3>Package directory layout<a class="headerlink" href="#package-directory-layout" title="Permalink to this headline">¶</a></h3>
+<p>Create a <tt class="file docutils literal"><span class="pre">kitchen</span></tt> directory in the toplevel.  Place the addon
+subpackage in there.  For example:</p>
+<div class="highlight-python"><pre>./                     &lt;== toplevel with README, setup.py, NEWS, etc
+kitchen/
+kitchen/__init__.py
+kitchen/config/        &lt;== subpackage directory
+kitchen/config/__init__.py</pre>
+</div>
+</div>
+<div class="section" id="fake-kitchen-module">
+<h3>Fake kitchen module<a class="headerlink" href="#fake-kitchen-module" title="Permalink to this headline">¶</a></h3>
+<p>The :file::<cite>__init__.py</cite> in the <tt class="file docutils literal"><span class="pre">kitchen</span></tt> directory is special.  It
+won&#8217;t be installed.  It just needs to pull in the kitchen from the system so
+that you are able to test your module.  You should be able to use this
+boilerplate:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Fake module.  This is not installed,  It&#39;s just made to import the real</span>
+<span class="c"># kitchen modules for testing this module</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+
+<span class="c"># Extend the __path__ with everything in the real kitchen module</span>
+<span class="n">__path__</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">extend_path</span><span class="p">(</span><span class="n">__path__</span><span class="p">,</span> <span class="n">__name__</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="xref py py-mod docutils literal"><span class="pre">kitchen</span></tt> needs to be findable by python for this to work.  Installed
+in the <tt class="file docutils literal"><span class="pre">site-packages</span></tt> directory or adding it to the
+<span class="target" id="index-1"></span><tt class="xref std std-envvar docutils literal"><span class="pre">PYTHONPATH</span></tt> will work.</p>
+</div>
+<p>Your unittests should now be able to find both your submodule and the main
+kitchen module.</p>
+</div>
+<div class="section" id="id2">
+<h3>Versioning<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>It is recommended that addon packages version similarly to
+<a class="reference internal" href="#subpackage-versioning"><em>Versioning</em></a>.  The <tt class="xref py py-data docutils literal"><span class="pre">__version_info__</span></tt> and
+<tt class="xref py py-data docutils literal"><span class="pre">__version__</span></tt> strings can be changed independently of  the version
+exposed by setup.py so that you have both an API version
+(<tt class="xref py py-data docutils literal"><span class="pre">__version_info__</span></tt>) and release version that&#8217;s easier for people to
+parse.  However, you aren&#8217;t required to do this and you could follow
+a different methodology if you want (for instance, <a class="reference internal" href="#kitchen-versioning"><em>Kitchen versioning</em></a>)</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Conventions for contributing to kitchen</a><ul>
+<li><a class="reference internal" href="#style">Style</a></li>
+<li><a class="reference internal" href="#python-2-3-compatibility">Python 2.3 compatibility</a></li>
+<li><a class="reference internal" href="#unittests">Unittests</a></li>
+<li><a class="reference internal" href="#docstrings-and-documentation">Docstrings and documentation</a></li>
+<li><a class="reference internal" href="#kitchen-versioning">Kitchen versioning</a></li>
+<li><a class="reference internal" href="#i18n">I18N</a></li>
+<li><a class="reference internal" href="#api-updates">API updates</a></li>
+<li><a class="reference internal" href="#news-file">NEWS file</a></li>
+<li><a class="reference internal" href="#kitchen-subpackages">Kitchen subpackages</a><ul>
+<li><a class="reference internal" href="#versioning">Versioning</a></li>
+<li><a class="reference internal" href="#criteria-for-subpackages-in-kitchen">Criteria for subpackages in kitchen</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#kitchen-addon-packages">Kitchen addon packages</a><ul>
+<li><a class="reference internal" href="#setup-py">setup.py</a></li>
+<li><a class="reference internal" href="#package-directory-layout">Package directory layout</a></li>
+<li><a class="reference internal" href="#fake-kitchen-module">Fake kitchen module</a></li>
+<li><a class="reference internal" href="#id2">Versioning</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="porting-guide-0.3.html"
+                        title="previous chapter">1.0.0 Porting Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="glossary.html"
+                        title="next chapter">Glossary</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/hacking.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="glossary.html" title="Glossary"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="porting-guide-0.3.html" title="1.0.0 Porting Guide"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

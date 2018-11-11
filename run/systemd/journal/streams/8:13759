@@ -1,0 +1,9 @@
+# This is private data. Do not parse
+PRIORITY=30
+LEVEL_PREFIX=1
+FORWARD_TO_SYSLOG=0
+FORWARD_TO_KMSG=0
+FORWARD_TO_CONSOLE=0
+STREAM_ID=bafb2c53ef2e4e198c6b6a3cc1e1b58d
+IDENTIFIER=lvmetad
+UNIT=lvm2-lvmetad.service

@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Miscellaneous functions for manipulating text &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen.text: unicode and utf8 and xml oh my!" href="api-text.html" />
+    <link rel="next" title="UTF-8" href="api-text-utf8.html" />
+    <link rel="prev" title="Format Text for Display" href="api-text-display.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-utf8.html" title="UTF-8"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-text-display.html" title="Format Text for Display"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" accesskey="U">Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-kitchen.text.misc"></span><div class="section" id="miscellaneous-functions-for-manipulating-text">
+<h1>Miscellaneous functions for manipulating text<a class="headerlink" href="#miscellaneous-functions-for-manipulating-text" title="Permalink to this headline">¶</a></h1>
+<p>Collection of text functions that don&#8217;t fit in another category.</p>
+<dl class="function">
+<dt id="kitchen.text.misc.byte_string_valid_encoding">
+<tt class="descclassname">kitchen.text.misc.</tt><tt class="descname">byte_string_valid_encoding</tt><big>(</big><em>byte_string</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#kitchen.text.misc.byte_string_valid_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect if a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is valid in a specific encoding</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; Byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to test for bytes not valid in this
+encoding</li>
+<li><strong>encoding</strong> &#8211; encoding to test against.  Defaults to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> if there are no invalid <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a> characters.
+<tt class="xref py py-data docutils literal"><span class="pre">False</span></tt> if an invalid character is detected.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function checks whether the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is valid in the
+specified encoding.  It <strong>does not</strong> detect whether the byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> actually was encoded in that encoding.  If you want that
+sort of functionality, you probably want to use
+<a class="reference internal" href="#kitchen.text.misc.guess_encoding" title="kitchen.text.misc.guess_encoding"><tt class="xref py py-func docutils literal"><span class="pre">guess_encoding()</span></tt></a> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.misc.byte_string_valid_xml">
+<tt class="descclassname">kitchen.text.misc.</tt><tt class="descname">byte_string_valid_xml</tt><big>(</big><em>byte_string</em>, <em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#kitchen.text.misc.byte_string_valid_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> would be valid in xml</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; Byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to check</li>
+<li><strong>encoding</strong> &#8211; Encoding of the xml file.  Default: <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> if the string is valid.  <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt> if it would
+be invalid in the xml file</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>In some cases you&#8217;ll have a whole bunch of byte strings and rather than
+transforming them to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> and back to byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> for
+output to xml, you will just want to make sure they work with the xml file
+you&#8217;re constructing.  This function will help you do that.  Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ARRAY_OF_MOSTLY_UTF8_STRINGS</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="n">processed_array</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">string</span> <span class="ow">in</span> <span class="n">ARRAY_OF_MOSTLY_UTF8_STRINGS</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">byte_string_valid_xml</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">):</span>
+        <span class="n">processed_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">processed_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">guess_bytes_to_xml</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+<span class="n">output_xml</span><span class="p">(</span><span class="n">processed_array</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.misc.guess_encoding">
+<tt class="descclassname">kitchen.text.misc.</tt><tt class="descname">guess_encoding</tt><big>(</big><em>byte_string</em>, <em>disable_chardet=False</em><big>)</big><a class="headerlink" href="#kitchen.text.misc.guess_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to guess the encoding of a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>byte_string</strong> &#8211; byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to guess the encoding of</li>
+<li><strong>disable_chardet</strong> &#8211; If this is True, we never attempt to use
+<tt class="xref py py-mod docutils literal"><span class="pre">chardet</span></tt> to guess the encoding.  This is useful if you need to
+have reproducibility whether <tt class="xref py py-mod docutils literal"><span class="pre">chardet</span></tt> is installed or not.
+Default: <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TypeError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first">if <tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt> is not a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> type</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string containing a guess at the encoding of
+<tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt>.  This is appropriate to pass as the encoding
+argument when encoding and decoding unicode strings.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>We start by attempting to decode the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> as <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a>.
+If this succeeds we tell the world it&#8217;s <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a> text.  If it doesn&#8217;t
+and <tt class="xref py py-mod docutils literal"><span class="pre">chardet</span></tt> is installed on the system and <tt class="xref py py-attr docutils literal"><span class="pre">disable_chardet</span></tt>
+is False this function will use it to try detecting the encoding of
+<tt class="xref py py-attr docutils literal"><span class="pre">byte_string</span></tt>.  If it is not installed or <tt class="xref py py-mod docutils literal"><span class="pre">chardet</span></tt> cannot
+determine the encoding with a high enough confidence then we rather
+arbitrarily claim that it is <tt class="docutils literal"><span class="pre">latin-1</span></tt>.  Since <tt class="docutils literal"><span class="pre">latin-1</span></tt> will encode
+to every byte, decoding from <tt class="docutils literal"><span class="pre">latin-1</span></tt> to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> will not
+cause <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeErrors</span></tt> although the output might be mangled.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.misc.html_entities_unescape">
+<tt class="descclassname">kitchen.text.misc.</tt><tt class="descname">html_entities_unescape</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#kitchen.text.misc.html_entities_unescape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Substitute unicode characters for HTML entities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string to substitute out html entities</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TypeError:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">if something other than a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string is
+given</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The plain text without html entities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.misc.process_control_chars">
+<tt class="descclassname">kitchen.text.misc.</tt><tt class="descname">process_control_chars</tt><big>(</big><em>string</em>, <em>strategy='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.misc.process_control_chars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look for and transform <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> in a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> &#8211; string to search for and transform <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>
+within</li>
+<li><strong>strategy</strong> &#8211; <p>XML does not allow <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control
+characters</em></a>.  When we encounter those we need to know what to do.
+Valid options are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">replace:</th><td class="field-body">(default) Replace the <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>
+with <tt class="docutils literal"><span class="pre">&quot;?&quot;</span></tt></td>
+</tr>
+<tr class="field-even field"><th class="field-name">ignore:</th><td class="field-body">Remove the characters altogether from the output</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">strict:</th><td class="field-body">Raise a <a class="reference internal" href="api-exceptions.html#kitchen.text.exceptions.ControlCharError" title="kitchen.text.exceptions.ControlCharError"><tt class="xref py py-exc docutils literal"><span class="pre">ControlCharError</span></tt></a> when
+we encounter a control character</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TypeError</strong> &#8211; if <tt class="xref py py-attr docutils literal"><span class="pre">string</span></tt> is not a unicode string.</li>
+<li><strong>ValueError</strong> &#8211; if the strategy is not one of replace, ignore, or
+strict.</li>
+<li><a class="reference internal" href="api-exceptions.html#kitchen.text.exceptions.ControlCharError" title="kitchen.text.exceptions.ControlCharError"><strong>kitchen.text.exceptions.ControlCharError</strong></a> &#8211; if the strategy is
+<tt class="docutils literal"><span class="pre">strict</span></tt> and a <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a> is present in the
+<tt class="xref py py-attr docutils literal"><span class="pre">string</span></tt></li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string with no <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a> in
+it.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.misc.str_eq">
+<tt class="descclassname">kitchen.text.misc.</tt><tt class="descname">str_eq</tt><big>(</big><em>str1</em>, <em>str2</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.misc.str_eq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compare two stringsi, converting to byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> if one is
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>str1</strong> &#8211; First string to compare</li>
+<li><strong>str2</strong> &#8211; Second string to compare</li>
+<li><strong>encoding</strong> &#8211; If we need to convert one string into a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+to compare, the encoding to use.  Default is <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a>.</li>
+<li><strong>errors</strong> &#8211; What to do if we encounter errors when encoding the string.
+See the <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_bytes()</span></tt></a> documentation for
+possible values.  The default is <tt class="docutils literal"><span class="pre">replace</span></tt>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function prevents <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeError</span></tt> (python-2.4 or less) and
+<tt class="xref py py-exc docutils literal"><span class="pre">UnicodeWarning</span></tt> (python 2.5 and higher) when we compare
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string to a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  The errors normally
+arise because the conversion is done to <a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a>.  This function
+lets you convert to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">utf-8</em></a> or another encoding instead.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When we need to convert one of the strings from <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> in
+order to compare them we convert the <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string into
+a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  That means that strings can compare differently
+if you use different encodings for each.</p>
+</div>
+<p>Note that <tt class="docutils literal"><span class="pre">str1</span> <span class="pre">==</span> <span class="pre">str2</span></tt> is faster than this function if you can accept
+the following limitations:</p>
+<ul class="simple">
+<li>Limited to python-2.5+ (otherwise a <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeDecodeError</span></tt> may be
+thrown)</li>
+<li>Will generate a <tt class="xref py py-exc docutils literal"><span class="pre">UnicodeWarning</span></tt> if non-<a class="reference internal" href="glossary.html#term-ascii"><em class="xref std std-term">ASCII</em></a> byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> is compared to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-text-display.html"
+                        title="previous chapter">Format Text for Display</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-text-utf8.html"
+                        title="next chapter">UTF-8</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-text-misc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-utf8.html" title="UTF-8"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-text-display.html" title="Format Text for Display"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" >Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

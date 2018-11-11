@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Kitchen.text: unicode and utf8 and xml oh my! &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen API" href="api-overview.html" />
+    <link rel="next" title="Kitchen.text.converters" href="api-text-converters.html" />
+    <link rel="prev" title="Kitchen.i18n Module" href="api-i18n.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-converters.html" title="Kitchen.text.converters"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-i18n.html" title="Kitchen.i18n Module"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" accesskey="U">Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="kitchen-text-unicode-and-utf8-and-xml-oh-my">
+<h1>Kitchen.text: unicode and utf8 and xml oh my!<a class="headerlink" href="#kitchen-text-unicode-and-utf8-and-xml-oh-my" title="Permalink to this headline">¶</a></h1>
+<p>The kitchen.text module contains functions that deal with text manipulation.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api-text-converters.html">Kitchen.text.converters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api-text-converters.html#byte-strings-and-unicode-in-python2">Byte Strings and Unicode in Python2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-text-converters.html#strategy-for-explicit-conversion">Strategy for Explicit Conversion</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api-text-converters.html#when-to-use-an-alternate-strategy">When to use an alternate strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api-text-converters.html#gotchas-and-how-to-avoid-them">Gotchas and how to avoid them</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api-text-converters.html#str-obj">str(obj)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api-text-converters.html#print">print</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api-text-converters.html#unicode-str-and-dict-keys">Unicode, str, and dict keys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-text-converters.html#functions">Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api-text-converters.html#unicode-and-byte-str-conversion">Unicode and byte str conversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-text-converters.html#transformation-to-xml">Transformation to XML</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api-text-converters.html#working-with-exception-messages">Working with exception messages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api-text-display.html">Format Text for Display</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-text-display.html#internal-data">Internal Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-text-misc.html">Miscellaneous functions for manipulating text</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-text-utf8.html">UTF-8</a></li>
+</ul>
+</div>
+<dl class="docutils">
+<dt><a class="reference internal" href="api-text-converters.html#module-kitchen.text.converters" title="kitchen.text.converters"><tt class="xref py py-mod docutils literal"><span class="pre">converters</span></tt></a></dt>
+<dd>deals with converting text for different encodings and to and from XML</dd>
+<dt><a class="reference internal" href="api-text-display.html#module-kitchen.text.display" title="kitchen.text.display"><tt class="xref py py-mod docutils literal"><span class="pre">display</span></tt></a></dt>
+<dd>deals with issues with printing text to a screen</dd>
+<dt><a class="reference internal" href="api-text-misc.html#module-kitchen.text.misc" title="kitchen.text.misc"><tt class="xref py py-mod docutils literal"><span class="pre">misc</span></tt></a></dt>
+<dd>is a catchall for text manipulation functions that don&#8217;t seem to fit
+elsewhere</dd>
+<dt><a class="reference internal" href="api-text-utf8.html#module-kitchen.text.utf8" title="kitchen.text.utf8 (deprecated)"><tt class="xref py py-mod docutils literal"><span class="pre">utf8</span></tt></a></dt>
+<dd>contains deprecated functions to manipulate utf8 byte strings</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-i18n.html"
+                        title="previous chapter">Kitchen.i18n Module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-text-converters.html"
+                        title="next chapter">Kitchen.text.converters</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-text.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-converters.html" title="Kitchen.text.converters"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-i18n.html" title="Kitchen.i18n Module"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

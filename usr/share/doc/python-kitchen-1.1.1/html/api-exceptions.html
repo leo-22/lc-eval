@@ -1,0 +1,162 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Exceptions &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen API" href="api-overview.html" />
+    <link rel="next" title="1.0.0 Porting Guide" href="porting-guide-0.3.html" />
+    <link rel="prev" title="Python 2.7 Compatibility" href="api-pycompat27.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="porting-guide-0.3.html" title="1.0.0 Porting Guide"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-pycompat27.html" title="Python 2.7 Compatibility"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" accesskey="U">Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="exceptions">
+<h1>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h1>
+<p>Kitchen has a hierarchy of exceptions that should make it easy to catch many
+errors emitted by kitchen itself.</p>
+<span class="target" id="module-kitchen.exceptions"></span><div class="section" id="base-kitchen-exceptions">
+<h2>Base kitchen exceptions<a class="headerlink" href="#base-kitchen-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Exception classes for kitchen and the root of the exception hierarchy for
+all kitchen modules.</p>
+<dl class="exception">
+<dt id="kitchen.exceptions.KitchenError">
+<em class="property">exception </em><tt class="descclassname">kitchen.exceptions.</tt><tt class="descname">KitchenError</tt><a class="headerlink" href="#kitchen.exceptions.KitchenError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base exception class for any error thrown directly by kitchen.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-kitchen.text.exceptions"></span><div class="section" id="kitchen-text-exceptions">
+<h2>Kitchen.text exceptions<a class="headerlink" href="#kitchen-text-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Exception classes thrown by kitchen&#8217;s text processing routines.</p>
+<dl class="exception">
+<dt id="kitchen.text.exceptions.XmlEncodeError">
+<em class="property">exception </em><tt class="descclassname">kitchen.text.exceptions.</tt><tt class="descname">XmlEncodeError</tt><a class="headerlink" href="#kitchen.text.exceptions.XmlEncodeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception thrown by error conditions when encoding an xml string.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="kitchen.text.exceptions.ControlCharError">
+<em class="property">exception </em><tt class="descclassname">kitchen.text.exceptions.</tt><tt class="descname">ControlCharError</tt><a class="headerlink" href="#kitchen.text.exceptions.ControlCharError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exception thrown when an ascii control character is encountered.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Exceptions</a><ul>
+<li><a class="reference internal" href="#base-kitchen-exceptions">Base kitchen exceptions</a></li>
+<li><a class="reference internal" href="#kitchen-text-exceptions">Kitchen.text exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-pycompat27.html"
+                        title="previous chapter">Python 2.7 Compatibility</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="porting-guide-0.3.html"
+                        title="next chapter">1.0.0 Porting Guide</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-exceptions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="porting-guide-0.3.html" title="1.0.0 Porting Guide"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-pycompat27.html" title="Python 2.7 Compatibility"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

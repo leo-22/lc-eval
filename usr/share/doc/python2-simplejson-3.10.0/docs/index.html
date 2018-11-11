@@ -1,0 +1,1017 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>simplejson — JSON encoder and decoder &mdash; simplejson 3.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '3.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="simplejson 3.10.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">simplejson 3.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-simplejson">
+<span id="simplejson-json-encoder-and-decoder"></span><h1><a class="reference internal" href="#module-simplejson" title="simplejson: Encode and decode the JSON format."><tt class="xref py py-mod docutils literal"><span class="pre">simplejson</span></tt></a> &#8212; JSON encoder and decoder<a class="headerlink" href="#module-simplejson" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://json.org">JSON (JavaScript Object Notation)</a>, specified by
+<span class="target" id="index-0"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc7159.html"><strong>RFC 7159</strong></a> (which obsoletes <span class="target" id="index-1"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc4627.html"><strong>RFC 4627</strong></a>) and by
+<a class="reference external" href="http://www.ecma-international.org/publications/standards/Ecma-404.htm">ECMA-404</a>,
+is a lightweight data interchange format inspired by
+<a class="reference external" href="http://en.wikipedia.org/wiki/JavaScript">JavaScript</a> object literal syntax
+(although it is not a strict subset of JavaScript <a class="footnote-reference" href="#rfc-errata" id="id1">[1]</a> ).</p>
+<p><a class="reference internal" href="#module-simplejson" title="simplejson: Encode and decode the JSON format."><tt class="xref py py-mod docutils literal"><span class="pre">simplejson</span></tt></a> exposes an API familiar to users of the standard library
+<tt class="xref py py-mod docutils literal"><span class="pre">marshal</span></tt> and <tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt> modules. It is the externally maintained
+version of the <tt class="xref py py-mod docutils literal"><span class="pre">json</span></tt> library contained in Python 2.6, but maintains
+compatibility with Python 2.5 and (currently) has
+significant performance advantages, even without using the optional C
+extension for speedups. <a class="reference internal" href="#module-simplejson" title="simplejson: Encode and decode the JSON format."><tt class="xref py py-mod docutils literal"><span class="pre">simplejson</span></tt></a> is also supported on Python 3.3+.</p>
+<p>Development of simplejson happens on Github:
+<a class="reference external" href="http://github.com/simplejson/simplejson">http://github.com/simplejson/simplejson</a></p>
+<p>Encoding basic Python object hierarchies:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;bar&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;baz&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}])</span>
+<span class="go">&#39;[&quot;foo&quot;, {&quot;bar&quot;: [&quot;baz&quot;, null, 1.0, 2]}]&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\b</span><span class="s">ar&quot;</span><span class="p">))</span>
+<span class="go">&quot;\&quot;foo\bar&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="s">u&#39;</span><span class="se">\u1234</span><span class="s">&#39;</span><span class="p">))</span>
+<span class="go">&quot;\u1234&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">&#39;</span><span class="p">))</span>
+<span class="go">&quot;\\&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&quot;c&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="go">{&quot;a&quot;: 0, &quot;b&quot;: 0, &quot;c&quot;: 0}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">simplejson.compat</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">io</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">([</span><span class="s">&#39;streaming API&#39;</span><span class="p">],</span> <span class="n">io</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">io</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+<span class="go">&#39;[&quot;streaming API&quot;]&#39;</span>
+</pre></div>
+</div>
+<p>Compact encoding:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,{</span><span class="s">&#39;4&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;6&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">),</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&#39;[1,2,3,{&quot;4&quot;:5,&quot;6&quot;:7}]&#39;</span>
+</pre></div>
+</div>
+<p>Pretty printing:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s">&#39;4&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;6&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">},</span> <span class="n">sort_keys</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s">&#39; &#39;</span><span class="p">))</span>
+<span class="go">{</span>
+<span class="go">    &quot;4&quot;: 5,</span>
+<span class="go">    &quot;6&quot;: 7</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Decoding JSON:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obj</span> <span class="o">=</span> <span class="p">[</span><span class="s">u&#39;foo&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">u&#39;bar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s">u&#39;baz&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">&#39;[&quot;foo&quot;, {&quot;bar&quot;:[&quot;baz&quot;, null, 1.0, 2]}]&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">obj</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">&#39;&quot;</span><span class="se">\\</span><span class="s">&quot;foo</span><span class="se">\\</span><span class="s">bar&quot;&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">u&#39;&quot;foo</span><span class="se">\x08</span><span class="s">ar&#39;</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">simplejson.compat</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">io</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="s">&#39;[&quot;streaming API&quot;]&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">io</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;streaming API&#39;</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Using Decimal instead of float:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">&#39;1.1&#39;</span><span class="p">,</span> <span class="n">use_decimal</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">Decimal</span><span class="p">(</span><span class="s">&#39;1.1&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="s">&#39;1.1&#39;</span><span class="p">),</span> <span class="n">use_decimal</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;1.1&#39;</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Specializing JSON object decoding:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">as_complex</span><span class="p">(</span><span class="n">dct</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="s">&#39;__complex__&#39;</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="nb">complex</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s">&#39;real&#39;</span><span class="p">],</span> <span class="n">dct</span><span class="p">[</span><span class="s">&#39;imag&#39;</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">dct</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">&#39;{&quot;__complex__&quot;: true, &quot;real&quot;: 1, &quot;imag&quot;: 2}&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">object_hook</span><span class="o">=</span><span class="n">as_complex</span><span class="p">)</span>
+<span class="go">(1+2j)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">decimal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">&#39;1.1&#39;</span><span class="p">,</span> <span class="n">parse_float</span><span class="o">=</span><span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">)</span> <span class="o">==</span> <span class="n">decimal</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="s">&#39;1.1&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>Specializing JSON object encoding:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">encode_complex</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">complex</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">imag</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; is not JSON serializable&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">encode_complex</span><span class="p">)</span>
+<span class="go">&#39;[2.0, 1.0]&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">encode_complex</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="p">)</span>
+<span class="go">&#39;[2.0, 1.0]&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">encode_complex</span><span class="p">)</span><span class="o">.</span><span class="n">iterencode</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="p">))</span>
+<span class="go">&#39;[2.0, 1.0]&#39;</span>
+</pre></div>
+</div>
+<p>Using <tt class="xref py py-mod docutils literal"><span class="pre">simplejson.tool</span></tt> from the shell to validate and pretty-print:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;{&quot;json&quot;:&quot;obj&quot;}&#39;</span> | python -m simplejson.tool
+<span class="o">{</span>
+    <span class="s2">&quot;json&quot;</span>: <span class="s2">&quot;obj&quot;</span>
+<span class="o">}</span>
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;{ 1.2:3.4}&#39;</span> | python -m simplejson.tool
+Expecting property name enclosed in double quotes: line 1 column 3 <span class="o">(</span>char 2<span class="o">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">JSON is a subset of <a class="reference external" href="http://yaml.org/">YAML</a> 1.2. The JSON produced by
+this module&#8217;s default settings (in particular, the default <em>separators</em>
+value) is also a subset of YAML 1.0 and 1.1. This module can thus also be
+used as a YAML serializer.</p>
+</div>
+<div class="section" id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="simplejson.dump">
+<tt class="descclassname">simplejson.</tt><tt class="descname">dump</tt><big>(</big><em>obj</em>, <em>fp</em>, <em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>cls=None</em>, <em>indent=None</em>, <em>separators=None</em>, <em>encoding='utf-8'</em>, <em>default=None</em>, <em>use_decimal=True</em>, <em>namedtuple_as_object=True</em>, <em>tuple_as_array=True</em>, <em>bigint_as_string=False</em>, <em>sort_keys=False</em>, <em>item_sort_key=None</em>, <em>for_json=None</em>, <em>ignore_nan=False</em>, <em>int_as_string_bitcount=None</em>, <em>iterable_as_array=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#simplejson.dump" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Serialize <em>obj</em> as a JSON formatted stream to <em>fp</em> (a <tt class="docutils literal"><span class="pre">.write()</span></tt>-supporting
+file-like object) using this <a class="reference internal" href="#py-to-json-table"><em>conversion table</em></a>.</p>
+<p>If <em>skipkeys</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>), then dict keys that are not
+of a basic type (<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">int</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">long</span></tt>,
+<tt class="xref py py-class docutils literal"><span class="pre">float</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">bool</span></tt>, <tt class="docutils literal"><span class="pre">None</span></tt>) will be skipped instead of raising a
+<tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt>.</p>
+<p>The <a class="reference internal" href="#module-simplejson" title="simplejson: Encode and decode the JSON format."><tt class="xref py py-mod docutils literal"><span class="pre">simplejson</span></tt></a> module will produce <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> objects in Python 3,
+not <tt class="xref py py-class docutils literal"><span class="pre">bytes</span></tt> objects. Therefore, <tt class="docutils literal"><span class="pre">fp.write()</span></tt> must support
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> input.</p>
+<p>If <em>ensure_ascii</em> is false (default: <tt class="docutils literal"><span class="pre">True</span></tt>), then some chunks written
+to <em>fp</em> may be <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> instances, subject to normal Python
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> coercion rules.  Unless <tt class="docutils literal"><span class="pre">fp.write()</span></tt>
+explicitly understands <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> (as in <tt class="xref py py-func docutils literal"><span class="pre">codecs.getwriter()</span></tt>) this
+is likely to cause an error. It&#8217;s best to leave the default settings, because
+they are safe and it is highly optimized.</p>
+<p>If <em>check_circular</em> is false (default: <tt class="docutils literal"><span class="pre">True</span></tt>), then the circular
+reference check for container types will be skipped and a circular reference
+will result in an <tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt> (or worse).</p>
+<p>If <em>allow_nan</em> is false (default: <tt class="docutils literal"><span class="pre">True</span></tt>), then it will be a
+<tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt> to serialize out of range <tt class="xref py py-class docutils literal"><span class="pre">float</span></tt> values (<tt class="docutils literal"><span class="pre">nan</span></tt>,
+<tt class="docutils literal"><span class="pre">inf</span></tt>, <tt class="docutils literal"><span class="pre">-inf</span></tt>) in strict compliance of the original JSON specification.
+If <em>allow_nan</em> is true, their JavaScript equivalents will be used
+(<tt class="docutils literal"><span class="pre">NaN</span></tt>, <tt class="docutils literal"><span class="pre">Infinity</span></tt>, <tt class="docutils literal"><span class="pre">-Infinity</span></tt>). See also <em>ignore_nan</em> for ECMA-262
+compliant behavior.</p>
+<p>If <em>indent</em> is a string, then JSON array elements and object members
+will be pretty-printed with a newline followed by that string repeated
+for each level of nesting. <tt class="docutils literal"><span class="pre">None</span></tt> (the default) selects the most compact
+representation without any newlines. For backwards compatibility with
+versions of simplejson earlier than 2.1.0, an integer is also accepted
+and is converted to a string with that many spaces.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.0: </span>Changed <em>indent</em> from an integer number of spaces to a string.</p>
+<p>If specified, <em>separators</em> should be an <tt class="docutils literal"><span class="pre">(item_separator,</span> <span class="pre">key_separator)</span></tt>
+tuple.  The default is <tt class="docutils literal"><span class="pre">(',</span> <span class="pre">',</span> <span class="pre">':</span> <span class="pre">')</span></tt> if <em>indent</em> is <tt class="docutils literal"><span class="pre">None</span></tt> and
+<tt class="docutils literal"><span class="pre">(',',</span> <span class="pre">':</span> <span class="pre">')</span></tt> otherwise.  To get the most compact JSON representation,
+you should specify <tt class="docutils literal"><span class="pre">(',',</span> <span class="pre">':')</span></tt> to eliminate whitespace.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.4: </span>Use <tt class="docutils literal"><span class="pre">(',',</span> <span class="pre">':</span> <span class="pre">')</span></tt> as default if <em>indent</em> is not <tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+<p><em>encoding</em> is the character encoding for str instances, default is
+<tt class="docutils literal"><span class="pre">'utf-8'</span></tt>.</p>
+<p><em>default(obj)</em> is a function that should return a serializable version of
+<em>obj</em> or raise <tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt>. The default simply raises <tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt>.</p>
+<p>To use a custom <a class="reference internal" href="#simplejson.JSONEncoder" title="simplejson.JSONEncoder"><tt class="xref py py-class docutils literal"><span class="pre">JSONEncoder</span></tt></a> subclass (e.g. one that overrides the
+<tt class="xref py py-meth docutils literal"><span class="pre">default()</span></tt> method to serialize additional types), specify it with the
+<em>cls</em> kwarg.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Subclassing is not recommended. Use the <em>default</em> kwarg
+or <em>for_json</em> instead. This is faster and more portable.</p>
+</div>
+<p>If <em>use_decimal</em> is true (default: <tt class="docutils literal"><span class="pre">True</span></tt>) then <tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt>
+will be natively serialized to JSON with full precision.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.0: </span><em>use_decimal</em> is new in 2.1.0.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.0: </span>The default of <em>use_decimal</em> changed to <tt class="docutils literal"><span class="pre">True</span></tt> in 2.2.0.</p>
+<p>If <em>namedtuple_as_object</em> is true (default: <tt class="docutils literal"><span class="pre">True</span></tt>),
+objects with <tt class="docutils literal"><span class="pre">_asdict()</span></tt> methods will be encoded
+as JSON objects.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.0: </span><em>namedtuple_as_object</em> is new in 2.2.0.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3.0: </span><em>namedtuple_as_object</em> no longer requires that these objects be
+subclasses of <tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt>.</p>
+<p>If <em>tuple_as_array</em> is true (default: <tt class="docutils literal"><span class="pre">True</span></tt>),
+<tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> (and subclasses) will be encoded as JSON arrays.</p>
+</div></blockquote>
+<p>If <em>iterable_as_array</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>),
+any object not in the above table that implements <tt class="docutils literal"><span class="pre">__iter__()</span></tt>
+will be encoded as a JSON array.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.8.0: </span><em>iterable_as_array</em> is new in 3.8.0.<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.0: </span><em>tuple_as_array</em> is new in 2.2.0.</p>
+<p>If <em>bigint_as_string</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>), <tt class="xref py py-class docutils literal"><span class="pre">int</span></tt> <tt class="docutils literal"><span class="pre">2**53</span></tt>
+and higher or lower than <tt class="docutils literal"><span class="pre">-2**53</span></tt> will be encoded as strings. This is to
+avoid the rounding that happens in Javascript otherwise. Note that this
+option loses type information, so use with extreme caution.
+See also <em>int_as_string_bitcount</em>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.4.0: </span><em>bigint_as_string</em> is new in 2.4.0.</p>
+<p>If <em>sort_keys</em> is true (not the default), then the output of dictionaries
+will be sorted by key; this is useful for regression tests to ensure that
+JSON serializations can be compared on a day-to-day basis.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.0.0: </span>Sorting now happens after the keys have been coerced to
+strings, to avoid comparison of heterogeneously typed objects
+(since this does not work in Python 3.3+)</p>
+<p>If <em>item_sort_key</em> is a callable (not the default), then the output of
+dictionaries will be sorted with it. The callable will be used like this:
+<tt class="docutils literal"><span class="pre">sorted(dct.items(),</span> <span class="pre">key=item_sort_key)</span></tt>. This option takes precedence
+over <em>sort_keys</em>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5.0: </span><em>item_sort_key</em> is new in 2.5.0.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.0.0: </span>Sorting now happens after the keys have been coerced to
+strings, to avoid comparison of heterogeneously typed objects
+(since this does not work in Python 3.3+)</p>
+<p>If <em>for_json</em> is true (not the default), objects with a <tt class="docutils literal"><span class="pre">for_json()</span></tt>
+method will use the return value of that method for encoding as JSON instead
+of the object.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.2.0: </span><em>for_json</em> is new in 3.2.0.</p>
+<p>If <em>ignore_nan</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>), then out of range
+<tt class="xref py py-class docutils literal"><span class="pre">float</span></tt> values (<tt class="docutils literal"><span class="pre">nan</span></tt>, <tt class="docutils literal"><span class="pre">inf</span></tt>, <tt class="docutils literal"><span class="pre">-inf</span></tt>) will be serialized as
+<tt class="docutils literal"><span class="pre">null</span></tt> in compliance with the ECMA-262 specification. If true, this will
+override <em>allow_nan</em>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.2.0: </span><em>ignore_nan</em> is new in 3.2.0.</p>
+<p>If <em>int_as_string_bitcount</em> is a positive number <tt class="docutils literal"><span class="pre">n</span></tt> (default: <tt class="docutils literal"><span class="pre">None</span></tt>),
+<tt class="xref py py-class docutils literal"><span class="pre">int</span></tt> <tt class="docutils literal"><span class="pre">2**n</span></tt> and higher or lower than <tt class="docutils literal"><span class="pre">-2**n</span></tt> will be encoded as strings. This is to
+avoid the rounding that happens in Javascript otherwise. Note that this
+option loses type information, so use with extreme caution.
+See also <em>bigint_as_string</em> (which is equivalent to <cite>int_as_string_bitcount=53</cite>).</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.5.0: </span><em>int_as_string_bitcount</em> is new in 3.5.0.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">JSON is not a framed protocol so unlike <tt class="xref py py-mod docutils literal"><span class="pre">pickle</span></tt> or <tt class="xref py py-mod docutils literal"><span class="pre">marshal</span></tt> it
+does not make sense to serialize more than one JSON document without some
+container protocol to delimit them.</p>
+</div>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplejson.dumps">
+<tt class="descclassname">simplejson.</tt><tt class="descname">dumps</tt><big>(</big><em>obj</em>, <em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>cls=None</em>, <em>indent=None</em>, <em>separators=None</em>, <em>encoding='utf-8'</em>, <em>default=None</em>, <em>use_decimal=True</em>, <em>namedtuple_as_object=True</em>, <em>tuple_as_array=True</em>, <em>bigint_as_string=False</em>, <em>sort_keys=False</em>, <em>item_sort_key=None</em>, <em>for_json=None</em>, <em>ignore_nan=False</em>, <em>int_as_string_bitcount=None</em>, <em>iterable_as_array=False</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#simplejson.dumps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize <em>obj</em> to a JSON formatted <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.</p>
+<p>If <em>ensure_ascii</em> is false, then the return value will be a
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> instance.  The other arguments have the same meaning as in
+<a class="reference internal" href="#simplejson.dump" title="simplejson.dump"><tt class="xref py py-func docutils literal"><span class="pre">dump()</span></tt></a>. Note that the default <em>ensure_ascii</em> setting has much
+better performance in Python 2.</p>
+<p>The other options have the same meaning as in <a class="reference internal" href="#simplejson.dump" title="simplejson.dump"><tt class="xref py py-func docutils literal"><span class="pre">dump()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplejson.load">
+<tt class="descclassname">simplejson.</tt><tt class="descname">load</tt><big>(</big><em>fp</em>, <em>encoding='utf-8'</em>, <em>cls=None</em>, <em>object_hook=None</em>, <em>parse_float=None</em>, <em>parse_int=None</em>, <em>parse_constant=None</em>, <em>object_pairs_hook=None</em>, <em>use_decimal=None</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#simplejson.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize <em>fp</em> (a <tt class="docutils literal"><span class="pre">.read()</span></tt>-supporting file-like object containing a JSON
+document) to a Python object using this
+<a class="reference internal" href="#json-to-py-table"><em>conversion table</em></a>. <a class="reference internal" href="#simplejson.JSONDecodeError" title="simplejson.JSONDecodeError"><tt class="xref py py-exc docutils literal"><span class="pre">JSONDecodeError</span></tt></a> will be
+raised if the given JSON document is not valid.</p>
+<p>If the contents of <em>fp</em> are encoded with an ASCII based encoding other than
+UTF-8 (e.g. latin-1), then an appropriate <em>encoding</em> name must be specified.
+Encodings that are not ASCII based (such as UCS-2) are not allowed, and
+should be wrapped with <tt class="docutils literal"><span class="pre">codecs.getreader(fp)(encoding)</span></tt>, or simply decoded
+to a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> object and passed to <a class="reference internal" href="#simplejson.loads" title="simplejson.loads"><tt class="xref py py-func docutils literal"><span class="pre">loads()</span></tt></a>. The default
+setting of <tt class="docutils literal"><span class="pre">'utf-8'</span></tt> is fastest and should be using whenever possible.</p>
+<p>If <em>fp.read()</em> returns <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> then decoded JSON strings that contain
+only ASCII characters may be parsed as <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> for performance and
+memory reasons. If your code expects only <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> the appropriate
+solution is to wrap fp with a reader as demonstrated above.</p>
+<p><em>object_hook</em> is an optional function that will be called with the result of
+any object literal decode (a <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt>).  The return value of
+<em>object_hook</em> will be used instead of the <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt>.  This feature can be used
+to implement custom decoders (e.g. <a class="reference external" href="http://www.jsonrpc.org">JSON-RPC</a>
+class hinting).</p>
+<p><em>object_pairs_hook</em> is an optional function that will be called with the
+result of any object literal decode with an ordered list of pairs.  The
+return value of <em>object_pairs_hook</em> will be used instead of the
+<tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt>.  This feature can be used to implement custom decoders that
+rely on the order that the key and value pairs are decoded (for example,
+<tt class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></tt> will remember the order of insertion). If
+<em>object_hook</em> is also defined, the <em>object_pairs_hook</em> takes priority.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.0: </span>Added support for <em>object_pairs_hook</em>.</p>
+<p><em>parse_float</em>, if specified, will be called with the string of every JSON
+float to be decoded.  By default, this is equivalent to <tt class="docutils literal"><span class="pre">float(num_str)</span></tt>.
+This can be used to use another datatype or parser for JSON floats
+(e.g. <tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt>).</p>
+<p><em>parse_int</em>, if specified, will be called with the string of every JSON int
+to be decoded.  By default, this is equivalent to <tt class="docutils literal"><span class="pre">int(num_str)</span></tt>.  This can
+be used to use another datatype or parser for JSON integers
+(e.g. <tt class="xref py py-class docutils literal"><span class="pre">float</span></tt>).</p>
+<p><em>parse_constant</em>, if specified, will be called with one of the following
+strings: <tt class="docutils literal"><span class="pre">'-Infinity'</span></tt>, <tt class="docutils literal"><span class="pre">'Infinity'</span></tt>, <tt class="docutils literal"><span class="pre">'NaN'</span></tt>.  This can be used to
+raise an exception if invalid JSON numbers are encountered.</p>
+<p>If <em>use_decimal</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>) then <em>parse_float</em> is set to
+<tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt>. This is a convenience for parity with the
+<a class="reference internal" href="#simplejson.dump" title="simplejson.dump"><tt class="xref py py-func docutils literal"><span class="pre">dump()</span></tt></a> parameter.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.0: </span><em>use_decimal</em> is new in 2.1.0.</p>
+<p>If <em>iterable_as_array</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>),
+any object not in the above table that implements <tt class="docutils literal"><span class="pre">__iter__()</span></tt>
+will be encoded as a JSON array.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.8.0: </span><em>iterable_as_array</em> is new in 3.8.0.</p>
+<p>To use a custom <a class="reference internal" href="#simplejson.JSONDecoder" title="simplejson.JSONDecoder"><tt class="xref py py-class docutils literal"><span class="pre">JSONDecoder</span></tt></a> subclass, specify it with the <tt class="docutils literal"><span class="pre">cls</span></tt>
+kwarg.  Additional keyword arguments will be passed to the constructor of the
+class. You probably shouldn&#8217;t do this.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Subclassing is not recommended. You should use <em>object_hook</em> or
+<em>object_pairs_hook</em>. This is faster and more portable than subclassing.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><a class="reference internal" href="#simplejson.load" title="simplejson.load"><tt class="xref py py-func docutils literal"><span class="pre">load()</span></tt></a> will read the rest of the file-like object as a string and
+then call <a class="reference internal" href="#simplejson.loads" title="simplejson.loads"><tt class="xref py py-func docutils literal"><span class="pre">loads()</span></tt></a>. It does not stop at the end of the first valid
+JSON document it finds and it will raise an error if there is anything
+other than whitespace after the document. Except for files containing
+only one JSON document, it is recommended to use <a class="reference internal" href="#simplejson.loads" title="simplejson.loads"><tt class="xref py py-func docutils literal"><span class="pre">loads()</span></tt></a>.</p>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplejson.loads">
+<tt class="descclassname">simplejson.</tt><tt class="descname">loads</tt><big>(</big><em>fp</em>, <em>encoding='utf-8'</em>, <em>cls=None</em>, <em>object_hook=None</em>, <em>parse_float=None</em>, <em>parse_int=None</em>, <em>parse_constant=None</em>, <em>object_pairs_hook=None</em>, <em>use_decimal=None</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#simplejson.loads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize <em>s</em> (a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> instance containing a JSON
+document) to a Python object. <a class="reference internal" href="#simplejson.JSONDecodeError" title="simplejson.JSONDecodeError"><tt class="xref py py-exc docutils literal"><span class="pre">JSONDecodeError</span></tt></a> will be
+raised if the given JSON document is not valid.</p>
+<p>If <em>s</em> is a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> instance and is encoded with an ASCII based encoding
+other than UTF-8 (e.g. latin-1), then an appropriate <em>encoding</em> name must be
+specified.  Encodings that are not ASCII based (such as UCS-2) are not
+allowed and should be decoded to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> first.</p>
+<p>If <em>s</em> is a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> then decoded JSON strings that contain
+only ASCII characters may be parsed as <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> for performance and
+memory reasons. If your code expects only <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> the appropriate
+solution is decode <em>s</em> to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> prior to calling loads.</p>
+<p>The other arguments have the same meaning as in <a class="reference internal" href="#simplejson.load" title="simplejson.load"><tt class="xref py py-func docutils literal"><span class="pre">load()</span></tt></a>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="encoders-and-decoders">
+<h2>Encoders and decoders<a class="headerlink" href="#encoders-and-decoders" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="simplejson.JSONDecoder">
+<em class="property">class </em><tt class="descclassname">simplejson.</tt><tt class="descname">JSONDecoder</tt><big>(</big><em>encoding='utf-8'</em>, <em>object_hook=None</em>, <em>parse_float=None</em>, <em>parse_int=None</em>, <em>parse_constant=None</em>, <em>object_pairs_hook=None</em>, <em>strict=True</em><big>)</big><a class="headerlink" href="#simplejson.JSONDecoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple JSON decoder.</p>
+<p>Performs the following translations in decoding by default:</p>
+<table border="1" class="docutils" id="json-to-py-table">
+<colgroup>
+<col width="41%" />
+<col width="30%" />
+<col width="30%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">JSON</th>
+<th class="head">Python 2</th>
+<th class="head">Python 3</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>object</td>
+<td>dict</td>
+<td>dict</td>
+</tr>
+<tr class="row-odd"><td>array</td>
+<td>list</td>
+<td>list</td>
+</tr>
+<tr class="row-even"><td>string</td>
+<td>unicode</td>
+<td>str</td>
+</tr>
+<tr class="row-odd"><td>number (int)</td>
+<td>int, long</td>
+<td>int</td>
+</tr>
+<tr class="row-even"><td>number (real)</td>
+<td>float</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td>true</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr class="row-even"><td>false</td>
+<td>False</td>
+<td>False</td>
+</tr>
+<tr class="row-odd"><td>null</td>
+<td>None</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>It also understands <tt class="docutils literal"><span class="pre">NaN</span></tt>, <tt class="docutils literal"><span class="pre">Infinity</span></tt>, and <tt class="docutils literal"><span class="pre">-Infinity</span></tt> as their
+corresponding <tt class="docutils literal"><span class="pre">float</span></tt> values, which is outside the JSON spec.</p>
+<p><em>encoding</em> determines the encoding used to interpret any <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> objects
+decoded by this instance (<tt class="docutils literal"><span class="pre">'utf-8'</span></tt> by default).  It has no effect when decoding
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> objects.</p>
+<p>Note that currently only encodings that are a superset of ASCII work, strings
+of other encodings should be passed in as <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.</p>
+<p><em>object_hook</em> is an optional function that will be called with the result of
+every JSON object decoded and its return value will be used in place of the
+given <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt>.  This can be used to provide custom deserializations
+(e.g. to support JSON-RPC class hinting).</p>
+<p><em>object_pairs_hook</em> is an optional function that will be called with the
+result of any object literal decode with an ordered list of pairs.  The
+return value of <em>object_pairs_hook</em> will be used instead of the
+<tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt>.  This feature can be used to implement custom decoders that
+rely on the order that the key and value pairs are decoded (for example,
+<tt class="xref py py-class docutils literal"><span class="pre">collections.OrderedDict</span></tt> will remember the order of insertion). If
+<em>object_hook</em> is also defined, the <em>object_pairs_hook</em> takes priority.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.0: </span>Added support for <em>object_pairs_hook</em>.</p>
+<p><em>parse_float</em>, if specified, will be called with the string of every JSON
+float to be decoded.  By default, this is equivalent to <tt class="docutils literal"><span class="pre">float(num_str)</span></tt>.
+This can be used to use another datatype or parser for JSON floats
+(e.g. <tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt>).</p>
+<p><em>parse_int</em>, if specified, will be called with the string of every JSON int
+to be decoded.  By default, this is equivalent to <tt class="docutils literal"><span class="pre">int(num_str)</span></tt>.  This can
+be used to use another datatype or parser for JSON integers
+(e.g. <tt class="xref py py-class docutils literal"><span class="pre">float</span></tt>).</p>
+<p><em>parse_constant</em>, if specified, will be called with one of the following
+strings: <tt class="docutils literal"><span class="pre">'-Infinity'</span></tt>, <tt class="docutils literal"><span class="pre">'Infinity'</span></tt>, <tt class="docutils literal"><span class="pre">'NaN'</span></tt>.  This can be used to
+raise an exception if invalid JSON numbers are encountered.</p>
+<p><em>strict</em> controls the parser&#8217;s behavior when it encounters an invalid
+control character in a string. The default setting of <tt class="docutils literal"><span class="pre">True</span></tt> means that
+unescaped control characters are parse errors, if <tt class="docutils literal"><span class="pre">False</span></tt> then control
+characters will be allowed in strings.</p>
+<dl class="method">
+<dt id="simplejson.JSONDecoder.decode">
+<tt class="descname">decode</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#simplejson.JSONDecoder.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the Python representation of <em>s</em> (a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> instance containing a JSON document)</p>
+<p>If <em>s</em> is a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> then decoded JSON strings that contain
+only ASCII characters may be parsed as <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> for performance and
+memory reasons. If your code expects only <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> the
+appropriate solution is decode <em>s</em> to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> prior to calling
+decode.</p>
+<p><a class="reference internal" href="#simplejson.JSONDecodeError" title="simplejson.JSONDecodeError"><tt class="xref py py-exc docutils literal"><span class="pre">JSONDecodeError</span></tt></a> will be raised if the given JSON
+document is not valid.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="simplejson.JSONDecoder.raw_decode">
+<tt class="descname">raw_decode</tt><big>(</big><em>s</em><span class="optional">[</span>, <em>idx=0</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#simplejson.JSONDecoder.raw_decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a JSON document from <em>s</em> (a <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+beginning with a JSON document) starting from the index <em>idx</em> and return
+a 2-tuple of the Python representation and the index in <em>s</em> where the
+document ended.</p>
+<p>This can be used to decode a JSON document from a string that may have
+extraneous data at the end, or to decode a string that has a series of
+JSON objects.</p>
+<p><a class="reference internal" href="#simplejson.JSONDecodeError" title="simplejson.JSONDecodeError"><tt class="xref py py-exc docutils literal"><span class="pre">JSONDecodeError</span></tt></a> will be raised if the given JSON
+document is not valid.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="simplejson.JSONEncoder">
+<em class="property">class </em><tt class="descclassname">simplejson.</tt><tt class="descname">JSONEncoder</tt><big>(</big><em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>encoding='utf-8'</em>, <em>default=None</em>, <em>use_decimal=True</em>, <em>namedtuple_as_object=True</em>, <em>tuple_as_array=True</em>, <em>bigint_as_string=False</em>, <em>item_sort_key=None</em>, <em>for_json=True</em>, <em>ignore_nan=False</em>, <em>int_as_string_bitcount=None</em>, <em>iterable_as_array=False</em><big>)</big><a class="headerlink" href="#simplejson.JSONEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extensible JSON encoder for Python data structures.</p>
+<p>Supports the following objects and types by default:</p>
+<table border="1" class="docutils" id="py-to-json-table">
+<colgroup>
+<col width="56%" />
+<col width="44%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Python</th>
+<th class="head">JSON</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dict, namedtuple</td>
+<td>object</td>
+</tr>
+<tr class="row-odd"><td>list, tuple</td>
+<td>array</td>
+</tr>
+<tr class="row-even"><td>str, unicode</td>
+<td>string</td>
+</tr>
+<tr class="row-odd"><td>int, long, float</td>
+<td>number</td>
+</tr>
+<tr class="row-even"><td>True</td>
+<td>true</td>
+</tr>
+<tr class="row-odd"><td>False</td>
+<td>false</td>
+</tr>
+<tr class="row-even"><td>None</td>
+<td>null</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The JSON format only permits strings to be used as object
+keys, thus any Python dicts to be encoded should only have string keys.
+For backwards compatibility, several other types are automatically
+coerced to strings: int, long, float, Decimal, bool, and None.
+It is error-prone to rely on this behavior, so avoid it when possible.
+Dictionaries with other types used as keys should be pre-processed or
+wrapped in another type with an appropriate <cite>for_json</cite> method to
+transform the keys during encoding.</p>
+</div>
+<p>It also understands <tt class="docutils literal"><span class="pre">NaN</span></tt>, <tt class="docutils literal"><span class="pre">Infinity</span></tt>, and <tt class="docutils literal"><span class="pre">-Infinity</span></tt> as their
+corresponding <tt class="docutils literal"><span class="pre">float</span></tt> values, which is outside the JSON spec.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.0: </span>Changed <em>namedtuple</em> encoding from JSON array to object.</p>
+<p>To extend this to recognize other objects, subclass and implement a
+<a class="reference internal" href="#simplejson.JSONEncoder.default" title="simplejson.JSONEncoder.default"><tt class="xref py py-meth docutils literal"><span class="pre">default()</span></tt></a> method with another method that returns a serializable object
+for <tt class="docutils literal"><span class="pre">o</span></tt> if possible, otherwise it should call the superclass implementation
+(to raise <tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt>).</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Subclassing is not recommended. You should use the <em>default</em>
+or <em>for_json</em> kwarg. This is faster and more portable than subclassing.</p>
+</div>
+</div></blockquote>
+<p>If <em>skipkeys</em> is false (the default), then it is a <tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt> to
+attempt encoding of keys that are not str, int, long, float, Decimal, bool,
+or None. If <em>skipkeys</em> is true, such items are simply skipped.</p>
+<p>If <em>ensure_ascii</em> is true (the default), the output is guaranteed to be
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> objects with all incoming unicode characters escaped.  If
+<em>ensure_ascii</em> is false, the output will be a unicode object.</p>
+<p>If <em>check_circular</em> is true (the default), then lists, dicts, and custom
+encoded objects will be checked for circular references during encoding to
+prevent an infinite recursion (which would cause an <tt class="xref py py-exc docutils literal"><span class="pre">OverflowError</span></tt>).
+Otherwise, no such check takes place.</p>
+<p>If <em>allow_nan</em> is true (the default), then <tt class="docutils literal"><span class="pre">NaN</span></tt>, <tt class="docutils literal"><span class="pre">Infinity</span></tt>, and
+<tt class="docutils literal"><span class="pre">-Infinity</span></tt> will be encoded as such. This behavior is not JSON
+specification compliant, but is consistent with most JavaScript based
+encoders and decoders.  Otherwise, it will be a <tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt> to encode
+such floats. See also <em>ignore_nan</em> for ECMA-262 compliant behavior.</p>
+<p>If <em>sort_keys</em> is true (not the default), then the output of dictionaries
+will be sorted by key; this is useful for regression tests to ensure that
+JSON serializations can be compared on a day-to-day basis.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.0.0: </span>Sorting now happens after the keys have been coerced to
+strings, to avoid comparison of heterogeneously typed objects
+(since this does not work in Python 3.3+)</p>
+<p>If <em>item_sort_key</em> is a callable (not the default), then the output of
+dictionaries will be sorted with it. The callable will be used like this:
+<tt class="docutils literal"><span class="pre">sorted(dct.items(),</span> <span class="pre">key=item_sort_key)</span></tt>. This option takes precedence
+over <em>sort_keys</em>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.5.0: </span><em>item_sort_key</em> is new in 2.5.0.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.0.0: </span>Sorting now happens after the keys have been coerced to
+strings, to avoid comparison of heterogeneously typed objects
+(since this does not work in Python 3.3+)</p>
+<p>If <em>indent</em> is a string, then JSON array elements and object members
+will be pretty-printed with a newline followed by that string repeated
+for each level of nesting. <tt class="docutils literal"><span class="pre">None</span></tt> (the default) selects the most compact
+representation without any newlines. For backwards compatibility with
+versions of simplejson earlier than 2.1.0, an integer is also accepted
+and is converted to a string with that many spaces.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.0: </span>Changed <em>indent</em> from an integer number of spaces to a string.</p>
+<p>If specified, <em>separators</em> should be an <tt class="docutils literal"><span class="pre">(item_separator,</span> <span class="pre">key_separator)</span></tt>
+tuple.  The default is <tt class="docutils literal"><span class="pre">(',</span> <span class="pre">',</span> <span class="pre">':</span> <span class="pre">')</span></tt> if <em>indent</em> is <tt class="docutils literal"><span class="pre">None</span></tt> and
+<tt class="docutils literal"><span class="pre">(',',</span> <span class="pre">':</span> <span class="pre">')</span></tt> otherwise.  To get the most compact JSON representation,
+you should specify <tt class="docutils literal"><span class="pre">(',',</span> <span class="pre">':')</span></tt> to eliminate whitespace.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.4: </span>Use <tt class="docutils literal"><span class="pre">(',',</span> <span class="pre">':</span> <span class="pre">')</span></tt> as default if <em>indent</em> is not <tt class="docutils literal"><span class="pre">None</span></tt>.</p>
+<p>If specified, <em>default</em> should be a function that gets called for objects
+that can&#8217;t otherwise be serialized.  It should return a JSON encodable
+version of the object or raise a <tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt>.</p>
+<p>If <em>encoding</em> is not <tt class="docutils literal"><span class="pre">None</span></tt>, then all input strings will be transformed
+into unicode using that encoding prior to JSON-encoding.  The default is
+<tt class="docutils literal"><span class="pre">'utf-8'</span></tt>.</p>
+<p>If <em>namedtuple_as_object</em> is true (default: <tt class="docutils literal"><span class="pre">True</span></tt>),
+objects with <tt class="docutils literal"><span class="pre">_asdict()</span></tt> methods will be encoded
+as JSON objects.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.0: </span><em>namedtuple_as_object</em> is new in 2.2.0.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.3.0: </span><em>namedtuple_as_object</em> no longer requires that these objects be
+subclasses of <tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt>.</p>
+<p>If <em>tuple_as_array</em> is true (default: <tt class="docutils literal"><span class="pre">True</span></tt>),
+<tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> (and subclasses) will be encoded as JSON arrays.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.2.0: </span><em>tuple_as_array</em> is new in 2.2.0.</p>
+<p>If <em>iterable_as_array</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>),
+any object not in the above table that implements <tt class="docutils literal"><span class="pre">__iter__()</span></tt>
+will be encoded as a JSON array.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.8.0: </span><em>iterable_as_array</em> is new in 3.8.0.</p>
+<p>If <em>bigint_as_string</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>), <tt class="xref py py-class docutils literal"><span class="pre">int`</span></tt> <tt class="docutils literal"><span class="pre">2**53</span></tt>
+and higher or lower than <tt class="docutils literal"><span class="pre">-2**53</span></tt> will be encoded as strings. This is to
+avoid the rounding that happens in Javascript otherwise. Note that this
+option loses type information, so use with extreme caution.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.4.0: </span><em>bigint_as_string</em> is new in 2.4.0.</p>
+<p>If <em>for_json</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>), objects with a <tt class="docutils literal"><span class="pre">for_json()</span></tt>
+method will use the return value of that method for encoding as JSON instead
+of the object.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.2.0: </span><em>for_json</em> is new in 3.2.0.</p>
+<p>If <em>ignore_nan</em> is true (default: <tt class="docutils literal"><span class="pre">False</span></tt>), then out of range
+<tt class="xref py py-class docutils literal"><span class="pre">float</span></tt> values (<tt class="docutils literal"><span class="pre">nan</span></tt>, <tt class="docutils literal"><span class="pre">inf</span></tt>, <tt class="docutils literal"><span class="pre">-inf</span></tt>) will be serialized as
+<tt class="docutils literal"><span class="pre">null</span></tt> in compliance with the ECMA-262 specification. If true, this will
+override <em>allow_nan</em>.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.2.0: </span><em>ignore_nan</em> is new in 3.2.0.</p>
+<dl class="method">
+<dt id="simplejson.JSONEncoder.default">
+<tt class="descname">default</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#simplejson.JSONEncoder.default" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Implement this method in a subclass such that it returns a serializable
+object for <em>o</em>, or calls the base implementation (to raise a
+<tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt>).</p>
+<p>For example, to support arbitrary iterators, you could implement default
+like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+   <span class="k">try</span><span class="p">:</span>
+       <span class="n">iterable</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+   <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+       <span class="k">pass</span>
+   <span class="k">else</span><span class="p">:</span>
+       <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+   <span class="k">return</span> <span class="n">JSONEncoder</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Subclassing is not recommended. You should implement this
+as a function and pass it to the <em>default</em> kwarg of <a class="reference internal" href="#simplejson.dumps" title="simplejson.dumps"><tt class="xref py py-func docutils literal"><span class="pre">dumps()</span></tt></a>.
+This is faster and more portable than subclassing. The
+semantics are the same, but without the self argument or the
+call to the super implementation.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="simplejson.JSONEncoder.encode">
+<tt class="descname">encode</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#simplejson.JSONEncoder.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a JSON string representation of a Python data structure, <em>o</em>.  For
+example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplejson</span> <span class="kn">as</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">({</span><span class="s">&quot;foo&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s">&quot;bar&quot;</span><span class="p">,</span> <span class="s">&quot;baz&quot;</span><span class="p">]})</span>
+<span class="go">&#39;{&quot;foo&quot;: [&quot;bar&quot;, &quot;baz&quot;]}&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="simplejson.JSONEncoder.iterencode">
+<tt class="descname">iterencode</tt><big>(</big><em>o</em><big>)</big><a class="headerlink" href="#simplejson.JSONEncoder.iterencode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode the given object, <em>o</em>, and yield each string representation as
+available.  For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">JSONEncoder</span><span class="p">()</span><span class="o">.</span><span class="n">iterencode</span><span class="p">(</span><span class="n">bigobject</span><span class="p">):</span>
+    <span class="n">mysocket</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that <a class="reference internal" href="#simplejson.JSONEncoder.encode" title="simplejson.JSONEncoder.encode"><tt class="xref py py-meth docutils literal"><span class="pre">encode()</span></tt></a> has much better performance than
+<a class="reference internal" href="#simplejson.JSONEncoder.iterencode" title="simplejson.JSONEncoder.iterencode"><tt class="xref py py-meth docutils literal"><span class="pre">iterencode()</span></tt></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="simplejson.JSONEncoderForHTML">
+<em class="property">class </em><tt class="descclassname">simplejson.</tt><tt class="descname">JSONEncoderForHTML</tt><big>(</big><em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>encoding='utf-8'</em>, <em>default=None</em>, <em>use_decimal=True</em>, <em>namedtuple_as_object=True</em>, <em>tuple_as_array=True</em>, <em>bigint_as_string=False</em>, <em>item_sort_key=None</em>, <em>for_json=True</em>, <em>ignore_nan=False</em>, <em>int_as_string_bitcount=None</em><big>)</big><a class="headerlink" href="#simplejson.JSONEncoderForHTML" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of <a class="reference internal" href="#simplejson.JSONEncoder" title="simplejson.JSONEncoder"><tt class="xref py py-class docutils literal"><span class="pre">JSONEncoder</span></tt></a> that escapes &amp;, &lt;, and &gt; for embedding in HTML.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 2.1.0: </span>New in 2.1.0</p>
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="simplejson.JSONDecodeError">
+<em class="property">exception </em><tt class="descclassname">simplejson.</tt><tt class="descname">JSONDecodeError</tt><big>(</big><em>msg</em>, <em>doc</em>, <em>pos</em>, <em>end=None</em><big>)</big><a class="headerlink" href="#simplejson.JSONDecodeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of <tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt> with the following additional attributes:</p>
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.msg">
+<tt class="descname">msg</tt><a class="headerlink" href="#simplejson.JSONDecodeError.msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unformatted error message</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.doc">
+<tt class="descname">doc</tt><a class="headerlink" href="#simplejson.JSONDecodeError.doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The JSON document being parsed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.pos">
+<tt class="descname">pos</tt><a class="headerlink" href="#simplejson.JSONDecodeError.pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The start index of doc where parsing failed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.end">
+<tt class="descname">end</tt><a class="headerlink" href="#simplejson.JSONDecodeError.end" title="Permalink to this definition">¶</a></dt>
+<dd><p>The end index of doc where parsing failed (may be <tt class="docutils literal"><span class="pre">None</span></tt>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.lineno">
+<tt class="descname">lineno</tt><a class="headerlink" href="#simplejson.JSONDecodeError.lineno" title="Permalink to this definition">¶</a></dt>
+<dd><p>The line corresponding to pos</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.colno">
+<tt class="descname">colno</tt><a class="headerlink" href="#simplejson.JSONDecodeError.colno" title="Permalink to this definition">¶</a></dt>
+<dd><p>The column corresponding to pos</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.endlineno">
+<tt class="descname">endlineno</tt><a class="headerlink" href="#simplejson.JSONDecodeError.endlineno" title="Permalink to this definition">¶</a></dt>
+<dd><p>The line corresponding to end (may be <tt class="docutils literal"><span class="pre">None</span></tt>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="simplejson.JSONDecodeError.endcolno">
+<tt class="descname">endcolno</tt><a class="headerlink" href="#simplejson.JSONDecodeError.endcolno" title="Permalink to this definition">¶</a></dt>
+<dd><p>The column corresponding to end (may be <tt class="docutils literal"><span class="pre">None</span></tt>)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="standard-compliance-and-interoperability">
+<h2>Standard Compliance and Interoperability<a class="headerlink" href="#standard-compliance-and-interoperability" title="Permalink to this headline">¶</a></h2>
+<p>The JSON format is specified by <span class="target" id="index-2"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc7159.html"><strong>RFC 7159</strong></a> and by
+<a class="reference external" href="http://www.ecma-international.org/publications/standards/Ecma-404.htm">ECMA-404</a>.
+This section details this module&#8217;s level of compliance with the RFC.
+For simplicity, <a class="reference internal" href="#simplejson.JSONEncoder" title="simplejson.JSONEncoder"><tt class="xref py py-class docutils literal"><span class="pre">JSONEncoder</span></tt></a> and <a class="reference internal" href="#simplejson.JSONDecoder" title="simplejson.JSONDecoder"><tt class="xref py py-class docutils literal"><span class="pre">JSONDecoder</span></tt></a> subclasses, and
+parameters other than those explicitly mentioned, are not considered.</p>
+<p>This module does not comply with the RFC in a strict fashion, implementing some
+extensions that are valid JavaScript but not valid JSON.  In particular:</p>
+<ul class="simple">
+<li>Infinite and NaN number values are accepted and output;</li>
+<li>Repeated names within an object are accepted, and only the value of the last
+name-value pair is used.</li>
+</ul>
+<p>Since the RFC permits RFC-compliant parsers to accept input texts that are not
+RFC-compliant, this module&#8217;s deserializer is technically RFC-compliant under
+default settings.</p>
+<div class="section" id="character-encodings">
+<h3>Character Encodings<a class="headerlink" href="#character-encodings" title="Permalink to this headline">¶</a></h3>
+<p>The RFC recommends that JSON be represented using either UTF-8, UTF-16, or
+UTF-32, with UTF-8 being the recommended default for maximum interoperability.</p>
+<p>As permitted, though not required, by the RFC, this module&#8217;s serializer sets
+<em>ensure_ascii=True</em> by default, thus escaping the output so that the resulting
+strings only contain ASCII characters.</p>
+<p>Other than the <em>ensure_ascii</em> parameter, this module is defined strictly in
+terms of conversion between Python objects and
+<tt class="xref py py-class docutils literal"><span class="pre">Unicode</span> <span class="pre">strings</span></tt>, and thus does not otherwise directly address
+the issue of character encodings.</p>
+<p>The RFC prohibits adding a byte order mark (BOM) to the start of a JSON text,
+and this module&#8217;s serializer does not add a BOM to its output.
+The RFC permits, but does not require, JSON deserializers to ignore an initial
+BOM in their input.  This module&#8217;s deserializer will ignore an initial BOM, if
+present.</p>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 3.6.0: </span>Older versions would raise <tt class="xref py py-exc docutils literal"><span class="pre">ValueError</span></tt> when an initial BOM is present</p>
+<p>The RFC does not explicitly forbid JSON strings which contain byte sequences
+that don&#8217;t correspond to valid Unicode characters (e.g. unpaired UTF-16
+surrogates), but it does note that they may cause interoperability problems.
+By default, this module accepts and outputs (when present in the original
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>) codepoints for such sequences.</p>
+</div>
+<div class="section" id="infinite-and-nan-number-values">
+<h3>Infinite and NaN Number Values<a class="headerlink" href="#infinite-and-nan-number-values" title="Permalink to this headline">¶</a></h3>
+<p>The RFC does not permit the representation of infinite or NaN number values.
+Despite that, by default, this module accepts and outputs <tt class="docutils literal"><span class="pre">Infinity</span></tt>,
+<tt class="docutils literal"><span class="pre">-Infinity</span></tt>, and <tt class="docutils literal"><span class="pre">NaN</span></tt> as if they were valid JSON number literal values:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Neither of these calls raises an exception, but the results are not valid JSON</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s">&#39;-inf&#39;</span><span class="p">))</span>
+<span class="go">&#39;-Infinity&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s">&#39;nan&#39;</span><span class="p">))</span>
+<span class="go">&#39;NaN&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Same when deserializing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">&#39;-Infinity&#39;</span><span class="p">)</span>
+<span class="go">-inf</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="s">&#39;NaN&#39;</span><span class="p">)</span>
+<span class="go">nan</span>
+</pre></div>
+</div>
+<p>In the serializer, the <em>allow_nan</em> parameter can be used to alter this
+behavior.  In the deserializer, the <em>parse_constant</em> parameter can be used to
+alter this behavior.</p>
+</div>
+<div class="section" id="repeated-names-within-an-object">
+<h3>Repeated Names Within an Object<a class="headerlink" href="#repeated-names-within-an-object" title="Permalink to this headline">¶</a></h3>
+<p>The RFC specifies that the names within a JSON object should be unique, but
+does not mandate how repeated names in JSON objects should be handled.  By
+default, this module does not raise an exception; instead, it ignores all but
+the last name-value pair for a given name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">weird_json</span> <span class="o">=</span> <span class="s">&#39;{&quot;x&quot;: 1, &quot;x&quot;: 2, &quot;x&quot;: 3}&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">weird_json</span><span class="p">)</span> <span class="o">==</span> <span class="p">{</span><span class="s">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p>The <em>object_pairs_hook</em> parameter can be used to alter this behavior.</p>
+</div>
+<div class="section" id="top-level-non-object-non-array-values">
+<h3>Top-level Non-Object, Non-Array Values<a class="headerlink" href="#top-level-non-object-non-array-values" title="Permalink to this headline">¶</a></h3>
+<p>The old version of JSON specified by the obsolete <span class="target" id="index-3"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc4627.html"><strong>RFC 4627</strong></a> required that
+the top-level value of a JSON text must be either a JSON object or array
+(Python <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">list</span></tt>), and could not be a JSON null,
+boolean, number, or string value.  <span class="target" id="index-4"></span><a class="rfc reference external" href="http://tools.ietf.org/html/rfc7159.html"><strong>RFC 7159</strong></a> removed that restriction, and
+this module does not and has never implemented that restriction in either its
+serializer or its deserializer.</p>
+<p>Regardless, for maximum interoperability, you may wish to voluntarily adhere
+to the restriction yourself.</p>
+</div>
+<div class="section" id="implementation-limitations">
+<h3>Implementation Limitations<a class="headerlink" href="#implementation-limitations" title="Permalink to this headline">¶</a></h3>
+<p>Some JSON deserializer implementations may set limits on:</p>
+<ul class="simple">
+<li>the size of accepted JSON texts</li>
+<li>the maximum level of nesting of JSON objects and arrays</li>
+<li>the range and precision of JSON numbers</li>
+<li>the content and maximum length of JSON strings</li>
+</ul>
+<p>This module does not impose any such limits beyond those of the relevant
+Python datatypes themselves or the Python interpreter itself.</p>
+<p>When serializing to JSON, beware any such limitations in applications that may
+consume your JSON.  In particular, it is common for JSON numbers to be
+deserialized into IEEE 754 double precision numbers and thus subject to that
+representation&#8217;s range and precision limitations.  This is especially relevant
+when serializing Python <tt class="xref py py-class docutils literal"><span class="pre">int</span></tt> values of extremely large magnitude, or
+when serializing instances of &#8220;exotic&#8221; numerical types such as
+<tt class="xref py py-class docutils literal"><span class="pre">decimal.Decimal</span></tt>.</p>
+</div>
+</div>
+<div class="section" id="command-line-interface">
+<span id="json-commandline"></span><h2>Command Line Interface<a class="headerlink" href="#command-line-interface" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref py py-mod docutils literal"><span class="pre">simplejson.tool</span></tt> module provides a simple command line interface to
+validate and pretty-print JSON.</p>
+<p>If the optional <em class="xref std std-option">infile</em> and <em class="xref std std-option">outfile</em> arguments are not
+specified, <tt class="xref py py-attr docutils literal"><span class="pre">sys.stdin</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">sys.stdout</span></tt> will be used respectively:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;{&quot;json&quot;: &quot;obj&quot;}&#39;</span> | python -m simplejson.tool
+<span class="o">{</span>
+    <span class="s2">&quot;json&quot;</span>: <span class="s2">&quot;obj&quot;</span>
+<span class="o">}</span>
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;{1.2:3.4}&#39;</span> | python -m simplejson.tool
+Expecting property name enclosed in double quotes: line 1 column 2 <span class="o">(</span>char 1<span class="o">)</span>
+</pre></div>
+</div>
+<div class="section" id="command-line-options">
+<h3>Command line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h3>
+<dl class="cmdoption">
+<dt>
+<tt class="descname">infile</tt></dt>
+<dd><p>The JSON file to be validated or pretty-printed:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>python -m simplejson.tool mp_films.json
+<span class="o">[</span>
+    <span class="o">{</span>
+        <span class="s2">&quot;title&quot;</span>: <span class="s2">&quot;And Now for Something Completely Different&quot;</span>,
+        <span class="s2">&quot;year&quot;</span>: 1971
+    <span class="o">}</span>,
+    <span class="o">{</span>
+        <span class="s2">&quot;title&quot;</span>: <span class="s2">&quot;Monty Python and the Holy Grail&quot;</span>,
+        <span class="s2">&quot;year&quot;</span>: 1975
+    <span class="o">}</span>
+<span class="o">]</span>
+</pre></div>
+</div>
+<p>If <em>infile</em> is not specified, read from <tt class="xref py py-attr docutils literal"><span class="pre">sys.stdin</span></tt>.</p>
+</dd></dl>
+
+<dl class="cmdoption">
+<dt>
+<tt class="descname">outfile</tt></dt>
+<dd><p>Write the output of the <em>infile</em> to the given <em>outfile</em>. Otherwise, write it
+to <tt class="xref py py-attr docutils literal"><span class="pre">sys.stdout</span></tt>.</p>
+</dd></dl>
+
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="rfc-errata" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>As noted in <a class="reference external" href="http://www.rfc-editor.org/errata_search.php?rfc=7159">the errata for RFC 7159</a>,
+JSON permits literal U+2028 (LINE SEPARATOR) and
+U+2029 (PARAGRAPH SEPARATOR) characters in strings, whereas JavaScript
+(as of ECMAScript Edition 5.1) does not.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">simplejson</span></tt> &#8212; JSON encoder and decoder</a><ul>
+<li><a class="reference internal" href="#basic-usage">Basic Usage</a></li>
+<li><a class="reference internal" href="#encoders-and-decoders">Encoders and decoders</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#standard-compliance-and-interoperability">Standard Compliance and Interoperability</a><ul>
+<li><a class="reference internal" href="#character-encodings">Character Encodings</a></li>
+<li><a class="reference internal" href="#infinite-and-nan-number-values">Infinite and NaN Number Values</a></li>
+<li><a class="reference internal" href="#repeated-names-within-an-object">Repeated Names Within an Object</a></li>
+<li><a class="reference internal" href="#top-level-non-object-non-array-values">Top-level Non-Object, Non-Array Values</a></li>
+<li><a class="reference internal" href="#implementation-limitations">Implementation Limitations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#command-line-interface">Command Line Interface</a><ul>
+<li><a class="reference internal" href="#command-line-options">Command line options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">simplejson 3.10.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2016, Bob Ippolito.
+      Last updated on Nov 14, 2016.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

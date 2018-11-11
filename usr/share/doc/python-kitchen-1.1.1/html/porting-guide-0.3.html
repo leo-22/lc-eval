@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1.0.0 Porting Guide &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="next" title="Conventions for contributing to kitchen" href="hacking.html" />
+    <link rel="prev" title="Exceptions" href="api-exceptions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hacking.html" title="Conventions for contributing to kitchen"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-exceptions.html" title="Exceptions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="porting-guide">
+<h1>1.0.0 Porting Guide<a class="headerlink" href="#porting-guide" title="Permalink to this headline">¶</a></h1>
+<p>The 0.1 through 1.0.0 releases focused on bringing in functions from yum and
+python-fedora.  This porting guide tells how to port from those APIs to their
+kitchen replacements.</p>
+<div class="section" id="python-fedora">
+<h2>python-fedora<a class="headerlink" href="#python-fedora" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="45%" />
+<col width="55%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>python-fedora</td>
+<td>kitchen replacement</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">fedora.iterutils.isiterable()</span></tt></td>
+<td><a class="reference internal" href="api-iterutils.html#kitchen.iterutils.isiterable" title="kitchen.iterutils.isiterable"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.iterutils.isiterable()</span></tt></a> <a class="footnote-reference" href="#f1" id="id1">[1]</a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">fedora.textutils.to_unicode()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_unicode()</span></tt></a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">fedora.textutils.to_bytes()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_bytes()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><p class="first"><a class="reference internal" href="api-iterutils.html#kitchen.iterutils.isiterable" title="kitchen.iterutils.isiterable"><tt class="xref py py-func docutils literal"><span class="pre">isiterable()</span></tt></a> has changed slightly in
+kitchen.  The <tt class="xref py py-attr docutils literal"><span class="pre">include_string</span></tt> attribute has switched its default value
+from <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> to <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>.  So you need to change code like:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Old code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isiterable</span><span class="p">(</span><span class="s">&#39;abcdef&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># New code</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isiterable</span><span class="p">(</span><span class="s">&#39;abcdef&#39;</span><span class="p">,</span> <span class="n">include_string</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="yum">
+<h2>yum<a class="headerlink" href="#yum" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="65%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>yum</td>
+<td>kitchen replacement</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.dummy_wrapper()</span></tt></td>
+<td><tt class="xref py py-meth docutils literal"><span class="pre">kitchen.i18n.DummyTranslations.ugettext()</span></tt> <a class="footnote-reference" href="#y1" id="id2">[2]</a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.dummyP_wrapper()</span></tt></td>
+<td><tt class="xref py py-meth docutils literal"><span class="pre">kitchen.i18n.DummyTanslations.ungettext()</span></tt> <a class="footnote-reference" href="#y1" id="id3">[2]</a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.utf8_width()</span></tt></td>
+<td><a class="reference internal" href="api-text-display.html#kitchen.text.display.textual_width" title="kitchen.text.display.textual_width"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.textual_width()</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.utf8_width_chop()</span></tt></td>
+<td><a class="reference internal" href="api-text-display.html#kitchen.text.display.textual_width_chop" title="kitchen.text.display.textual_width_chop"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.textual_width_chop()</span></tt></a>
+and <a class="reference internal" href="api-text-display.html#kitchen.text.display.textual_width" title="kitchen.text.display.textual_width"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.textual_width()</span></tt></a> <a class="footnote-reference" href="#y2" id="id4">[3]</a> <a class="footnote-reference" href="#y4" id="id5">[5]</a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.utf8_valid()</span></tt></td>
+<td><a class="reference internal" href="api-text-misc.html#kitchen.text.misc.byte_string_valid_encoding" title="kitchen.text.misc.byte_string_valid_encoding"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.misc.byte_string_valid_encoding()</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.utf8_text_wrap()</span></tt></td>
+<td><a class="reference internal" href="api-text-display.html#kitchen.text.display.wrap" title="kitchen.text.display.wrap"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.wrap()</span></tt></a> <a class="footnote-reference" href="#y3" id="id6">[4]</a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.utf8_text_fill()</span></tt></td>
+<td><a class="reference internal" href="api-text-display.html#kitchen.text.display.fill" title="kitchen.text.display.fill"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.fill()</span></tt></a> <a class="footnote-reference" href="#y3" id="id7">[4]</a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.to_unicode()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_unicode()</span></tt></a> <a class="footnote-reference" href="#y5" id="id8">[6]</a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.to_unicode_maybe()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_unicode()</span></tt></a> <a class="footnote-reference" href="#y5" id="id9">[6]</a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.to_utf8()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_bytes()</span></tt></a> <a class="footnote-reference" href="#y5" id="id10">[6]</a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.to_str()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_unicode()</span></tt></a>
+or <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_bytes()</span></tt></a> <a class="footnote-reference" href="#y6" id="id11">[7]</a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.str_eq()</span></tt></td>
+<td><a class="reference internal" href="api-text-misc.html#kitchen.text.misc.str_eq" title="kitchen.text.misc.str_eq"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.misc.str_eq()</span></tt></a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.misc.to_xml()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.unicode_to_xml" title="kitchen.text.converters.unicode_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.unicode_to_xml()</span></tt></a>
+or <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.byte_string_to_xml" title="kitchen.text.converters.byte_string_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.byte_string_to_xml()</span></tt></a> <a class="footnote-reference" href="#y7" id="id12">[8]</a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n._()</span></tt></td>
+<td>See: <a class="reference internal" href="#yum-i18n-init"><em>Initializing Yum i18n</em></a></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.P_()</span></tt></td>
+<td>See: <a class="reference internal" href="#yum-i18n-init"><em>Initializing Yum i18n</em></a></td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.exception2msg()</span></tt></td>
+<td><a class="reference internal" href="api-text-converters.html#kitchen.text.converters.exception_to_unicode" title="kitchen.text.converters.exception_to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.exception_to_unicode()</span></tt></a>
+or <tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converter.exception_to_bytes()</span></tt> <a class="footnote-reference" href="#y8" id="id13">[9]</a></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[2]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> These yum methods provided fallback support for <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>
+functions in case either <tt class="docutils literal"><span class="pre">gaftonmode</span></tt> was set or <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt> failed
+to return an object.  In kitchen, we can use the
+<a class="reference internal" href="api-i18n.html#kitchen.i18n.DummyTranslations" title="kitchen.i18n.DummyTranslations"><tt class="xref py py-class docutils literal"><span class="pre">kitchen.i18n.DummyTranslations</span></tt></a> object to fulfill that role.
+Please see <a class="reference internal" href="#yum-i18n-init"><em>Initializing Yum i18n</em></a> for more suggestions on how to do this.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td>The yum version of these functions returned a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  The
+kitchen version listed here returns a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  If you
+need a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> simply call
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_bytes()</span></tt></a> on the result.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[4]</td><td><em>(<a class="fn-backref" href="#id6">1</a>, <a class="fn-backref" href="#id7">2</a>)</em> The yum version of these functions would return either a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string depending on what the input
+value was.  The kitchen version always returns <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td><p class="first"><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.utf8_width_chop()</span></tt> performed two functions.  It
+returned the piece of the message that fit in a specified width and the
+width of that message.  In kitchen, you need to call two functions, one
+for each action:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Old way</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">utf8_width_chop</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">(5, &#39;く ku&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># New way</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.display</span> <span class="kn">import</span> <span class="n">textual_width</span><span class="p">,</span> <span class="n">textual_width_chop</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">textual_width</span><span class="p">(</span><span class="n">msg</span><span class="p">),</span> <span class="n">textual_width_chop</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="go">(5, u&#39;く ku&#39;)</span>
+</pre></div>
+</div>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[6]</td><td><em>(<a class="fn-backref" href="#id8">1</a>, <a class="fn-backref" href="#id9">2</a>, <a class="fn-backref" href="#id10">3</a>)</em> <p>If the yum version of <tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt> or
+<tt class="xref py py-func docutils literal"><span class="pre">to_utf8()</span></tt> is given an object that is not a string, it
+returns the object itself.  <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_unicode()</span></tt></a> and
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_bytes()</span></tt></a> default to returning the
+<tt class="docutils literal"><span class="pre">simplerepr</span></tt> of the object instead.  If you want the yum behaviour, set
+the <tt class="xref py py-attr docutils literal"><span class="pre">nonstring</span></tt> parameter to <tt class="docutils literal"><span class="pre">passthru</span></tt>:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">to_unicode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_unicode</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">u&#39;5&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_unicode</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">nonstring</span><span class="o">=</span><span class="s">&#39;passthru&#39;</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11">[7]</a></td><td><tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.to_str()</span></tt> could return either a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  or
+a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string In kitchen you can get the same effect but you
+get to choose whether you want a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+string.  Use <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_bytes" title="kitchen.text.converters.to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">to_bytes()</span></tt></a> for <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+and <a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">to_unicode()</span></tt></a> for <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id12">[8]</a></td><td><tt class="xref py py-func docutils literal"><span class="pre">yum.misc.to_xml()</span></tt> was buggy as written.  I think the intention
+was for you to be able to pass a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+string in and get out a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> that was valid to use in an xml
+file.  The two kitchen functions
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.byte_string_to_xml" title="kitchen.text.converters.byte_string_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">byte_string_to_xml()</span></tt></a> and
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.unicode_to_xml" title="kitchen.text.converters.unicode_to_xml"><tt class="xref py py-func docutils literal"><span class="pre">unicode_to_xml()</span></tt></a> do that for each string
+type.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="y8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id13">[9]</a></td><td><p class="first">When porting <tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.exception2msg()</span></tt> to use kitchen, you
+should setup two wrapper functions to aid in your port.  They&#8217;ll look like
+this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kitchen.text.converters</span> <span class="kn">import</span> <span class="n">EXCEPTION_CONVERTERS</span><span class="p">,</span> \
+    <span class="n">BYTE_EXCEPTION_CONVERTERS</span><span class="p">,</span> <span class="n">exception_to_unicode</span><span class="p">,</span> \
+    <span class="n">exception_to_bytes</span>
+<span class="k">def</span> <span class="nf">exception2umsg</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Return a unicode representation of an exception&#39;&#39;&#39;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">EXCEPTION_CONVERTERS</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">exception_to_unicode</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">converters</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">exception2bmsg</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Return a utf8 encoded str representation of an exception&#39;&#39;&#39;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">e</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BYTE_EXCEPTION_CONVERTERS</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">exception_to_bytes</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">converters</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="last">The reason to define this wrapper is that many of the exceptions in yum
+put the message in the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> attribute of the <tt class="xref py py-exc docutils literal"><span class="pre">Exception</span></tt>
+instead of adding it to the <tt class="xref py py-attr docutils literal"><span class="pre">args</span></tt> attribute.  So the default
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.EXCEPTION_CONVERTERS" title="kitchen.text.converters.EXCEPTION_CONVERTERS"><tt class="xref py py-data docutils literal"><span class="pre">EXCEPTION_CONVERTERS</span></tt></a> don&#8217;t know where to
+find the message.  The wrapper tells kitchen to check the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt>
+attribute for the message.  The reason to define two wrappers may be less
+obvious.  <tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.exception2msg()</span></tt> can return a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+string or a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> depending on a combination of what
+attributes are present on the <tt class="xref py py-exc docutils literal"><span class="pre">Exception</span></tt> and what locale the
+function is being run in.  By contrast,
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.exception_to_unicode" title="kitchen.text.converters.exception_to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.exception_to_unicode()</span></tt></a> only returns
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings and
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.exception_to_bytes" title="kitchen.text.converters.exception_to_bytes"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.exception_to_bytes()</span></tt></a> only returns byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>.  This is much safer as it keeps code that can only handle
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> or only handle byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> correctly from getting
+the wrong type when an input changes but it means you need to examine the
+calling code when porting from <tt class="xref py py-func docutils literal"><span class="pre">yum.i18n.exception2msg()</span></tt> and use the
+appropriate wrapper.</p>
+</td></tr>
+</tbody>
+</table>
+<div class="section" id="initializing-yum-i18n">
+<span id="yum-i18n-init"></span><h3>Initializing Yum i18n<a class="headerlink" href="#initializing-yum-i18n" title="Permalink to this headline">¶</a></h3>
+<p>Previously, yum had several pieces of code to initialize i18n.  From the
+toplevel of <tt class="file docutils literal"><span class="pre">yum/i18n.py</span></tt>:</p>
+<div class="highlight-python"><pre>try:.
+    '''
+    Setup the yum translation domain and make _() and P_() translation wrappers
+    available.
+    using ugettext to make sure translated strings are in Unicode.
+    '''
+    import gettext
+    t = gettext.translation('yum', fallback=True)
+    _ = t.ugettext
+    P_ = t.ungettext
+except:
+    '''
+    Something went wrong so we make a dummy _() wrapper there is just
+    returning the same text
+    '''
+    _ = dummy_wrapper
+    P_ = dummyP_wrapper</pre>
+</div>
+<p>With kitchen, this can be changed to this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">kitchen.i18n</span> <span class="kn">import</span> <span class="n">easy_gettext_setup</span><span class="p">,</span> <span class="n">DummyTranslations</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">P_</span> <span class="o">=</span> <span class="n">easy_gettext_setup</span><span class="p">(</span><span class="s">&#39;yum&#39;</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">translations</span> <span class="o">=</span> <span class="n">DummyTranslations</span><span class="p">()</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">translations</span><span class="o">.</span><span class="n">ugettext</span>
+    <span class="n">P_</span> <span class="o">=</span> <span class="n">translations</span><span class="o">.</span><span class="n">ungettext</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>In <a class="reference internal" href="unicode-frustrations.html#overcoming-frustration"><em>Overcoming frustration: Correctly using unicode in python2</em></a>, it is mentioned that for some
+things (like exception messages), using the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> oriented
+functions is more appropriate.  If this is desired, the setup portion is
+only a second call to <a class="reference internal" href="api-i18n.html#kitchen.i18n.easy_gettext_setup" title="kitchen.i18n.easy_gettext_setup"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.i18n.easy_gettext_setup()</span></tt></a>:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">b_</span><span class="p">,</span> <span class="n">bP_</span> <span class="o">=</span> <span class="n">easy_gettext_setup</span><span class="p">(</span><span class="s">&#39;yum&#39;</span><span class="p">,</span> <span class="n">use_unicode</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The second place where i18n is setup is in <tt class="xref py py-meth docutils literal"><span class="pre">yum.YumBase._getConfig()</span></tt> in
+<tt class="file docutils literal"><span class="pre">yum/__init_.py</span></tt> if <tt class="docutils literal"><span class="pre">gaftonmode</span></tt> is in effect:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">startupconf</span><span class="o">.</span><span class="n">gaftonmode</span><span class="p">:</span>
+    <span class="k">global</span> <span class="n">_</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">yum</span><span class="o">.</span><span class="n">i18n</span><span class="o">.</span><span class="n">dummy_wrapper</span>
+</pre></div>
+</div>
+<p>This can be changed to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">startupconf</span><span class="o">.</span><span class="n">gaftonmode</span><span class="p">:</span>
+    <span class="k">global</span> <span class="n">_</span>
+    <span class="n">_</span> <span class="o">=</span> <span class="n">DummyTranslations</span><span class="p">()</span><span class="o">.</span><span class="n">ugettext</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1.0.0 Porting Guide</a><ul>
+<li><a class="reference internal" href="#python-fedora">python-fedora</a></li>
+<li><a class="reference internal" href="#yum">yum</a><ul>
+<li><a class="reference internal" href="#initializing-yum-i18n">Initializing Yum i18n</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-exceptions.html"
+                        title="previous chapter">Exceptions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hacking.html"
+                        title="next chapter">Conventions for contributing to kitchen</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/porting-guide-0.3.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hacking.html" title="Conventions for contributing to kitchen"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-exceptions.html" title="Exceptions"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

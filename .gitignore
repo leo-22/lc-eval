@@ -1,0 +1,6 @@
+/proc
+/sys
+/var/log
+/var/tmp/
+var/cache/
+/usr/lib/locale/

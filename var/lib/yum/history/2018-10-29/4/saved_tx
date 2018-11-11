@@ -1,0 +1,12 @@
+446:bde84814799894ac3812e42b25a34cb2940ae73b
+0
+1
+installed:447:f956493391c2294eac78cc5e9aac0e114005cfca
+1
+mbr: rubygem-deep_merge,noarch,0,1.0.1,5.el7 70
+  repo: yum.knack.works_epel_7_x86_64
+  ts_state: u
+  output_state: 20
+  isDep: False
+  reason: user
+  reinstall: False

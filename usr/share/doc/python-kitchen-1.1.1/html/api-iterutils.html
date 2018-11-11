@@ -1,0 +1,199 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Kitchen.iterutils Module &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen API" href="api-overview.html" />
+    <link rel="next" title="Helpers for versioning software" href="api-versioning.html" />
+    <link rel="prev" title="Kitchen.collections" href="api-collections.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-versioning.html" title="Helpers for versioning software"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-collections.html" title="Kitchen.collections"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" accesskey="U">Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-kitchen.iterutils">
+<span id="kitchen-iterutils-module"></span><h1>Kitchen.iterutils Module<a class="headerlink" href="#module-kitchen.iterutils" title="Permalink to this headline">¶</a></h1>
+<p>Functions to manipulate iterables</p>
+<p class="versionadded">
+<span class="versionmodified">New in version Kitchen:: </span>0.2.1a1</p>
+<p><em>Module author: Toshio Kuratomi &lt;<a class="reference external" href="mailto:toshio&#37;&#52;&#48;fedoraproject&#46;org">toshio<span>&#64;</span>fedoraproject<span>&#46;</span>org</a>&gt;</em></p>
+<p><em>Module author: Luke Macken &lt;<a class="reference external" href="mailto:lmacken&#37;&#52;&#48;redhat&#46;com">lmacken<span>&#64;</span>redhat<span>&#46;</span>com</a>&gt;</em></p>
+<dl class="function">
+<dt id="kitchen.iterutils.isiterable">
+<tt class="descclassname">kitchen.iterutils.</tt><tt class="descname">isiterable</tt><big>(</big><em>obj</em>, <em>include_string=False</em><big>)</big><a class="headerlink" href="#kitchen.iterutils.isiterable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether an object is an iterable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>obj</strong> &#8211; Object to test whether it is an iterable</li>
+<li><strong>include_string</strong> &#8211; If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">obj</span></tt> is a byte
+<tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> or <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string this function will return
+<tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>.  If set to <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>, byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> and
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings will cause this function to return
+<tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>.  Default <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> if <tt class="xref py py-attr docutils literal"><span class="pre">obj</span></tt> is iterable, otherwise
+<tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.iterutils.iterate">
+<tt class="descclassname">kitchen.iterutils.</tt><tt class="descname">iterate</tt><big>(</big><em>obj</em>, <em>include_string=False</em><big>)</big><a class="headerlink" href="#kitchen.iterutils.iterate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator that can be used to iterate over anything</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> &#8211; The object to iterate over</li>
+<li><strong>include_string</strong> &#8211; if <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>, treat strings as iterables.
+Otherwise treat them as a single scalar value.  Default <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function will create an iterator out of any scalar or iterable.  It
+is useful for making a value given to you an iterable before operating on it.
+Iterables have their items returned.  scalars are transformed into iterables.
+A string is treated as a scalar value unless the <tt class="xref py py-attr docutils literal"><span class="pre">include_string</span></tt>
+parameter is set to <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>.  Example usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="bp">None</span><span class="p">))</span>
+<span class="go">[None]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">([</span><span class="bp">None</span><span class="p">]))</span>
+<span class="go">[None]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
+<span class="go">[1, 2, 3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])))</span>
+<span class="go">[1, 2, 3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="s">&#39;1&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="s">&#39;2&#39;</span><span class="p">)))</span>
+<span class="go">[&#39;a&#39;, &#39;b&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">[1]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])))</span>
+<span class="go">[1, 2, 3]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="s">&#39;abc&#39;</span><span class="p">))</span>
+<span class="go">[&#39;abc&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">iterate</span><span class="p">(</span><span class="s">&#39;abc&#39;</span><span class="p">,</span> <span class="n">include_string</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<span class="go">[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-collections.html"
+                        title="previous chapter">Kitchen.collections</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-versioning.html"
+                        title="next chapter">Helpers for versioning software</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-iterutils.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-versioning.html" title="Helpers for versioning software"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-collections.html" title="Kitchen.collections"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

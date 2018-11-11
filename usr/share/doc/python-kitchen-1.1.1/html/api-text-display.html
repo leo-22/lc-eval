@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Format Text for Display &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen.text: unicode and utf8 and xml oh my!" href="api-text.html" />
+    <link rel="next" title="Miscellaneous functions for manipulating text" href="api-text-misc.html" />
+    <link rel="prev" title="Kitchen.text.converters" href="api-text-converters.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-misc.html" title="Miscellaneous functions for manipulating text"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-text-converters.html" title="Kitchen.text.converters"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" accesskey="U">Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <span class="target" id="module-kitchen.text.display"></span><div class="section" id="format-text-for-display">
+<h1>Format Text for Display<a class="headerlink" href="#format-text-for-display" title="Permalink to this headline">¶</a></h1>
+<p>Functions related to displaying unicode text.  Unicode characters don&#8217;t all
+have the same width so we need helper functions for displaying them.</p>
+<p class="versionadded">
+<span class="versionmodified">New in version 0.2: </span>kitchen.display API 1.0.0</p>
+</div>
+<dl class="function">
+<dt id="kitchen.text.display.textual_width">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">textual_width</tt><big>(</big><em>msg</em>, <em>control_chars='guess'</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.display.textual_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> of a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to get the width of</li>
+<li><strong>control_chars</strong> &#8211; <p>specify how to deal with <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>.
+Possible values are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">guess:</th><td class="field-body">(default) will take a guess for <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a>
+widths.  Most codes will return zero width.  <tt class="docutils literal"><span class="pre">backspace</span></tt>,
+<tt class="docutils literal"><span class="pre">delete</span></tt>, and <tt class="docutils literal"><span class="pre">clear</span> <span class="pre">delete</span></tt> return -1.  <tt class="docutils literal"><span class="pre">escape</span></tt> currently
+returns -1 as well but this is not guaranteed as it&#8217;s not always
+correct</td>
+</tr>
+<tr class="field-even field"><th class="field-name">strict:</th><td class="field-body">will raise <a class="reference internal" href="api-exceptions.html#kitchen.text.exceptions.ControlCharError" title="kitchen.text.exceptions.ControlCharError"><tt class="xref py py-exc docutils literal"><span class="pre">kitchen.text.exceptions.ControlCharError</span></tt></a>
+if a <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a> is encountered</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>encoding</strong> &#8211; If we are given a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> this is used to
+decode it into <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  Any characters that are not
+decodable in this encoding will get a value dependent on the
+<tt class="xref py py-attr docutils literal"><span class="pre">errors</span></tt> parameter.</li>
+<li><strong>errors</strong> &#8211; How to treat errors encoding the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  Legal values are the same as for
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_unicode()</span></tt></a>.  The default value of
+<tt class="docutils literal"><span class="pre">replace</span></tt> will cause undecodable byte sequences to have a width of
+one. <tt class="docutils literal"><span class="pre">ignore</span></tt> will have a width of zero.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises ControlCharError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">if <tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> contains a <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control
+character</em></a> and <tt class="xref py py-attr docutils literal"><span class="pre">control_chars</span></tt> is <tt class="docutils literal"><span class="pre">strict</span></tt>.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">Textual width</em></a> of the <tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt>.  This is the amount of
+space that the string will consume on a monospace display.  It&#8217;s
+measured in the number of cell positions or columns it will take up on
+a monospace display.  This is <strong>not</strong> the number of glyphs that are in
+the string.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This function can be wrong sometimes because Unicode does not specify
+a strict width value for all of the <a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code points</em></a>.  In
+particular, we&#8217;ve found that some Tamil characters take up to four
+character cells but we return a lesser amount.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display.textual_width_chop">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">textual_width_chop</tt><big>(</big><em>msg</em>, <em>chop</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.display.textual_width_chop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a string, return it chopped to a given <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to chop</li>
+<li><strong>chop</strong> &#8211; Chop <tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> if it exceeds this <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a></li>
+<li><strong>encoding</strong> &#8211; If we are given a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>, this is used to
+decode it into a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string.  Any characters that are not
+decodable in this encoding will be assigned a width of one.</li>
+<li><strong>errors</strong> &#8211; How to treat errors encoding the byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  Legal values are the same as for
+<a class="reference internal" href="api-text-converters.html#kitchen.text.converters.to_unicode" title="kitchen.text.converters.to_unicode"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.converters.to_unicode()</span></tt></a></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string of the <tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> chopped at the given
+<a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This is what you want to use instead of <tt class="docutils literal"><span class="pre">%.*s</span></tt>, as it does the &#8220;right&#8221;
+thing with regard to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a> sequences, <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>,
+and characters that take more than one cell position. Eg:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Wrong: only displays 8 characters because it is operating on bytes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;</span><span class="si">%.*s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s">&#39;café ñunru!&#39;</span><span class="p">)</span>
+<span class="go">café ñun</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Properly operates on graphemes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">textual_width_chop</span><span class="p">(</span><span class="s">&#39;café ñunru!&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="go">café ñunru</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># takes too many columns because the kanji need two cell positions</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;1234567890</span><span class="se">\n</span><span class="si">%.*s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s">u&#39;一二三四五六七八九十&#39;</span><span class="p">)</span>
+<span class="go">1234567890</span>
+<span class="go">一二三四五六七八九十</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Properly chops at 10 columns</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&#39;1234567890</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">textual_width_chop</span><span class="p">(</span><span class="s">u&#39;一二三四五六七八九十&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="go">1234567890</span>
+<span class="go">一二三四五</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display.textual_width_fill">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">textual_width_fill</tt><big>(</big><em>msg</em>, <em>fill</em>, <em>chop=None</em>, <em>left=True</em>, <em>prefix=''</em>, <em>suffix=''</em><big>)</big><a class="headerlink" href="#kitchen.text.display.textual_width_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string to a specified <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a>
+or chop to same</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string to format</li>
+<li><strong>fill</strong> &#8211; pad string until the <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> of the string is
+this length</li>
+<li><strong>chop</strong> &#8211; before doing anything else, chop the string to this length.
+Default: Don&#8217;t chop the string at all</li>
+<li><strong>left</strong> &#8211; If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> (default) left justify the string and put the
+padding on the right.  If <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>, pad on the left side.</li>
+<li><strong>prefix</strong> &#8211; Attach this string before the field we&#8217;re filling</li>
+<li><strong>suffix</strong> &#8211; Append this string to the end of the field we&#8217;re filling</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> formatted to fill the specified width.  If no
+<tt class="xref py py-attr docutils literal"><span class="pre">chop</span></tt> is specified, the string could exceed the fill length
+when completed.  If <tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> or <tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> are printable
+characters, the string could be longer than the fill width.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> should be used for &#8220;invisible&#8221;
+characters like highlighting, color changing escape codes, etc.  The
+fill characters are appended outside of any <tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> or
+<tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> elements.  This allows you to only highlight
+<tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> inside of the field you&#8217;re filling.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt>, <tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt>, and <tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> should all be
+representable as unicode characters.  In particular, any escape
+sequences in <tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> need to be convertible
+to <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>.  If you need to use byte sequences here rather
+than unicode characters, use
+<a class="reference internal" href="#kitchen.text.display.byte_string_textual_width_fill" title="kitchen.text.display.byte_string_textual_width_fill"><tt class="xref py py-func docutils literal"><span class="pre">byte_string_textual_width_fill()</span></tt></a> instead.</p>
+</div>
+<p>This function expands a string to fill a field of a particular
+<a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a>.  Use it instead of <tt class="docutils literal"><span class="pre">%*.*s</span></tt>, as it does the
+&#8220;right&#8221; thing with regard to <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a> sequences, <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control
+characters</em></a>, and characters that take more than one cell position in
+a display.  Example usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">msg</span> <span class="o">=</span> <span class="s">u&#39;一二三四五六七八九十&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Wrong: This uses 10 characters instead of 10 cells:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">u&quot;:</span><span class="si">%-*.*s</span><span class="s">:&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">msg</span><span class="p">[:</span><span class="mi">9</span><span class="p">])</span>
+<span class="go">:一二三四五六七八九 :</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># This uses 10 cells like we really want:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">u&quot;:</span><span class="si">%s</span><span class="s">:&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">textual_width_fill</span><span class="p">(</span><span class="n">msg</span><span class="p">[:</span><span class="mi">9</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="go">:一二三四五:</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Wrong: Right aligned in the field, but too many cells</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">u&quot;</span><span class="si">%20.10s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="go">          一二三四五六七八九十</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Correct: Right aligned with proper number of cells</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">textual_width_fill</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="bp">False</span><span class="p">))</span>
+<span class="go">          一二三四五</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Wrong: Adding some escape characters to highlight the line but too many cells</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">u&quot;</span><span class="si">%s%20.10s%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">suffix</span><span class="p">)</span>
+<span class="go">u&#39;[7m          一二三四五六七八九十[0m&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Correct highlight of the line</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">u&quot;</span><span class="si">%s%s%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">display</span><span class="o">.</span><span class="n">textual_width_fill</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">suffix</span><span class="p">)</span>
+<span class="go">u&#39;[7m          一二三四五[0m&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Correct way to not highlight the fill</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">u&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">display</span><span class="o">.</span><span class="n">textual_width_fill</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">))</span>
+<span class="go">u&#39;          [7m一二三四五[0m&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display.wrap">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">wrap</tt><big>(</big><em>text</em>, <em>width=70</em>, <em>initial_indent=u''</em>, <em>subsequent_indent=u''</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.display.wrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works like we want <tt class="xref py py-func docutils literal"><span class="pre">textwrap.wrap()</span></tt> to work,</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to wrap</li>
+<li><strong>width</strong> &#8211; <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> at which to wrap.  Default: 70</li>
+<li><strong>initial_indent</strong> &#8211; string to use to indent the first line.  Default:
+do not indent.</li>
+<li><strong>subsequent_indent</strong> &#8211; string to use to wrap subsequent lines.
+Default: do not indent</li>
+<li><strong>encoding</strong> &#8211; Encoding to use if <tt class="xref py py-attr docutils literal"><span class="pre">text</span></tt> is a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></li>
+<li><strong>errors</strong> &#8211; error handler to use if <tt class="xref py py-attr docutils literal"><span class="pre">text</span></tt> is a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt>
+and contains some undecodable characters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><tt class="xref py py-class docutils literal"><span class="pre">list</span></tt> of <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of lines that have been text wrapped and indented.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="xref py py-func docutils literal"><span class="pre">textwrap.wrap()</span></tt> from the <a class="reference external" href="http://docs.python.org/library">python standard library</a> has two drawbacks that this
+attempts to fix:</p>
+<ol class="arabic simple">
+<li>It does not handle <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a>.  It only operates on bytes or
+characters which are both inadequate (due to multi-byte and double
+width characters).</li>
+<li>It malforms lists and blocks.</li>
+</ol>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display.fill">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">fill</tt><big>(</big><em>text</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#kitchen.text.display.fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Works like we want <tt class="xref py py-func docutils literal"><span class="pre">textwrap.fill()</span></tt> to work</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string or byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to process</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string with each line separated by a newline</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#kitchen.text.display.wrap" title="kitchen.text.display.wrap"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.wrap()</span></tt></a></dt>
+<dd>for other parameters that you can give this command.</dd>
+</dl>
+</div>
+<p>This function is a light wrapper around <a class="reference internal" href="#kitchen.text.display.wrap" title="kitchen.text.display.wrap"><tt class="xref py py-func docutils literal"><span class="pre">kitchen.text.display.wrap()</span></tt></a>.
+Where that function returns a <tt class="xref py py-class docutils literal"><span class="pre">list</span></tt> of lines, this function
+returns one string with each line separated by a newline.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display.byte_string_textual_width_fill">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">byte_string_textual_width_fill</tt><big>(</big><em>msg</em>, <em>fill</em>, <em>chop=None</em>, <em>left=True</em>, <em>prefix=''</em>, <em>suffix=''</em>, <em>encoding='utf-8'</em>, <em>errors='replace'</em><big>)</big><a class="headerlink" href="#kitchen.text.display.byte_string_textual_width_fill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to a specified <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> or chop
+to same</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>msg</strong> &#8211; byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> encoded in <a class="reference internal" href="glossary.html#term-utf-8"><em class="xref std std-term">UTF-8</em></a> that we want formatted</li>
+<li><strong>fill</strong> &#8211; pad <tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> until the <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> is this long</li>
+<li><strong>chop</strong> &#8211; before doing anything else, chop the string to this length.
+Default: Don&#8217;t chop the string at all</li>
+<li><strong>left</strong> &#8211; If <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> (default) left justify the string and put the
+padding on the right.  If <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>, pad on the left side.</li>
+<li><strong>prefix</strong> &#8211; Attach this byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> before the field we&#8217;re
+filling</li>
+<li><strong>suffix</strong> &#8211; Append this byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> to the end of the field we&#8217;re
+filling</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> formatted to fill the specified <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual
+width</em></a>.  If no <tt class="xref py py-attr docutils literal"><span class="pre">chop</span></tt> is specified, the string could exceed the
+fill length when completed.  If <tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> or <tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> are
+printable characters, the string could be longer than fill width.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> should be used for &#8220;invisible&#8221;
+characters like highlighting, color changing escape codes, etc.  The
+fill characters are appended outside of any <tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> or
+<tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> elements.  This allows you to only highlight
+<tt class="xref py py-attr docutils literal"><span class="pre">msg</span></tt> inside of the field you&#8217;re filling.</p>
+</div>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#kitchen.text.display.textual_width_fill" title="kitchen.text.display.textual_width_fill"><tt class="xref py py-func docutils literal"><span class="pre">textual_width_fill()</span></tt></a></dt>
+<dd><p class="first">For example usage.  This function has only two differences.</p>
+<ol class="last arabic simple">
+<li>it takes byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> for <tt class="xref py py-attr docutils literal"><span class="pre">prefix</span></tt> and
+<tt class="xref py py-attr docutils literal"><span class="pre">suffix</span></tt> so you can pass in arbitrary sequences of
+bytes, not just unicode characters.</li>
+<li>it returns a byte <tt class="xref py py-class docutils literal"><span class="pre">str</span></tt> instead of a <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+string.</li>
+</ol>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<div class="section" id="internal-data">
+<h1>Internal Data<a class="headerlink" href="#internal-data" title="Permalink to this headline">¶</a></h1>
+<p>There are a few internal functions and variables in this module.  Code outside
+of kitchen shouldn&#8217;t use them but people coding on kitchen itself may find
+them useful.</p>
+<dl class="data">
+<dt id="kitchen.text.display._COMBINING">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">_COMBINING</tt><em class="property"> = ((768, 879), (1155, 1161), (1425, 1469), (1471, 1471), (1473, 1474), (1476, 1477), (1479, 1479), (1536, 1539), (1552, 1562), (1611, 1630), (1648, 1648), (1750, 1764), (1767, 1768), (1770, 1773), (1807, 1807), (1809, 1809), (1840, 1866), (1958, 1968), (2027, 2035), (2070, 2073), (2075, 2083), (2085, 2087), (2089, 2093), (2305, 2306), (2364, 2364), (2369, 2376), (2381, 2381), (2385, 2388), (2402, 2403), (2433, 2433), (2492, 2492), (2497, 2500), (2509, 2509), (2530, 2531), (2561, 2562), (2620, 2620), (2625, 2626), (2631, 2632), (2635, 2637), (2672, 2673), (2689, 2690), (2748, 2748), (2753, 2757), (2759, 2760), (2765, 2765), (2786, 2787), (2817, 2817), (2876, 2876), (2879, 2879), (2881, 2883), (2893, 2893), (2902, 2902), (2946, 2946), (3008, 3008), (3021, 3021), (3134, 3136), (3142, 3144), (3146, 3149), (3157, 3158), (3260, 3260), (3263, 3263), (3270, 3270), (3276, 3277), (3298, 3299), (3393, 3395), (3405, 3405), (3530, 3530), (3538, 3540), (3542, 3542), (3633, 3633), (3636, 3642), (3655, 3662), (3761, 3761), (3764, 3769), (3771, 3772), (3784, 3789), (3864, 3865), (3893, 3893), (3895, 3895), (3897, 3897), (3953, 3966), (3968, 3972), (3974, 3975), (3984, 3991), (3993, 4028), (4038, 4038), (4141, 4144), (4146, 4146), (4150, 4151), (4153, 4154), (4184, 4185), (4237, 4237), (4448, 4607), (4959, 4959), (5906, 5908), (5938, 5940), (5970, 5971), (6002, 6003), (6068, 6069), (6071, 6077), (6086, 6086), (6089, 6099), (6109, 6109), (6155, 6157), (6313, 6313), (6432, 6434), (6439, 6440), (6450, 6450), (6457, 6459), (6679, 6680), (6752, 6752), (6773, 6780), (6783, 6783), (6912, 6915), (6964, 6964), (6966, 6970), (6972, 6972), (6978, 6978), (6980, 6980), (7019, 7027), (7082, 7082), (7223, 7223), (7376, 7378), (7380, 7392), (7394, 7400), (7405, 7405), (7616, 7654), (7677, 7679), (8203, 8207), (8234, 8238), (8288, 8291), (8298, 8303), (8400, 8432), (11503, 11505), (11744, 11775), (12330, 12335), (12441, 12442), (42607, 42607), (42620, 42621), (42736, 42737), (43014, 43014), (43019, 43019), (43045, 43046), (43204, 43204), (43232, 43249), (43307, 43309), (43347, 43347), (43443, 43443), (43456, 43456), (43696, 43696), (43698, 43700), (43703, 43704), (43710, 43711), (43713, 43713), (44013, 44013), (64286, 64286), (65024, 65039), (65056, 65062), (65279, 65279), (65529, 65531), (66045, 66045), (68097, 68099), (68101, 68102), (68108, 68111), (68152, 68154), (68159, 68159), (69817, 69818), (119141, 119145), (119149, 119170), (119173, 119179), (119210, 119213), (119362, 119364), (917505, 917505), (917536, 917631), (917760, 917999))</em><a class="headerlink" href="#kitchen.text.display._COMBINING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal table, provided by this module to list <a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code points</em></a> which
+combine with other characters and therefore should have no <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual
+width</em></a>.  This is a sorted <tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> of non-overlapping intervals.  Each
+interval is a <tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> listing a starting <a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a> and ending
+<a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a>.  Every <a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a> between the two end points is
+a combining character.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="#kitchen.text.display._generate_combining_table" title="kitchen.text.display._generate_combining_table"><tt class="xref py py-func docutils literal"><span class="pre">_generate_combining_table()</span></tt></a></dt>
+<dd>for how this table is generated</dd>
+</dl>
+</div>
+<p>This table was last regenerated on python-2.7.0 with
+<tt class="xref py py-data docutils literal"><span class="pre">unicodedata.unidata_version</span></tt> 5.1.0</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display._generate_combining_table">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">_generate_combining_table</tt><big>(</big><big>)</big><a class="headerlink" href="#kitchen.text.display._generate_combining_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine Markus Kuhn&#8217;s data with <tt class="xref py py-mod docutils literal"><span class="pre">unicodedata</span></tt> to make combining
+char list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> of tuples</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> of intervals of <a class="reference internal" href="glossary.html#term-code-points"><em class="xref std std-term">code points</em></a> that are
+combining character.  Each interval is a 2-<tt class="xref py py-class docutils literal"><span class="pre">tuple</span></tt> of the
+starting <a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a> and the ending <a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a> for the
+combining characters.</td>
+</tr>
+</tbody>
+</table>
+<p>In normal use, this function serves to tell how we&#8217;re generating the
+combining char list.  For speed reasons, we use this to generate a static
+list and just use that later.</p>
+<p>Markus Kuhn&#8217;s list of combining characters is more complete than what&#8217;s in
+the python <tt class="xref py py-mod docutils literal"><span class="pre">unicodedata</span></tt> library but the python <tt class="xref py py-mod docutils literal"><span class="pre">unicodedata</span></tt> is
+synced against later versions of the unicode database</p>
+<p>This is used to generate the <a class="reference internal" href="#kitchen.text.display._COMBINING" title="kitchen.text.display._COMBINING"><tt class="xref py py-data docutils literal"><span class="pre">_COMBINING</span></tt></a>
+table.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display._print_combining_table">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">_print_combining_table</tt><big>(</big><big>)</big><a class="headerlink" href="#kitchen.text.display._print_combining_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print out a new <a class="reference internal" href="#kitchen.text.display._COMBINING" title="kitchen.text.display._COMBINING"><tt class="xref py py-data docutils literal"><span class="pre">_COMBINING</span></tt></a> table</p>
+<p>This will print a new <a class="reference internal" href="#kitchen.text.display._COMBINING" title="kitchen.text.display._COMBINING"><tt class="xref py py-data docutils literal"><span class="pre">_COMBINING</span></tt></a> table in the format used in
+<tt class="file docutils literal"><span class="pre">kitchen/text/display.py</span></tt>.  It&#8217;s useful for updating the
+<a class="reference internal" href="#kitchen.text.display._COMBINING" title="kitchen.text.display._COMBINING"><tt class="xref py py-data docutils literal"><span class="pre">_COMBINING</span></tt></a> table with updated data from a new python as the format
+won&#8217;t change from what&#8217;s already in the file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display._interval_bisearch">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">_interval_bisearch</tt><big>(</big><em>value</em>, <em>table</em><big>)</big><a class="headerlink" href="#kitchen.text.display._interval_bisearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Binary search in an interval table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> &#8211; numeric value to search for</li>
+<li><strong>table</strong> &#8211; Ordered list of intervals.  This is a list of two-tuples.  The
+elements of the two-tuple define an interval&#8217;s start and end points.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">If <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> is found within an interval in the <tt class="xref py py-attr docutils literal"><span class="pre">table</span></tt>
+return <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt>.  Otherwise, <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function checks whether a numeric value is present within a table
+of intervals.  It checks using a binary search algorithm, dividing the
+list of values in half and checking against the values until it determines
+whether the value is in the table.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display._ucp_width">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">_ucp_width</tt><big>(</big><em>ucs</em>, <em>control_chars='guess'</em><big>)</big><a class="headerlink" href="#kitchen.text.display._ucp_width" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> of a ucs character</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ucs</strong> &#8211; integer representing a single unicode <a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a></li>
+<li><strong>control_chars</strong> &#8211; <p>specify how to deal with <a class="reference internal" href="glossary.html#term-control-characters"><em class="xref std std-term">control characters</em></a>.
+Possible values are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">guess:</th><td class="field-body">(default) will take a guess for <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a>
+widths.  Most codes will return zero width.  <tt class="docutils literal"><span class="pre">backspace</span></tt>,
+<tt class="docutils literal"><span class="pre">delete</span></tt>, and <tt class="docutils literal"><span class="pre">clear</span> <span class="pre">delete</span></tt> return -1.  <tt class="docutils literal"><span class="pre">escape</span></tt> currently
+returns -1 as well but this is not guaranteed as it&#8217;s not always
+correct</td>
+</tr>
+<tr class="field-even field"><th class="field-name">strict:</th><td class="field-body">will raise <a class="reference internal" href="api-exceptions.html#kitchen.text.exceptions.ControlCharError" title="kitchen.text.exceptions.ControlCharError"><tt class="xref py py-exc docutils literal"><span class="pre">ControlCharError</span></tt></a>
+if a <a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a> is encountered</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises ControlCharError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first">if the <a class="reference internal" href="glossary.html#term-code-point"><em class="xref std std-term">code point</em></a> is a unicode
+<a class="reference internal" href="glossary.html#term-control-character"><em class="xref std std-term">control character</em></a> and <tt class="xref py py-attr docutils literal"><span class="pre">control_chars</span></tt> is set to &#8216;strict&#8217;</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> of the character.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It&#8217;s important to remember this is <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> and not the
+number of characters or bytes.</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.text.display._textual_width_le">
+<tt class="descclassname">kitchen.text.display.</tt><tt class="descname">_textual_width_le</tt><big>(</big><em>width</em>, <em>*args</em><big>)</big><a class="headerlink" href="#kitchen.text.display._textual_width_le" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optimize the common case when deciding which <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> is
+larger</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>width</strong> &#8211; <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> to compare against.</li>
+<li><strong>*args</strong> &#8211; <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> strings to check the total <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual
+width</em></a> of</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> if the total length of <tt class="xref py py-attr docutils literal"><span class="pre">args</span></tt> are less than
+or equal to <tt class="xref py py-attr docutils literal"><span class="pre">width</span></tt>.  Otherwise <tt class="xref py py-data docutils literal"><span class="pre">False</span></tt>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>We often want to know &#8220;does X fit in Y&#8221;.  It takes a while to use
+<a class="reference internal" href="#kitchen.text.display.textual_width" title="kitchen.text.display.textual_width"><tt class="xref py py-func docutils literal"><span class="pre">textual_width()</span></tt></a> to calculate this.  However, we know that the number
+of canonically composed <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> characters is always going to
+have 1 or 2 for the <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> per character.  With this we can
+take the following shortcuts:</p>
+<ol class="arabic simple">
+<li>If the number of canonically composed characters is more than width,
+the true <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> cannot be less than width.</li>
+<li>If the number of canonically composed characters * 2 is less than the
+width then the <a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> must be ok.</li>
+</ol>
+<p><a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> of a canonically composed <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> string
+will always be greater than or equal to the the number of <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>
+characters.  So we can first check if the number of composed
+<tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt> characters is less than the asked for width.  If it is we
+can return <tt class="xref py py-data docutils literal"><span class="pre">True</span></tt> immediately.  If not, then we must do a full
+<a class="reference internal" href="glossary.html#term-textual-width"><em class="xref std std-term">textual width</em></a> lookup.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Format Text for Display</a></li>
+<li><a class="reference internal" href="#internal-data">Internal Data</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-text-converters.html"
+                        title="previous chapter">Kitchen.text.converters</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-text-misc.html"
+                        title="next chapter">Miscellaneous functions for manipulating text</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-text-display.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-text-misc.html" title="Miscellaneous functions for manipulating text"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-text-converters.html" title="Kitchen.text.converters"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li>
+          <li><a href="api-text.html" >Kitchen.text: unicode and utf8 and xml oh my!</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

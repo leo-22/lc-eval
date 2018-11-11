@@ -1,0 +1,18 @@
+I:97017
+E:ID_BUS=pci
+E:ID_MODEL_FROM_DATABASE=Elastic Network Adapter (ENA)
+E:ID_MODEL_ID=0xec20
+E:ID_NET_DRIVER=ena
+E:ID_NET_NAME_MAC=enx0e1dccfdb06c
+E:ID_NET_NAME_PATH=enp0s5
+E:ID_NET_NAME_SLOT=ens5
+E:ID_PATH=pci-0000:00:05.0
+E:ID_PATH_TAG=pci-0000_00_05_0
+E:ID_PCI_CLASS_FROM_DATABASE=Network controller
+E:ID_PCI_SUBCLASS_FROM_DATABASE=Ethernet controller
+E:ID_VENDOR_FROM_DATABASE=Amazon.com, Inc.
+E:ID_VENDOR_ID=0x1d0f
+E:SYSTEMD_ALIAS=/sys/subsystem/net/devices/eth0
+E:SYSTEMD_WANTS=ec2net-ifup@eth0
+E:net.ifnames=0
+G:systemd

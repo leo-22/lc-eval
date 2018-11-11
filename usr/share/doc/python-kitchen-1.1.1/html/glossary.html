@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Glossary &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="prev" title="Conventions for contributing to kitchen" href="hacking.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hacking.html" title="Conventions for contributing to kitchen"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="glossary">
+<h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h1>
+<dl class="glossary docutils">
+<dt id="term-everything-but-the-kitchen-sink">&#8220;Everything but the kitchen sink&#8221;</dt>
+<dd>An English idiom meaning to include nearly everything that you can
+think of.</dd>
+<dt id="term-api-version">API version</dt>
+<dd>Version that is meant for computer consumption.  This version is
+parsable and comparable by computers.  It contains information about
+a library&#8217;s API so that computer software can decide whether it works
+with the software.</dd>
+<dt id="term-ascii">ASCII</dt>
+<dd><p class="first">A character encoding that maps numbers to characters essential to
+American English.  It maps 128 characters using 7bits.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/ASCII">http://en.wikipedia.org/wiki/ASCII</a></p>
+</div>
+</dd>
+<dt id="term-ascii-compatible">ASCII compatible</dt>
+<dd><p class="first">An encoding in which the particular byte that maps to a character in
+the <a class="reference internal" href="#term-ascii"><em class="xref std std-term">ASCII</em></a> character set is only used to map to that character.
+This excludes EBDIC based encodings and many multi-byte fixed and
+variable width encodings since they reuse the bytes that make up the
+<a class="reference internal" href="#term-ascii"><em class="xref std std-term">ASCII</em></a> encoding for other purposes.  <a class="reference internal" href="#term-utf-8"><em class="xref std std-term">UTF-8</em></a> is notable
+as a variable width encoding that is <a class="reference internal" href="#term-ascii"><em class="xref std std-term">ASCII</em></a> compatible.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference external" href="http://en.wikipedia.org/wiki/Variable-width_encoding">http://en.wikipedia.org/wiki/Variable-width_encoding</a></dt>
+<dd>For another explanation of various ways bytes are mapped to
+characters in a possibly incompatible manner.</dd>
+</dl>
+</div>
+</dd>
+<dt id="term-code-points">code points</dt>
+<dd><a class="reference internal" href="#term-code-point"><em class="xref std std-term">code point</em></a></dd>
+<dt id="term-code-point">code point</dt>
+<dd>A number that maps to a particular abstract character.  Code points
+make it so that we have a number pointing to a character without
+worrying about implementation details of how those numbers are stored
+for the computer to read.  Encodings define how the code points map to
+particular sequences of bytes on disk  and in memory.</dd>
+<dt id="term-control-characters">control characters</dt>
+<dd><a class="reference internal" href="#term-control-character"><em class="xref std std-term">control character</em></a></dd>
+<dt id="term-control-character">control character</dt>
+<dd><p class="first">The set of characters in unicode that are used, not to display glyphs
+on the screen, but to tell the display in program to do something.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/Control_character">http://en.wikipedia.org/wiki/Control_character</a></p>
+</div>
+</dd>
+<dt id="term-grapheme">grapheme</dt>
+<dd><p class="first">characters or pieces of characters that you might write on a page to
+make words, sentences, or other pieces of text.</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/Grapheme">http://en.wikipedia.org/wiki/Grapheme</a></p>
+</div>
+</dd>
+<dt id="term-i18n">I18N</dt>
+<dd>I18N is an abbreviation for internationalization.  It&#8217;s often used to
+signify the need to translate words, number and date formats, and
+other pieces of data in a computer program so that it will work well
+for people who speak another language than yourself.</dd>
+<dt id="term-message-catalogs">message catalogs</dt>
+<dd><a class="reference internal" href="#term-message-catalog"><em class="xref std std-term">message catalog</em></a></dd>
+<dt id="term-message-catalog">message catalog</dt>
+<dd><p class="first">Message catalogs contain translations for user-visible strings that
+are present in your code.  Normally, you need to mark the strings to
+be translated by wrapping them in one of several <tt class="xref py py-mod docutils literal"><span class="pre">gettext</span></tt>
+functions.  The function serves two purposes:</p>
+<ol class="arabic simple">
+<li>It allows automated tools to find which strings are supposed to be
+extracted for translation.</li>
+<li>The functions perform the translation when the program is running.</li>
+</ol>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://babel.edgewall.org/wiki/Documentation/messages.html">babel&#8217;s documentation</a>
+    for one method of extracting message catalogs from source
+    code.</p>
+</div>
+</dd>
+<dt id="term-murphy-s-law">Murphy&#8217;s Law</dt>
+<dd><p class="first">&#8220;Anything that can go wrong, will go wrong.&#8221;</p>
+<div class="admonition-see-also last admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="http://en.wikipedia.org/wiki/Murphy%27s_Law">http://en.wikipedia.org/wiki/Murphy%27s_Law</a></p>
+</div>
+</dd>
+<dt id="term-release-version">release version</dt>
+<dd>Version that is meant for human consumption.  This version is easy for
+a human to look at to decide how a particular version relates to other
+versions of the software.</dd>
+<dt id="term-textual-width">textual width</dt>
+<dd>The amount of horizontal space a character takes up on a monospaced
+screen.  The units are number of character cells or columns that it
+takes the place of.</dd>
+<dt id="term-utf-8">UTF-8</dt>
+<dd>A character encoding that maps all unicode <a class="reference internal" href="#term-code-points"><em class="xref std std-term">code points</em></a> to a sequence
+of bytes.  It is compatible with <a class="reference internal" href="#term-ascii"><em class="xref std std-term">ASCII</em></a>.  It uses a variable
+number of bytes to encode all of unicode.  ASCII characters take one
+byte.  Characters from other parts of unicode take two to four bytes.
+It is widespread as an encoding on the internet and in Linux.</dd>
+</dl>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hacking.html"
+                        title="previous chapter">Conventions for contributing to kitchen</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/glossary.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hacking.html" title="Conventions for contributing to kitchen"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

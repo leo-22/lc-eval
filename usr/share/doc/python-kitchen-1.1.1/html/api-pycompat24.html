@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Python 2.4 Compatibiity &mdash; kitchen 1.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within kitchen 1.1.1 documentation"
+          href="_static/opensearch.xml"/>
+    <link rel="top" title="kitchen 1.1.1 documentation" href="index.html" />
+    <link rel="up" title="Kitchen API" href="api-overview.html" />
+    <link rel="next" title="Python 2.5 Compatibility" href="api-pycompat25.html" />
+    <link rel="prev" title="Helpers for versioning software" href="api-versioning.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-pycompat25.html" title="Python 2.5 Compatibility"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="api-versioning.html" title="Helpers for versioning software"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" accesskey="U">Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="python-2-4-compatibiity">
+<h1>Python 2.4 Compatibiity<a class="headerlink" href="#python-2-4-compatibiity" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-kitchen.pycompat24.sets">
+<span id="sets-for-python-2-3"></span><h2>Sets for python-2.3<a class="headerlink" href="#module-kitchen.pycompat24.sets" title="Permalink to this headline">¶</a></h2>
+<p>In python-2.4, a builtin <tt class="xref py py-class docutils literal"><span class="pre">set</span></tt> type was added to python.  This module
+provides a function to emulate that on python-2.3 by using the <tt class="xref py py-mod docutils literal"><span class="pre">sets</span></tt>
+module.</p>
+<dl class="docutils">
+<dt><tt class="xref py py-func docutils literal"><span class="pre">set()</span></tt></dt>
+<dd>Create a set.  If running on python 2.4+ this is the <tt class="xref py py-class docutils literal"><span class="pre">set</span></tt>
+constructor.  If using python-2.3, it&#8217;s <tt class="xref py py-class docutils literal"><span class="pre">sets.Set</span></tt>.</dd>
+<dt><tt class="xref py py-func docutils literal"><span class="pre">frozenset()</span></tt></dt>
+<dd>Create a frozenset.  If running on python2.4+ this is the
+<tt class="xref py py-class docutils literal"><span class="pre">frozenset</span></tt> constructor.  If using python-2.3, it&#8217;s
+<tt class="xref py py-class docutils literal"><span class="pre">sets.ImmutableSet</span></tt>.</dd>
+</dl>
+<p class="versionchanged">
+<span class="versionmodified">Changed in version 0.2.0: </span>API: kitchen.pycompat24 1.0.0
+Added set and frozenset</p>
+<dl class="function">
+<dt id="kitchen.pycompat24.sets.add_builtin_set">
+<tt class="descclassname">kitchen.pycompat24.sets.</tt><tt class="descname">add_builtin_set</tt><big>(</big><big>)</big><a class="headerlink" href="#kitchen.pycompat24.sets.add_builtin_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there&#8217;s no set builtin, us the <tt class="xref py py-mod docutils literal"><span class="pre">sets</span></tt> module to make one</p>
+<p>This function makes sure that a <tt class="xref py py-class docutils literal"><span class="pre">set</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">frozenset</span></tt> type
+are available in the <tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt> namespace.  Since the function
+checks whether <tt class="xref py py-class docutils literal"><span class="pre">set</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">frozenset</span></tt> are already present in
+the <tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt> namespace and refuses to overwrite those if found,
+it&#8217;s safe to call this in multiple places and in scripts run under
+python-2.4+, where a more efficient set implementation is already present
+in the <tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt> namespace.</p>
+<p>However, since this function modifies <tt class="xref py py-mod docutils literal"><span class="pre">__builtin__</span></tt> there&#8217;s no need
+to call it more than once  so you likely want to do something like this
+when your program loads:</p>
+<div class="highlight-python"><pre>myprogram/__init__.py:
+
+from kitchen.pycompat24 import sets
+builtinset.add_builtin_set()</pre>
+</div>
+<p>You can then use <tt class="xref py py-func docutils literal"><span class="pre">set()</span></tt> and <tt class="xref py py-func docutils literal"><span class="pre">frozenset()</span></tt> anywhere in your code:</p>
+<div class="highlight-python"><pre>myprogram/compute.py:
+
+def math_students(algebra_student_list, geometry_student_list):
+    return set(algebra_student_list) union set(geometry_student_list)</pre>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-kitchen.pycompat24.base64">
+<span id="partial-new-style-base64-interface"></span><h2>Partial new style base64 interface<a class="headerlink" href="#module-kitchen.pycompat24.base64" title="Permalink to this headline">¶</a></h2>
+<p>Implement the modern base64 interface.</p>
+<p>Python-2.4 and above have a new API for the base64 module.  This is a backport
+of that module for use on python-2.3.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-mod docutils literal"><span class="pre">base64</span></tt>
+    for information about using the functions provided here.</p>
+</div>
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.b16decode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">b16decode</tt><big>(</big><em>s</em>, <em>casefold=False</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.b16decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a Base16 encoded string.</p>
+<p>s is the string to decode.  Optional casefold is a flag specifying whether
+a lowercase alphabet is acceptable as input.  For security purposes, the
+default is False.</p>
+<p>The decoded string is returned.  A TypeError is raised if s were
+incorrectly padded or if there are non-alphabet characters present in the
+string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.b16encode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">b16encode</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.b16encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a string using Base16.</p>
+<p>s is the string to encode.  The encoded string is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.b32decode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">b32decode</tt><big>(</big><em>s</em>, <em>casefold=False</em>, <em>map01=None</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.b32decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a Base32 encoded string.</p>
+<p>s is the string to decode.  Optional casefold is a flag specifying whether
+a lowercase alphabet is acceptable as input.  For security purposes, the
+default is False.</p>
+<p>RFC 3548 allows for optional mapping of the digit 0 (zero) to the letter O
+(oh), and for optional mapping of the digit 1 (one) to either the letter I
+(eye) or letter L (el).  The optional argument map01 when not None,
+specifies which letter the digit 1 should be mapped to (when map01 is not
+None, the digit 0 is always mapped to the letter O).  For security
+purposes the default is None, so that 0 and 1 are not allowed in the
+input.</p>
+<p>The decoded string is returned.  A TypeError is raised if s were
+incorrectly padded or if there are non-alphabet characters present in the
+string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.b32encode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">b32encode</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.b32encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a string using Base32.</p>
+<p>s is the string to encode.  The encoded string is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.b64decode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">b64decode</tt><big>(</big><em>s</em>, <em>altchars=None</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.b64decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a Base64 encoded string.</p>
+<p>s is the string to decode.  Optional altchars must be a string of at least
+length 2 (additional characters are ignored) which specifies the
+alternative alphabet used instead of the &#8216;+&#8217; and &#8216;/&#8217; characters.</p>
+<p>The decoded string is returned.  A TypeError is raised if s were
+incorrectly padded or if there are non-alphabet characters present in the
+string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.b64encode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">b64encode</tt><big>(</big><em>s</em>, <em>altchars=None</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.b64encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a string using Base64.</p>
+<p>s is the string to encode.  Optional altchars must be a string of at least
+length 2 (additional characters are ignored) which specifies an
+alternative alphabet for the &#8216;+&#8217; and &#8216;/&#8217; characters.  This allows an
+application to e.g. generate url or filesystem safe Base64 strings.</p>
+<p>The encoded string is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.decode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">decode</tt><big>(</big><em>input</em>, <em>output</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.decodestring">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">decodestring</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.decodestring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.encode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">encode</tt><big>(</big><em>input</em>, <em>output</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.encodestring">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">encodestring</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.encodestring" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a string into multiple lines of base-64 data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.standard_b64decode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">standard_b64decode</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.standard_b64decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a string encoded with the standard Base64 alphabet.</p>
+<p>s is the string to decode.  The decoded string is returned.  A TypeError
+is raised if the string is incorrectly padded or if there are non-alphabet
+characters present in the string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.standard_b64encode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">standard_b64encode</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.standard_b64encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a string using the standard Base64 alphabet.</p>
+<p>s is the string to encode.  The encoded string is returned.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.urlsafe_b64decode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">urlsafe_b64decode</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.urlsafe_b64decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a string encoded with the standard Base64 alphabet.</p>
+<p>s is the string to decode.  The decoded string is returned.  A TypeError
+is raised if the string is incorrectly padded or if there are non-alphabet
+characters present in the string.</p>
+<p>The alphabet uses &#8216;-&#8216; instead of &#8216;+&#8217; and &#8216;_&#8217; instead of &#8216;/&#8217;.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="kitchen.pycompat24.base64.urlsafe_b64encode">
+<tt class="descclassname">kitchen.pycompat24.base64.</tt><tt class="descname">urlsafe_b64encode</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#kitchen.pycompat24.base64.urlsafe_b64encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a string using a url-safe Base64 alphabet.</p>
+<p>s is the string to encode.  The encoded string is returned.  The alphabet
+uses &#8216;-&#8216; instead of &#8216;+&#8217; and &#8216;_&#8217; instead of &#8216;/&#8217;.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="subprocess">
+<h2>Subprocess<a class="headerlink" href="#subprocess" title="Permalink to this headline">¶</a></h2>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="api-pycompat27.html#module-kitchen.pycompat27.subprocess" title="kitchen.pycompat27.subprocess"><tt class="xref py py-mod docutils literal"><span class="pre">kitchen.pycompat27.subprocess</span></tt></a></dt>
+<dd>Kitchen includes the python-2.7 version of subprocess which has a new
+function, <tt class="xref py py-func docutils literal"><span class="pre">check_output()</span></tt>.  When
+you import <tt class="xref py py-mod docutils literal"><span class="pre">pycompat24.subprocess</span></tt> you will be getting the
+python-2.7 version of subprocess rather than the 2.4 version (where
+subprocess first appeared).  This choice was made so that we can
+concentrate our efforts on keeping the single version of subprocess up
+to date rather than working on a 2.4 version that very few people
+would need specifically.</dd>
+</dl>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Python 2.4 Compatibiity</a><ul>
+<li><a class="reference internal" href="#module-kitchen.pycompat24.sets">Sets for python-2.3</a></li>
+<li><a class="reference internal" href="#module-kitchen.pycompat24.base64">Partial new style base64 interface</a></li>
+<li><a class="reference internal" href="#subprocess">Subprocess</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api-versioning.html"
+                        title="previous chapter">Helpers for versioning software</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api-pycompat25.html"
+                        title="next chapter">Python 2.5 Compatibility</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api-pycompat24.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api-pycompat25.html" title="Python 2.5 Compatibility"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="api-versioning.html" title="Helpers for versioning software"
+             >previous</a> |</li>
+        <li><a href="index.html">kitchen 1.1.1 documentation</a> &raquo;</li>
+          <li><a href="api-overview.html" >Kitchen API</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011 Red Hat, Inc. and others.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+# This is private data. Do not parse
+PRIORITY=30
+LEVEL_PREFIX=1
+FORWARD_TO_SYSLOG=1
+FORWARD_TO_KMSG=0
+FORWARD_TO_CONSOLE=0
+STREAM_ID=2f16e95d5eef42cfae21ef941551b9b4
+IDENTIFIER=lsmd
+UNIT=libstoragemgmt.service
